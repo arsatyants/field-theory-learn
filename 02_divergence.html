@@ -6,6 +6,17 @@
 <title>Модуль 02 — Дивергенция</title>
 <link rel="stylesheet" href="shared.css">
 <script src="mathjax-config.js"></script>
+<script>
+window.MathJax = {
+  tex: {
+    packages: {'[+]': ['ams', 'physics']},
+    macros: {
+      oiint: ['{\unicode{x222F}}\limits_{#1}', 1],
+      oint: ['{\unicode{x222E}}\limits_{#1}', 1]
+    }
+  }
+};
+</script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script src="lang.js"></script>
 </head>
@@ -80,7 +91,7 @@ $$ \bigl[F_x(x+dx) - F_x(x)\bigr]\,dy\,dz \;\approx\; \frac{\partial F_x}{\parti
 <p class="info" data-en="The infinitesimal definition of divergence makes the fluid picture precise: surround the point with a small closed surface and compute the net flux through it, then divide by the enclosed volume and shrink the surface to a point:">
 Инфинитезимальное определение дивергенции делает картину жидкости точной: окружим точку малой замкнутой поверхностью, вычислим чистый поток через неё, разделим на объём и стянем поверхность в точку:</p>
 <div class="formula-block">
-$$ \operatorname{div} \mathbf{F} = \lim_{V \to 0} \frac{1}{|V|} ∯_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS $$
+$$ \operatorname{div} \mathbf{F} = \lim_{V \to 0} \frac{1}{|V|} \oiint_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS $$
 </div>
 <div class="two-col">
 <div class="rule-box green" data-en="<strong>div F &gt; 0 — source.</strong> Outflow exceeds inflow: the neighborhood “pushes” fluid outward. A positive charge creates exactly such a pattern in the electric field.">

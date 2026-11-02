@@ -7,12 +7,23 @@
 <title>Модуль 06 — Теорема Стокса</title>
 <link rel="stylesheet" href="shared.css">
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+window.MathJax = {
+  tex: {
+    packages: {'[+]': ['ams', 'physics']},
+    macros: {
+      oiint: ['{\unicode{x222F}}\limits_{#1}', 1],
+      oint: ['{\unicode{x222E}}\limits_{#1}', 1]
+    }
+  }
+};
+</script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script src="lang.js"></script>
 </head>
 <body>
 <nav class="top-nav">
-  <a class="nav-home" href="index.html">∮→∯</a>
+  <a class="nav-home" href="index.html">\oint→\oiint</a>
   <div class="nav-title" data-en="Module 06 — Stokes theorem">Модуль 06 — Теорема Стокса</div>
 </nav>
 <div id="stepNav">
@@ -135,7 +146,7 @@ $$ \nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t} $$
     let n = 400;
     let pi = std::f64::consts::PI;
 
-    // Левая часть: циркуляция ∮ F·dr = ∮ (−y dx + x dy)
+    // Левая часть: циркуляция \oint F·dr = \oint (−y dx + x dy)
     let mut circ = 0.0_f64;
     let dt = 2.0 * pi / (n as f64);
     for i in 0..n {
@@ -153,7 +164,7 @@ $$ \nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t} $$
 
     println!("Поле F = (−y, x, 0) — вращение как твёрдое тело");
     println!("Контур: окружность R = {}", r);
-    println!("Циркуляция ∮F·dr   (числ.): {:.6}", circ);
+    println!("Циркуляция \ointF·dr   (числ.): {:.6}", circ);
     println!("Поток rot F·n dS   (аналит): {:.6}", flux);
     println!("Относительная ошибка: {:.6}%", ((circ - flux)/flux).abs() * 100.0);
     println!("rot F = (0, 0, 2) — удвоенная угловая скорость");

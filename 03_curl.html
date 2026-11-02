@@ -6,6 +6,17 @@
 <title>Модуль 03 — Ротор</title>
 <link rel="stylesheet" href="shared.css">
 <script src="mathjax-config.js"></script>
+<script>
+window.MathJax = {
+  tex: {
+    packages: {'[+]': ['ams', 'physics']},
+    macros: {
+      oiint: ['{\unicode{x222F}}\limits_{#1}', 1],
+      oint: ['{\unicode{x222E}}\limits_{#1}', 1]
+    }
+  }
+};
+</script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script src="lang.js"></script>
 </head>
@@ -88,7 +99,7 @@ $$ (\operatorname{rot}\mathbf F)_z = \frac{\partial F_y}{\partial x} - \frac{\pa
 <p class="info" data-en="The integral “ancestor” of the curl is circulation — the work of the field along a closed path. One takes a curve L, walks along it, and accumulates how much of the field points along the motion:">
 Интегральный «предок» ротора — <strong>циркуляция</strong>: работа поля вдоль замкнутого пути. Берём кривую \( L \), идём вдоль неё и накапливаем, сколько поля смотрит по ходу движения:</p>
 <div class="formula-block">
-$$ \Gamma = ∮_{L} \mathbf{F} \cdot d\mathbf{r} = ∮_{L} F_x\,dx + F_y\,dy + F_z\,dz $$
+$$ \Gamma = \oint_{L} \mathbf{F} \cdot d\mathbf{r} = \oint_{L} F_x\,dx + F_y\,dy + F_z\,dz $$
 </div>
 <p class="info" data-en="The physical meaning is work: if F is a force, the circulation is the work done by the force on a particle that makes one full loop. For a potential (conservative) force the answer must be zero — you cannot extract free energy by returning to the starting point.">
 Физический смысл — работа: если \( \mathbf{F} \) — сила, то циркуляция равна работе силы над частицей, прошедшей круг. Для потенциальной (консервативной) силы работа по замкнутому пути обязана быть нулём — нельзя вернуть бесплатную энергию, вернувшись в исходную точку.</p>
@@ -97,7 +108,7 @@ $$ \Gamma = ∮_{L} \mathbf{F} \cdot d\mathbf{r} = ∮_{L} F_x\,dx + F_y\,dy + F
 <p class="info" data-en="The connection between circulation and curl is the Stokes theorem (module 06): the circulation along the boundary equals the flux of the curl through the surface. Its infinitesimal version — the curl is the circulation per unit area of a shrinking contour:">
 Связь циркуляции и ротора — теорема Стокса (модуль 06): циркуляция по границе равна потоку ротора через поверхность. Её инфинитезимальная версия — ротор есть циркуляция на единицу площади сжимающегося контура:</p>
 <div class="formula-block">
-$$ (\operatorname{rot} \mathbf{F}) \cdot \mathbf{n} = \lim_{S \to 0} \frac{1}{|S|} ∮_{\partial S} \mathbf{F} \cdot d\mathbf{r} $$
+$$ (\operatorname{rot} \mathbf{F}) \cdot \mathbf{n} = \lim_{S \to 0} \frac{1}{|S|} \oint_{\partial S} \mathbf{F} \cdot d\mathbf{r} $$
 </div>
 <div class="rule-box amber" data-en="This is the curl-analogue of the divergence definition: div = flux per unit volume, rot = circulation per unit area. Both are “density” versions of integral theorems.">
 Это ротор-аналог определения дивергенции: div = поток на единицу объёма, rot = циркуляция на единицу площади. Обе — «плотностные» версии интегральных теорем.</div>
@@ -221,7 +232,7 @@ $$ \mathbf F = (-y,\; x,\; 0):\quad \partial_x(x) - \partial_y(-y) = 1 + 1 = 2; 
 <section class="step-section" data-step="6">
 <div class="card">
 <div class="card-title" data-en="Summary &amp; exercises">Итоги и упражнения</div>
-<ul class="info" data-en="&lt;li&gt;rot F = ∇ × F — a vector field; its direction is the rotation axis (right-hand rule), its magnitude is twice the local angular velocity.&lt;/li&gt;&lt;li&gt;Planar case: (rot F)_z = ∂F_y/∂x − ∂F_x/∂y.&lt;/li&gt;&lt;li&gt;Circulation Γ = ∮F·dr; rot F·n = circulation per unit area.&lt;/li&gt;&lt;li&gt;Curl ≠ curved streamlines: shear has curl, a point vortex (away from the centre) does not.&lt;/li&gt;&lt;li&gt;rot grad ≡ 0, div rot ≡ 0.&lt;/li&gt;&lt;li&gt;rot F = 0 in a simply connected region ⇔ F = ∇φ ⇔ work is path-independent.&lt;/li&gt;"><li>\( \operatorname{rot}\mathbf F = \nabla\times\mathbf F \) — векторное поле; направление — ось вращения (правило правой руки), модуль — удвоенная локальная угловая скорость.</li><li>Плоский случай: \( (\operatorname{rot}\mathbf F)_z = \partial_x F_y - \partial_y F_x \).</li><li>Циркуляция \( \Gamma = ∮ \mathbf F\cdot d\mathbf r \); \( \operatorname{rot}\mathbf F\cdot\mathbf n \) — циркуляция на единицу площади.</li><li>Ротор ≠ изогнутые линии тока: у сдвига ротор есть, у точечного вихря (вне центра) — нет.</li><li>\( \operatorname{rot}\operatorname{grad} \equiv 0 \), \( \operatorname{div}\operatorname{rot} \equiv 0 \).</li><li>\( \operatorname{rot}\mathbf F = 0 \) в односвязной области ⇔ \( \mathbf F = \nabla\varphi \) ⇔ работа не зависит от пути.</li></ul>
+<ul class="info" data-en="&lt;li&gt;rot F = ∇ × F — a vector field; its direction is the rotation axis (right-hand rule), its magnitude is twice the local angular velocity.&lt;/li&gt;&lt;li&gt;Planar case: (rot F)_z = ∂F_y/∂x − ∂F_x/∂y.&lt;/li&gt;&lt;li&gt;Circulation Γ = \ointF·dr; rot F·n = circulation per unit area.&lt;/li&gt;&lt;li&gt;Curl ≠ curved streamlines: shear has curl, a point vortex (away from the centre) does not.&lt;/li&gt;&lt;li&gt;rot grad ≡ 0, div rot ≡ 0.&lt;/li&gt;&lt;li&gt;rot F = 0 in a simply connected region ⇔ F = ∇φ ⇔ work is path-independent.&lt;/li&gt;"><li>\( \operatorname{rot}\mathbf F = \nabla\times\mathbf F \) — векторное поле; направление — ось вращения (правило правой руки), модуль — удвоенная локальная угловая скорость.</li><li>Плоский случай: \( (\operatorname{rot}\mathbf F)_z = \partial_x F_y - \partial_y F_x \).</li><li>Циркуляция \( \Gamma = \oint \mathbf F\cdot d\mathbf r \); \( \operatorname{rot}\mathbf F\cdot\mathbf n \) — циркуляция на единицу площади.</li><li>Ротор ≠ изогнутые линии тока: у сдвига ротор есть, у точечного вихря (вне центра) — нет.</li><li>\( \operatorname{rot}\operatorname{grad} \equiv 0 \), \( \operatorname{div}\operatorname{rot} \equiv 0 \).</li><li>\( \operatorname{rot}\mathbf F = 0 \) в односвязной области ⇔ \( \mathbf F = \nabla\varphi \) ⇔ работа не зависит от пути.</li></ul>
 <p class="info" data-en="&lt;b&gt;Exercises&lt;/b&gt;">
 <b>Упражнения</b></p>
 
