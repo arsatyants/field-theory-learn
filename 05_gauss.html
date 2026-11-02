@@ -45,6 +45,26 @@ $$ \underbrace{\int_a^b f'\,dx = f(b) - f(a)}_{\text{1D}} \qquad\longleftrightar
 <div class="rule-box" data-en="Why the outward normal? The flux counts outflow minus inflow. Divergence measures local net production. The theorem states: total production = net outflow. Consistent orientation is the whole content of the sign convention.">
 Почему внешняя нормаль? Поток считает «вытекло минус втекло». Дивергенция измеряет локальный чистый «выпуск». Теорема утверждает: суммарный выпуск = чистый выток. Согласованная ориентация — всё содержание знакового соглашения.</div>
 </div>
+<div class="svg-diagram">
+<svg width="360" height="220" viewBox="0 0 360 220">
+  <rect width="360" height="220" fill="#13161f" rx="12"/>
+  <circle cx="180" cy="110" r="65" fill="rgba(62,207,142,0.06)" stroke="#3ecf8e" stroke-width="1.5"/>
+  <g stroke="#3ecf8e" stroke-width="1.5" opacity="0.8">
+    <line x1="180" y1="45" x2="180" y2="25" marker-end="url(#ag)"/>
+    <line x1="180" y1="175" x2="180" y2="195" marker-end="url(#ag)"/>
+    <line x1="115" y1="110" x2="95" y2="110" marker-end="url(#ag)"/>
+    <line x1="245" y1="110" x2="265" y2="110" marker-end="url(#ag)"/>
+    <line x1="134" y1="64" x2="120" y2="50" marker-end="url(#ag)"/>
+    <line x1="226" y1="64" x2="240" y2="50" marker-end="url(#ag)"/>
+    <line x1="134" y1="156" x2="120" y2="170" marker-end="url(#ag)"/>
+    <line x1="226" y1="156" x2="240" y2="170" marker-end="url(#ag)"/>
+  </g>
+  <text x="180" y="110" fill="#3ecf8e" font-size="13" text-anchor="middle" font-family="JetBrains Mono,monospace">div F внутри</text>
+  <text x="180" y="200" fill="#7a7f9a" font-size="12" text-anchor="middle">Поток через сферу = ∫∫∫ div F dV</text>
+  <defs><marker id="ag" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,5 L7,2.5 z" fill="currentColor"/></marker></defs>
+</svg>
+<div class="svg-label">Рис. Теорема Остроградского-Гаусса: генерация поля внутри = поток через границу.</div>
+</div>
 </section>
 
 <section class="step-section" data-step="1">

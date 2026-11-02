@@ -39,6 +39,23 @@
 <div class="rule-box" data-en="Divergence answers “does the point generate field?”, curl answers “does the point rotate field?”. Together they give the full local portrait of a vector field: sources and vortices.">
 Дивергенция отвечает «генерирует ли точка поле?», ротор — «вращает ли точка поле?». Вместе они дают полный локальный портрет векторного поля: источники и вихри.</div>
 </div>
+<div class="svg-diagram">
+<svg width="360" height="220" viewBox="0 0 360 220">
+  <rect width="360" height="220" fill="#13161f" rx="12"/>
+  <circle cx="180" cy="110" r="55" fill="none" stroke="#2a2e45" stroke-width="1" stroke-dasharray="4,4"/>
+  <g stroke="#f7c948" stroke-width="2" fill="none">
+    <path d="M180,55 A55,55 0 0,1 235,110" marker-end="url(#ac)"/>
+    <path d="M235,110 A55,55 0 0,1 180,165" marker-end="url(#ac)"/>
+    <path d="M180,165 A55,55 0 0,1 125,110" marker-end="url(#ac)"/>
+    <path d="M125,110 A55,55 0 0,1 180,55" marker-end="url(#ac)"/>
+  </g>
+  <line x1="180" y1="110" x2="180" y2="40" stroke="#f7c948" stroke-width="3" marker-end="url(#ac)"/>
+  <text x="195" y="45" fill="#f7c948" font-size="14" font-family="JetBrains Mono,monospace">∇×F</text>
+  <text x="180" y="200" fill="#7a7f9a" font-size="12" text-anchor="middle">Ротор направлен по оси вращения (правило правого винта)</text>
+  <defs><marker id="ac" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,5 L7,2.5 z" fill="currentColor"/></marker></defs>
+</svg>
+<div class="svg-label">Рис. Вихревое поле в плоскости: круговые линии тока, ротор перпендикулярен плоскости.</div>
+</div>
 </section>
 
 <section class="step-section" data-step="1">
