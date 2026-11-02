@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Модуль 05 — Теорема Остроградского-Гаусса</title>
+<link rel="stylesheet" href="shared.css">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-home" href="index.html">∭→∯</a>
+  <div class="nav-title">Модуль 05 — Теорема Остроградского-Гаусса</div>
+</div>
+<div id="stepNav">
+  <button class="step-btn active" data-step="0">Формулировка</button>
+  <button class="step-btn" data-step="1">Доказательство</button>
+  <button class="step-btn" data-step="2">Пример: сфера</button>
+  <button class="step-btn" data-step="3">Физический смысл</button>
+  <button class="step-btn" data-step="4">Rust: проверка Гаусса</button>
+</div>
+</main class="main">
+
+<section class="step-section active" data-step="0">
+<div class="card">
+<div class="card-title">Формулировка</div>
+<p class="info">
+Пусть \( V \) — замкнутая ограниченная область пространства, ограниченная гладкой (или кусочно-гладкой) поверхностью \( S = \partial V \), и пусть векторное поле \( \mathbf{F} \) непрерывно дифференцируемо в \( V \cup S \).
+</p>
+<div class="formula-block">
+$$ \oiint_{S} \mathbf{F} \cdot \mathbf{n} \, dS = \iiint_{V} \operatorname{div} \mathbf{F} \, dV $$
+</div>
+<div class="rule-box">
+Поток векторного поля через замкнутую поверхность равен объёмному интегралу дивергенции по ограниченной области.
+</div>
+</div>
+</section>
+
+<section class="step-section" data-step="1">
+<div class="card">
+<div class="card-title">Суть доказательства</div>
+<p class="info">
+Разобьём объём \( V \) на малые элементы \( \Delta V_i \) с границами \( \Delta S_i \).
+</p>
+<p class="info">
+Внутренние границы соседних элементов входят с противоположными нормалями и дают взаимные компенсации. Остаются только внешние границы — общая поверхность \( S \).
+</p>
+<div class="formula-block">
+$$ \sum_{i} \oint_{\Delta S_i} \mathbf{F} \cdot \mathbf{n} \, dS = \sum_{i} \int_{\Delta V_i} \operatorname{div} \mathbf{F} \, dV $$
+</div>
+<div class="formula-block">
+$$ \oint_{S} \mathbf{F} \cdot \mathbf{n} \, dS = \int_{V} \operatorname{div} \mathbf{F} \, dV $$
+</div>
+<div class="rule-box green">
+При переходе к пределу \( \Delta V_i \to 0 \) сумма интегралов по элементам переходит в тройной интеграл по области.
+</div>
+</div>
+</section>
+
+<section class="step-section" data-step="2">
+<div class="card">
+<div class="card-title">Пример: сфера + радиальное поле</div>
+<p class="info">
+Пусть \( \mathbf{F} = \mathbf{r} = (x,\; y,\; z) \). Тогда \( \operatorname{div} \mathbf{F} = 3 \).
+</p>
+<div class="formula-block">
+$$ \iiint_{V} \operatorname{div} \mathbf{F} \, dV = 3 \cdot \frac{4}{3} \pi R^{3} = 4 \pi R^{3} $$
+</div>
+<p class="info">
+Поверхностный интеграл: на сфере \( \mathbf{n} = \mathbf{r}/R \), \( \mathbf{F} \cdot \mathbf{n} = R \):
+</p>
+<div class="formula-block">
+$$ \oiint_{S} R \, dS = R \cdot 4 \pi R^{2} = 4 \pi R^{3} $$
+</div>
+<div class="rule-box">
+Обе части равны \( 4\pi R^{3} \) — теорема верифицирована.
+</div>
+</div>
+</section>
+
+<section class="step-section" data-step="3">
+<div class="card">
+<div class="card-title">Физический смысл</div>
+<div class="two-col">
+<div class="rule-box green">
+<strong>Электростатика:</strong> поток \( \mathbf{E} \) через замкнутую поверхность пропорционален заряду внутри (закон Гаусса).
+</div>
+<div class="rule-box">
+<strong>Гидродинамика:</strong> поток скорости жидкости через поверхность равен сумме источников внутри объёма.
+</div>
+</div>
+<div class="formula-block">
+$$ \oiint_{S} \mathbf{E} \cdot \mathbf{n} \, dS = \frac{Q_{\text{внутри}}}{\varepsilon_{0}} $$
+</div>
+</div>
+</section>
+
+<section class="step-section" data-step="4">
+<div class="card">
+<div class="card-title">Rust: численная проверка теоремы Гаусса</div>
+<div class="editor-wrap">
+  <div class="editor-header">
+    <span class="editor-lang">Rust</span>
+    <button class="run-btn">▶ Run</button>
+  </div>
+  <textarea class="code-area">fn main() {
+    // Теорема Гаусса для F = (x², y², z²) в кубе [0,1]³
+    // div F = 2x + 2y + 2z
+    // Объёмный интеграл: ∫∫∫ (2x+2y+2z) dV = 3 * ∫₀¹∫₀¹∫₀¹ 2x dxdydz = 3 * 2*(1/2) = 3
+    let n = 40usize;
+    let mut vol_int = 0.0_f64;
+    let dx = 1.0 / (n as f64);
+    for i in 0..n {
+        let x = (i as f64 + 0.5) * dx;
+        for j in 0..n {
+            let y = (j as f64 + 0.5) * dx;
+            for k in 0..n {
+                let z = (k as f64 + 0.5) * dx;
+                vol_int += (2.0*x + 2.0*y + 2.0*z) * dx*dx*dx;
+            }
+        }
+    }
+
+    // Поверхностный интеграл через 6 граней куба
+    let mut surf_int = 0.0_f64;
+    // грани x=0 и x=1: F·n = ±Fx = ±x²
+    for j in 0..n {
+        let y = (j as f64 + 0.5) * dx;
+        for k in 0..n {
+            let z = (k as f64 + 0.5) * dx;
+            // x=1: n=(1,0,0), F·n = 1.0
+            surf_int += 1.0 * dx * dx;
+            // x=0: n=(-1,0,0), F·n = 0
+        }
+    }
+    // грани y=0 и y=1
+    for i in 0..n {
+        let x = (i as f64 + 0.5) * dx;
+        for k in 0..n {
+            let z = (k as f64 + 0.5) * dx;
+            surf_int += 1.0 * dx * dx; // y=1
+        }
+    }
+    // грани z=0 и z=1
+    for i in 0..n {
+        let x = (i as f64 + 0.5) * dx;
+        for j in 0..n {
+            let y = (j as f64 + 0.5) * dx;
+            surf_int += 1.0 * dx * dx; // z=1
+        }
+    }
+
+    println!("F = (x², y², z²) в кубе [0,1]³");
+    println!("Объёмный интеграл div F: {:.6}", vol_int);
+    println!("Поверхностный интеграл:   {:.6}", surf_int);
+    println!("Аналитически:             3.0");
+}
+  </textarea>
+  <div class="output-box">Нажмите ▶ Run для запуска</div>
+</div>
+</div>
+</section>
+
+</main>
+<script src="playground.js"></script>
+<script>
+  document.querySelectorAll('.step-btn').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.step-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.step-section').forEach(s=>s.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelector('.step-section[data-step="'+b.dataset.step+'"]').classList.add('active');
+  }));
+</script>
+</body>
+</html>

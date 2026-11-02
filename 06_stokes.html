@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Модуль 06 — Теорема Стокса</title>
+<link rel="stylesheet" href="shared.css">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-home" href="index.html">∮→∯</a>
+  <div class="nav-title">Модуль 06 — Теорема Стокса</div>
+</div>
+<div id="stepNav">
+  <button class="step-btn active" data-step="0">Формулировка</button>
+  <button class="step-btn" data-step="1">Доказательство (идея)</button>
+  <button class="step-btn" data-step="2">Пример: круг</button>
+  <button class="step-btn" data-step="3">Классификация полей</button>
+  <button class="step-btn" data-step="4">Rust: проверка Стокса</button>
+</div>
+</main class="main">
+
+<section class="step-section active" data-step="0">
+<div class="card">
+<div class="card-title">Формулировка</div>
+<p class="info">
+Пусть \( S \) — ориентированная кусочно-гладкая поверхность с краем \( L = \partial S \), и пусть векторное поле \( \mathbf{F} \) непрерывно дифференцируемо в области, содержащей \( S \).
+</p>
+<div class="formula-block">
+$$ \oint_{L} \mathbf{F} \cdot d\mathbf{r} = \iint_{S} (\nabla \times \mathbf{F}) \cdot \mathbf{n} \, dS $$
+</div>
+<div class="rule-box">
+Циркуляция поля по замкнутому контуру равна потоку ротора через любую поверхность, ограничиваемую этим контуром.
+</div>
+<p class="info">
+Направление обхода контура \( L \) и нормаль \( \mathbf{n} \) согласованы по правилу правого винта.
+</p>
+</div>
+</section>
+
+<section class="step-section" data-step="1">
+<div class="card">
+<div class="card-title">Идея доказательства</div>
+<p class="info">
+Разобьём поверхность \( S \) на малые элементы \( \Delta S_i \) с границами \( \Delta L_i \).
+</p>
+<p class="info">
+Внутренние участки границ соседних элементов проходятся в противоположных направлениях и взаимно уничтожаются. Остаётся только внешний контур \( L \).
+</p>
+<div class="formula-block">
+$$ \sum_{i} \oint_{\Delta L_i} \mathbf{F} \cdot d\mathbf{r} = \sum_{i} \iint_{\Delta S_i} (\nabla \times \mathbf{F}) \cdot \mathbf{n} \, dS $$
+</div>
+<div class="rule-box green">
+При \( \Delta S_i \to 0 \) сумма переходит в интеграл по поверхности \( S \), а левая часть — в контурный интеграл по \( L \).
+</div>
+</div>
+</section>
+
+<section class="step-section" data-step="2">
+<div class="card">
+<div class="card-title">Пример: круг в плоскости XY</div>
+<p class="info">
+Пусть \( \mathbf{F} = (-y,\; x,\; 0) \). Тогда \( \nabla \times \mathbf{F} = (0,\; 0,\; 2) \).
+</p>
+<p class="info">
+Контурный интеграл по окружности радиуса \( R \): \( x = R\cos t,\; y = R\sin t \):
+</p>
+<div class="formula-block">
+$$ \oint_{L} (-y)\,dx + x\,dy = \int_{0}^{2\pi} [(-R\sin t)(-R\sin t) + (R\cos t)(R\cos t)]\,dt $$
+$$ = R^{2} \int_{0}^{2\pi} (\sin^{2}t + \cos^{2}t)\,dt = 2\pi R^{2} $$
+</div>
+<p class="info">
+Поверхностный интеграл ротора (через круг в плоскости XY, \( \mathbf{n} = (0,\; 0,\; 1) \)):
+</p>
+<div class="formula-block">
+$$ \iint_{S} 2\,dS = 2 \cdot \pi R^{2} = 2\pi R^{2} $$
+</div>
+<div class="rule-box">
+Обе части равны \( 2\pi R^{2} \) — теорема Стокса выполняется.
+</div>
+</div>
+</section>
+
+<section class="step-section" data-step="3">
+<div class="card">
+<div class="card-title">Классификация векторных полей</div>
+<table class="data-table">
+<tr><td>Тип поля</td><td>Условие</td><td>Потенциал</td></tr>
+<tr><td>Безвихревое (потенциальное)</td><td>\( \operatorname{rot} \mathbf{F} = \mathbf{0} \)</td><td>\( \mathbf{F} = \nabla \varphi \)</td></tr>
+<tr><td>Соленоидальное</td><td>\( \operatorname{div} \mathbf{F} = 0 \)</td><td>\( \mathbf{F} = \operatorname{rot} \mathbf{A} \)</td></tr>
+<tr><td>Гармоническое</td><td>\( \operatorname{div} \mathbf{F} = 0 \) и \( \operatorname{rot} \mathbf{F} = \mathbf{0} \)</td><td>\( \mathbf{F} = \nabla \varphi \), \( \Delta \varphi = 0 \)</td></tr>
+</table>
+<div class="rule-box amber">
+В односвязной области безвихревое поле всегда потенциально, и циркуляция по любому замкнутому контуру равна нулю.
+</div>
+</div>
+</section>
+
+<section class="step-section" data-step="4">
+<div class="card">
+<div class="card-title">Rust: численная проверка теоремы Стокса</div>
+<div class="editor-wrap">
+  <div class="editor-header">
+    <span class="editor-lang">Rust</span>
+    <button class="run-btn">▶ Run</button>
+  </div>
+  <textarea class="code-area">fn main() {
+    // Теорема Стокса для F = (-y, x, 0) через круг радиуса R в плоскости z=0
+    let r = 3.0;
+    let n = 400usize;
+
+    // Контурный интеграл ∮ (-y dx + x dy)
+    let mut circ = 0.0_f64;
+    let dt = 2.0 * std::f64::consts::PI / (n as f64);
+    for i in 0..n {
+        let t = i as f64 * dt;
+        let tp = t + dt;
+        let x = r * t.cos();
+        let y = r * t.sin();
+        let dx = r * (tp.cos() - t.cos());
+        let dy = r * (tp.sin() - t.sin());
+        circ += (-y) * dx + x * dy;
+    }
+
+    // Поверхностный интеграл ∬ rot F · n dS = ∬ 2 dS = 2 * πR²
+    let flux = 2.0 * std::f64::consts::PI * r * r;
+
+    println!("F = (-y, x, 0), контур: окружность R={}", r);
+    println!("Контурный интеграл (численно): {:.6}", circ);
+    println!("Поверхностный интеграл (аналит): {:.6}", flux);
+    println!("Относительная ошибка: {:.6}%", ((circ - flux)/flux).abs() * 100.0);
+}
+  </textarea>
+  <div class="output-box">Нажмите ▶ Run для запуска</div>
+</div>
+</div>
+</section>
+
+</main>
+<script src="playground.js"></script>
+<script>
+  document.querySelectorAll('.step-btn').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.step-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.step-section').forEach(s=>s.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelector('.step-section[data-step="'+b.dataset.step+'"]').classList.add('active');
+  }));
+</script>
+</body>
+</html>

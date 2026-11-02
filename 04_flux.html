@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Модуль 04 — Поток поля</title>
+<link rel="stylesheet" href="shared.css">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-home" href="index.html">∯</a>
+  <div class="nav-title">Модуль 04 — Поток векторного поля через поверхность</div>
+</div>
+<div id="stepNav">
+  <button class="step-btn active" data-step="0">Определение</button>
+  <button class="step-btn" data-step="1">Поток через грань</button>
+  <button class="step-btn" data-step="2">Связь с дивергенцией</button>
+  <button class="step-btn" data-step="3">Геометрический смысл</button>
+  <button class="step-btn" data-step="4">Rust: численный поток</button>
+</div>
+</main class="main">
+
+<section class="step-section active" data-step="0">
+<div class="card">
+<div class="card-title">Определение</div>
+<p class="info">
+<strong>Поток</strong> векторного поля \( \mathbf{F} \) через ориентированную поверхность \( S \):
+</p>
+<div class="formula-block">
+$$ \Phi = \iint_{S} \mathbf{F} \cdot \mathbf{n} \, dS = \iint_{S} F_n \, dS $$
+</div>
+<p class="info">
+где \( \mathbf{n} \) — единичный вектор нормали к поверхности, \( F_n \) — проекция поля на нормаль.
+</p>
+<div class="rule-box">
+Если поле можно представить как скорость жидкости, поток — это объём жидкости, протекающий через поверхность в единицу времени.
+</div>
+</div>
+</section>
+
+<section class="step-section" data-step="1">
+<div class="card">
+<div class="card-title">Поток через грань куба</div>
+<p class="info">
+Рассмотрим постоянное поле \( \mathbf{F} = (a,\; b,\; c) \) и грань куба \( x = \text{const} \), нормаль \( \mathbf{n} = (1,\; 0,\; 0) \):
+</p>
+<div class="formula-block">
+$$ \Phi = \iint_{S} a \, dS = a \cdot S $$
+</div>
+<p class="info">
+Через все шесть граней куба с ребром \( L \):
+</p>
+<div class="formula-block">
+$$ \Phi_{\text{total}} = aL^{2} - aL^{2} + bL^{2} - bL^{2} + cL^{2} - cL^{2} = 0 $$
+</div>
+<div class="rule-box green">
+Для однородного поля полный поток через замкнутую поверхность равен нулю — нет источников и стоков.
+</div>
+</div>
+</section>
+
+<section class="step-section" data-step="2">
+<div class="card">
+<div class="card-title">Связь с дивергенцией</div>
+<p class="info">
+Теорема Остроградского-Гаусса связывает поток через замкнутую поверхность с дивергенцией:
+</p>
+<div class="formula-block">
+$$ \oiint_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS = \iiint_{V} \operatorname{div} \mathbf{F} \, dV $$
+</div>
+<div class="rule-box">
+Это означает: суммарный «выброс» поля через границу тела равен интегралу плотности источников по всему объёму.
+</div>
+</div>
+</section>
+
+<section class="step-section" data-step="3">
+<div class="card">
+<div class="card-title">Геометрический смысл</div>
+<p class="info">
+Поток поля через элементарную площадку \( dS \) равен объёму цилиндра с основанием \( dS \) и высотой, равной проекции вектора поля на нормаль.
+</p>
+<div class="formula-block">
+$$ d\Phi = \mathbf{F} \cdot \mathbf{n} \, dS = |\mathbf{F}| \cos\theta \, dS $$
+</div>
+<div class="rule-box amber">
+При \( \theta = 90^{\circ} \) (поле параллельно поверхности) поток равен нулю. При \( \theta = 0^{\circ} \) (поле перпендикулярно) — максимален.
+</div>
+</div>
+</section>
+
+<section class="step-section" data-step="4">
+<div class="card">
+<div class="card-title">Rust: поток через сферу (численно)</div>
+<div class="editor-wrap">
+  <div class="editor-header">
+    <span class="editor-lang">Rust</span>
+    <button class="run-btn">▶ Run</button>
+  </div>
+  <textarea class="code-area">fn main() {
+    // Поток поля F = (x, y, z) = r через сферу радиуса R
+    // Аналитически: div F = 3 => поток = 3 * (4/3 π R³) = 4πR³
+    let r = 2.0;
+    let n = 200usize;
+    let mut flux = 0.0_f64;
+
+    for i in 0..n {
+        let theta = std::f64::consts::PI * (i as f64 + 0.5) / (n as f64);
+        let st = theta.sin();
+        let ct = theta.cos();
+        for j in 0..n {
+            let phi = 2.0 * std::f64::consts::PI * (j as f64 + 0.5) / (n as f64);
+            let sp = phi.sin();
+            let cp = phi.cos();
+
+            // точка на сфере
+            let x = r * st * cp;
+            let y = r * st * sp;
+            let z = r * ct;
+
+            // F = (x, y, z)
+            // нормаль n = (x, y, z)/r
+            // F·n = (x²+y²+z²)/r = r²/r = r
+            // dS = r² sinθ dθ dφ
+            let dtheta = std::f64::consts::PI / (n as f64);
+            let dphi = 2.0 * std::f64::consts::PI / (n as f64);
+            let dS = r * r * st * dtheta * dphi;
+            flux += r * dS;
+        }
+    }
+
+    let expected = 4.0 * std::f64::consts::PI * r * r * r;
+    println!("Численный поток через сферу R={}: {:.6}", r, flux);
+    println!("Аналитически 4πR³ = {:.6}", expected);
+    println!("Относительная ошибка: {:.6}%", ((flux - expected)/expected).abs() * 100.0);
+}
+  </textarea>
+  <div class="output-box">Нажмите ▶ Run для запуска</div>
+</div>
+</div>
+</section>
+
+</main>
+<script src="playground.js"></script>
+<script>
+  document.querySelectorAll('.step-btn').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.step-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.step-section').forEach(s=>s.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelector('.step-section[data-step="'+b.dataset.step+'"]').classList.add('active');
+  }));
+</script>
+</body>
+</html>
