@@ -1,6 +1,6 @@
 pub fn run() {
-    let n = 40usize;
-    let dx = 1.0 / (n as f64);
+    let n = 40;
+    let dx = 1.0 / n as f64;
     let mut vol_int = 0.0_f64;
     for i in 0..n {
         let x = (i as f64 + 0.5) * dx;
@@ -12,17 +12,8 @@ pub fn run() {
             }
         }
     }
-
-    let mut surf_int = 0.0_f64;
-    // x=1 faces
-    for _ in 0..n { for _ in 0..n { surf_int += 1.0 * dx * dx; } }
-    // y=1 faces
-    for _ in 0..n { for _ in 0..n { surf_int += 1.0 * dx * dx; } }
-    // z=1 faces
-    for _ in 0..n { for _ in 0..n { surf_int += 1.0 * dx * dx; } }
-
-    println!("F = (x², y², z²) в кубе [0,1]³");
-    println!("Объёмный интеграл div F: {:.6}", vol_int);
-    println!("Поверхностный интеграл:   {:.6}", surf_int);
-    println!("Аналитически:             3.0");
+    let surf_int = 1.0 + 1.0 + 1.0;
+    println!("Поле F = (x², y², z²), куб [0,1]³");
+    println!("Объёмный интеграл div F (числ.): {:.6}", vol_int);
+    println!("Поверхностный поток      (точно): {:.6}", surf_int);
 }

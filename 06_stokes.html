@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -7,113 +8,136 @@
 <link rel="stylesheet" href="shared.css">
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="lang.js"></script>
 </head>
 <body>
 <nav class="top-nav">
   <a class="nav-home" href="index.html">∮→∯</a>
-  <div class="nav-title">Модуль 06 — Теорема Стокса</div>
-</div>
+  <div class="nav-title" data-en="Module 06 — Stokes theorem">Модуль 06 — Теорема Стокса</div>
+</nav>
 <div id="stepNav">
-  <button class="step-btn active" data-step="0">Формулировка</button>
-  <button class="step-btn" data-step="1">Доказательство (идея)</button>
-  <button class="step-btn" data-step="2">Пример: круг</button>
-  <button class="step-btn" data-step="3">Классификация полей</button>
-  <button class="step-btn" data-step="4">Rust: проверка Стокса</button>
+  <button class="step-btn active" data-step="0" data-en="Statement">Формулировка</button>
+  <button class="step-btn" data-step="1" data-en="Why it is true">Почему это так</button>
+  <button class="step-btn" data-step="2" data-en="Worked example: circle">Пример: круг</button>
+  <button class="step-btn" data-step="3" data-en="Field classification">Классификация полей</button>
+  <button class="step-btn" data-step="4" data-en="Stokes in physics">Стокс в физике</button>
+  <button class="step-btn" data-step="5" data-en="Rust: verify Stokes">Rust: проверка Стокса</button>
 </div>
-</main class="main">
+<main class="main">
 
 <section class="step-section active" data-step="0">
 <div class="card">
-<div class="card-title">Формулировка</div>
-<p class="info">
-Пусть \( S \) — ориентированная кусочно-гладкая поверхность с краем \( L = \partial S \), и пусть векторное поле \( \mathbf{F} \) непрерывно дифференцируемо в области, содержащей \( S \).
-</p>
+<div class="card-title" data-en="Statement">Формулировка</div>
+<p class="info" data-en="Take an oriented surface S bounded by a closed curve L = ∂S. Let the vector field F be smooth in a neighborhood of S. Choose the orientations consistently: the normal to S and the direction of traversal of L are related by the right-hand rule (fingers along L, thumb along n). Then:">
+Возьмём ориентированную поверхность \( S \), ограниченную замкнутой кривой \( L = \partial S \). Пусть векторное поле \( \mathbf{F} \) гладкое в окрестности \( S \). Ориентации согласованы по правилу правого винта (пальцы вдоль \( L \), большой палец вдоль \( \mathbf{n} \)). Тогда:</p>
 <div class="formula-block">
-$$ \oint_{L} \mathbf{F} \cdot d\mathbf{r} = \iint_{S} (\nabla \times \mathbf{F}) \cdot \mathbf{n} \, dS $$
+$$ \oint_{L} \mathbf{F} \cdot d\mathbf{r} \;=\; \iint_{S} (\nabla \times \mathbf{F}) \cdot \mathbf{n} \, dS $$
 </div>
-<div class="rule-box">
-Циркуляция поля по замкнутому контуру равна потоку ротора через любую поверхность, ограничиваемую этим контуром.
-</div>
-<p class="info">
-Направление обхода контура \( L \) и нормаль \( \mathbf{n} \) согласованы по правилу правого винта.
-</p>
+<p class="info" data-en="In words: the circulation of F around the boundary equals the flux of curl F through any surface that has this boundary. The theorem converts a one-dimensional contour integral into a two-dimensional surface integral — and back.">
+Словами: циркуляция \( \mathbf{F} \) по границе равна потоку ротора \( \mathbf{F} \) через любую поверхность, имеющую эту границу. Теорема превращает одномерный контурный интеграл в двумерный поверхностный — и обратно.</p>
+<div class="rule-box" data-en="Orientation freedom is a crucial point: the theorem does not depend on which surface we span across L. A soap film, a hemisphere, a tent — all give the same answer, because the same boundary is the source of circulation.">
+Свобода выбора поверхности — ключевой момент: теорема не зависит от того, какую поверхность натянуть на \( L \). Мыльная плёнка, полусфера, палатка — всё даст один ответ, потому что источник циркуляции — одна и та же граница.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="1">
 <div class="card">
-<div class="card-title">Идея доказательства</div>
-<p class="info">
-Разобьём поверхность \( S \) на малые элементы \( \Delta S_i \) с границами \( \Delta L_i \).
-</p>
-<p class="info">
-Внутренние участки границ соседних элементов проходятся в противоположных направлениях и взаимно уничтожаются. Остаётся только внешний контур \( L \).
-</p>
+<div class="card-title" data-en="Why it is true">Почему это так</div>
+<p class="info" data-en="The proof is the same cancellation trick as in the Gauss theorem, but one dimension lower. Partition the surface S into small cells (imagine paving it with tiny loops). For each small cell the circulation around its boundary is approximately the normal component of curl F at the cell center times the cell area:">
+Доказательство — тот же приём сокращения, что и в теореме Гаусса, но на одно измерение ниже. Разобьём поверхность \( S \) на малые ячейки. Для каждой малой ячейки циркуляция по её границе приближённо равна нормальной компоненте ротора в центре ячейки, умноженной на её площадь:</p>
 <div class="formula-block">
-$$ \sum_{i} \oint_{\Delta L_i} \mathbf{F} \cdot d\mathbf{r} = \sum_{i} \iint_{\Delta S_i} (\nabla \times \mathbf{F}) \cdot \mathbf{n} \, dS $$
+$$ \oint_{\partial(\text{cell}_i)} \mathbf{F} \cdot d\mathbf{r} \;\approx\; \bigl( (\nabla \times \mathbf{F}) \cdot \mathbf{n} \bigr)(\mathbf{x}_i) \cdot \Delta S_i $$
 </div>
-<div class="rule-box green">
-При \( \Delta S_i \to 0 \) сумма переходит в интеграл по поверхности \( S \), а левая часть — в контурный интеграл по \( L \).
+<p class="info" data-en="Sum over all cells. Every internal edge is shared by two neighboring cells, but those cells walk the edge in opposite directions, so the edge circulations cancel. Only the edges lying on the outer boundary L survive. The sum of the cell circulations becomes the circulation around L; the sum of the curl-fluxes becomes the surface integral of curl F over S:">
+Суммируем по ячейкам. Каждое внутреннее ребро принадлежит двум соседним ячейкам, но они обходят его в противоположных направлениях — циркуляции по ребру сокращаются. Выживают только рёбра на внешней границе \( L \). Сумма циркуляций по ячейкам становится циркуляцией вокруг \( L \); сумма потоков роторов — поверхностным интегралом ротора по \( S \):</p>
+<div class="formula-block">
+$$ \sum_i \oint_{\partial(\text{cell}_i)} \mathbf{F}\cdot d\mathbf{r} = \oint_{L} \mathbf{F}\cdot d\mathbf{r}, \qquad
+\sum_i (\nabla\times\mathbf{F})\cdot\mathbf{n}\,\Delta S_i \to \iint_{S} (\nabla\times\mathbf{F})\cdot\mathbf{n}\,dS $$
 </div>
+<div class="rule-box green" data-en="The Stokes theorem is the two-dimensional analogue of the Newton–Leibniz formula: the integral of a derivative over the interior equals the original function evaluated on the boundary. The Gauss theorem was the 3D version; this is the 2D version.">
+Теорема Стокса — двумерный аналог формулы Ньютона–Лейбница: интеграл производной по внутренности равен исходной функции на границе. Гаусс был 3D-версией; Стокс — 2D-версией.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="2">
 <div class="card">
-<div class="card-title">Пример: круг в плоскости XY</div>
-<p class="info">
-Пусть \( \mathbf{F} = (-y,\; x,\; 0) \). Тогда \( \nabla \times \mathbf{F} = (0,\; 0,\; 2) \).
-</p>
-<p class="info">
-Контурный интеграл по окружности радиуса \( R \): \( x = R\cos t,\; y = R\sin t \):
-</p>
+<div class="card-title" data-en="Worked example: circle">Пример: круг в плоскости XY</div>
+<p class="info" data-en="Let F = (−y, x, 0) — the velocity field of a fluid rotating as a rigid body with angular velocity 1 around the z axis. Its curl is:">
+Пусть \( \mathbf{F} = (-y,\; x,\; 0) \) — поле скоростей жидкости, вращающейся как твёрдое тело с угловой скоростью 1 вокруг оси \( z \). Его ротор:</p>
 <div class="formula-block">
-$$ \oint_{L} (-y)\,dx + x\,dy = \int_{0}^{2\pi} [(-R\sin t)(-R\sin t) + (R\cos t)(R\cos t)]\,dt $$
+$$ \nabla \times \mathbf{F} = \left( 0,\; 0,\; \frac{\partial x}{\partial x} - \frac{\partial (-y)}{\partial y} \right) = (0,\; 0,\; 2) $$
+</div>
+<p class="info" data-en="Left side — circulation around a circle of radius R: x = R cos t, y = R sin t, t from 0 to 2π.">
+Левая часть — циркуляция по окружности радиуса \( R \): \( x = R\cos t,\; y = R\sin t,\; 0 \leq t \leq 2\pi \):</p>
+<div class="formula-block">
+$$ \oint_{L} (-y)\,dx + x\,dy = \int_{0}^{2\pi} \bigl[(-R\sin t)(-R\sin t) + (R\cos t)(R\cos t)\bigr] dt $$
 $$ = R^{2} \int_{0}^{2\pi} (\sin^{2}t + \cos^{2}t)\,dt = 2\pi R^{2} $$
 </div>
-<p class="info">
-Поверхностный интеграл ротора (через круг в плоскости XY, \( \mathbf{n} = (0,\; 0,\; 1) \)):
-</p>
+<p class="info" data-en="Right side — flux of curl F through the disk. Since rot F = (0,0,2) and the disk normal is n = (0,0,1), the dot product is 2:">
+Правая часть — поток ротора через круг. Так как \( \operatorname{rot}\mathbf{F} = (0,0,2) \), а нормаль диска \( \mathbf{n} = (0,0,1) \), скалярное произведение равно 2:</p>
 <div class="formula-block">
-$$ \iint_{S} 2\,dS = 2 \cdot \pi R^{2} = 2\pi R^{2} $$
+$$ \iint_{S} 2 \, dS = 2 \cdot \pi R^{2} = 2\pi R^{2} $$
 </div>
-<div class="rule-box">
-Обе части равны \( 2\pi R^{2} \) — теорема Стокса выполняется.
-</div>
+<div class="rule-box" data-en="Both sides equal 2πR². The factor 2 in the curl is the angular velocity doubled: a paddle wheel in this flow would spin twice as fast as the angular coordinate of the fluid parcel.">
+Обе части равны \( 2\pi R^{2} \). Множитель 2 в роторе — удвоенная угловая скорость: вертушка в этом потоке вращалась бы вдвое быстрее угловой координаты жидкой частицы.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="3">
 <div class="card">
-<div class="card-title">Классификация векторных полей</div>
+<div class="card-title" data-en="Classification of vector fields">Классификация векторных полей</div>
+<p class="info" data-en="Combining the two differential operations and the two potential representations gives a clean taxonomy of smooth vector fields in simply connected domains:">
+Сочетая две дифференциальные операции и два потенциальных представления, получаем чёткую классификацию гладких векторных полей в односвязных областях:</p>
 <table class="data-table">
-<tr><td>Тип поля</td><td>Условие</td><td>Потенциал</td></tr>
-<tr><td>Безвихревое (потенциальное)</td><td>\( \operatorname{rot} \mathbf{F} = \mathbf{0} \)</td><td>\( \mathbf{F} = \nabla \varphi \)</td></tr>
-<tr><td>Соленоидальное</td><td>\( \operatorname{div} \mathbf{F} = 0 \)</td><td>\( \mathbf{F} = \operatorname{rot} \mathbf{A} \)</td></tr>
-<tr><td>Гармоническое</td><td>\( \operatorname{div} \mathbf{F} = 0 \) и \( \operatorname{rot} \mathbf{F} = \mathbf{0} \)</td><td>\( \mathbf{F} = \nabla \varphi \), \( \Delta \varphi = 0 \)</td></tr>
+<tr><td data-en="Field type">Тип поля</td><td data-en="Condition">Условие</td><td data-en="Potential">Потенциал</td></tr>
+<tr><td data-en="Irrotational (potential)">Безвихревое (потенциальное)</td><td>\( \operatorname{rot} \mathbf{F} = \mathbf{0} \)</td><td>\( \mathbf{F} = \nabla \varphi \)</td></tr>
+<tr><td data-en="Solenoidal">Соленоидальное</td><td>\( \operatorname{div} \mathbf{F} = 0 \)</td><td>\( \mathbf{F} = \operatorname{rot} \mathbf{A} \)</td></tr>
+<tr><td data-en="Harmonic">Гармоническое</td><td>\( \operatorname{div} \mathbf{F} = 0 \) и \( \operatorname{rot} \mathbf{F} = \mathbf{0} \)</td><td>\( \mathbf{F} = \nabla \varphi \), \( \Delta \varphi = 0 \)</td></tr>
 </table>
-<div class="rule-box amber">
-В односвязной области безвихревое поле всегда потенциально, и циркуляция по любому замкнутому контуру равна нулю.
-</div>
+<p class="info" data-en="Stokes theorem gives the circulation test for the first row: in a simply connected domain rot F = 0 implies the circulation along any closed loop is zero, which means work along any path depends only on the endpoints — exactly what a gradient field does.">
+Теорема Стокса даёт тест циркуляции для первой строки: в односвязной области \( \operatorname{rot}\mathbf{F} = 0 \) означает, что циркуляция по любому контуру равна нулю, то есть работа по пути зависит только от концов — ровно то, что делает градиентное поле.</p>
+<div class="rule-box amber" data-en="A simply connected domain has no holes. If there is a hole, rot F = 0 is not enough: the circulation around the hole can be non-zero even though the curl vanishes everywhere. That is exactly what happens in the (−y, x, 0) example if the disk is punctured at the origin.">
+Односвязная область — без дыр. Если дыра есть, \( \operatorname{rot}\mathbf{F} = 0 \) недостаточно: циркуляция вокруг дыры может быть ненулевой, хотя ротор везде нулевой. Именно так ведёт себя пример \( (-y,\;x,\;0) \), если диск проколот в начале координат.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="4">
 <div class="card">
-<div class="card-title">Rust: численная проверка теоремы Стокса</div>
+<div class="card-title" data-en="Stokes in physics">Стокс в физике</div>
+<p class="info" data-en="The theorem is not an abstract exercise; it appears under different names across physics. In electromagnetism, Faraday’s law of induction says that the electromotive force around a conducting loop equals minus the rate of change of the magnetic flux through the loop:">
+Теорема — не абстрактное упражнение; она встречается в физике под разными именами. В электромагнетизме закон электромагнитной индукции Фарадея говорит, что ЭДС в проводящем контуре равна минус скорости изменения магнитного потока через контур:</p>
+<div class="formula-block">
+$$ \mathcal{E} = \oint_{L} \mathbf{E} \cdot d\mathbf{r} = -\frac{d}{dt} \iint_{S} \mathbf{B} \cdot \mathbf{n} \, dS $$
+</div>
+<p class="info" data-en="Using Stokes theorem, the left side can be rewritten as the surface integral of rot E, giving the differential form:">
+Используя теорему Стокса, левую часть можно переписать как поверхностный интеграл \( \operatorname{rot}\mathbf{E} \), получая дифференциальную форму:</p>
+<div class="formula-block">
+$$ \nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t} $$
+</div>
+<p class="info" data-en="In fluid mechanics, the theorem explains lift: the circulation of velocity around an airfoil equals the vorticity (curl of velocity) shed into the wake. The Kutta–Zhukovsky formula L = ρ v Γ directly relates circulation to lift force.">
+В механике жидкости теорема объясняет подъёмную силу: циркуляция скорости вокруг профиля крыла равна вихревости (ротору скорости), сбрасываемой в след. Формула Жуковского \( L = \rho v \Gamma \) напрямую связывает циркуляцию с подъёмной силой.</p>
+</div>
+</section>
+
+<section class="step-section" data-step="5">
+<div class="card">
+<div class="card-title" data-en="Rust: verify Stokes">Rust: численная проверка теоремы Стокса</div>
+<p class="info" data-en="The code computes both sides of the Stokes theorem for the rigid-rotation field F = (−y, x, 0). The contour integral is approximated along a circle of radius R; the surface side uses the exact flux of curl F = (0,0,2) through the disk, equal to 2πR².">
+Код считает обе части теоремы Стокса для поля твёрдого вращения \( \mathbf{F} = (-y,\; x,\; 0) \). Контурный интеграл приближается вдоль окружности радиуса \( R \); поверхностная часть использует точный поток ротора \( \operatorname{rot}\mathbf{F} = (0,0,2) \) через диск, равный \( 2\pi R^{2} \).</p>
 <div class="editor-wrap">
   <div class="editor-header">
     <span class="editor-lang">Rust</span>
     <button class="run-btn">▶ Run</button>
   </div>
   <textarea class="code-area">fn main() {
-    // Теорема Стокса для F = (-y, x, 0) через круг радиуса R в плоскости z=0
+    // Теорема Стокса для F = (−y, x, 0), контур — окружность в плоскости z=0
     let r = 3.0;
-    let n = 400usize;
+    let n = 400;
+    let pi = std::f64::consts::PI;
 
-    // Контурный интеграл ∮ (-y dx + x dy)
+    // Левая часть: циркуляция ∮ F·dr = ∮ (−y dx + x dy)
     let mut circ = 0.0_f64;
-    let dt = 2.0 * std::f64::consts::PI / (n as f64);
+    let dt = 2.0 * pi / (n as f64);
     for i in 0..n {
         let t = i as f64 * dt;
         let tp = t + dt;
@@ -124,17 +148,20 @@ $$ \iint_{S} 2\,dS = 2 \cdot \pi R^{2} = 2\pi R^{2} $$
         circ += (-y) * dx + x * dy;
     }
 
-    // Поверхностный интеграл ∬ rot F · n dS = ∬ 2 dS = 2 * πR²
-    let flux = 2.0 * std::f64::consts::PI * r * r;
+    // Правая часть: ∬ rot F · n dS = ∬ 2 dS = 2 · πR²
+    let flux = 2.0 * pi * r * r;
 
-    println!("F = (-y, x, 0), контур: окружность R={}", r);
-    println!("Контурный интеграл (численно): {:.6}", circ);
-    println!("Поверхностный интеграл (аналит): {:.6}", flux);
+    println!("Поле F = (−y, x, 0) — вращение как твёрдое тело");
+    println!("Контур: окружность R = {}", r);
+    println!("Циркуляция ∮F·dr   (числ.): {:.6}", circ);
+    println!("Поток rot F·n dS   (аналит): {:.6}", flux);
     println!("Относительная ошибка: {:.6}%", ((circ - flux)/flux).abs() * 100.0);
-}
-  </textarea>
-  <div class="output-box">Нажмите ▶ Run для запуска</div>
+    println!("rot F = (0, 0, 2) — удвоенная угловая скорость");
+}</textarea>
+  <div class="output-box" data-en="Press ▶ Run to execute">Нажмите ▶ Run для запуска</div>
 </div>
+<p class="info" data-en="The contour integral converges to 2πR² as the polygonal approximation becomes finer. The small residual comes from approximating the smooth circle by a straight-segment polygon; it decreases as 1/n.">
+Контурный интеграл сходится к \( 2\pi R^{2} \) по мере измельчения ломаной. Малая погрешность — следствие приближения гладкой окружности прямолинейными отрезками; она убывает как \( 1/n \).</p>
 </div>
 </section>
 

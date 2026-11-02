@@ -5,94 +5,158 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Модуль 02 — Дивергенция</title>
 <link rel="stylesheet" href="shared.css">
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="mathjax-config.js"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="lang.js"></script>
 </head>
 <body>
 <nav class="top-nav">
   <a class="nav-home" href="index.html">∇·</a>
-  <div class="nav-title">Модуль 02 — Дивергенция векторного поля</div>
-</div>
+  <div class="nav-title" data-en="Module 02 — Divergence of a vector field">Модуль 02 — Дивергенция векторного поля</div>
+</nav>
 <div id="stepNav">
-  <button class="step-btn active" data-step="0">Определение</button>
-  <button class="step-btn" data-step="1">Источники и стоки</button>
-  <button class="step-btn" data-step="2">В декартовых координатах</button>
-  <button class="step-btn" data-step="3">Соленоидальное поле</button>
-  <button class="step-btn" data-step="4">Rust: численная div</button>
+  <button class="step-btn active" data-step="0" data-en="Vector field">Векторное поле</button>
+  <button class="step-btn" data-step="1" data-en="Definition">Определение</button>
+  <button class="step-btn" data-step="2" data-en="Sources and sinks">Источники и стоки</button>
+  <button class="step-btn" data-step="3" data-en="In coordinates">В координатах</button>
+  <button class="step-btn" data-step="4" data-en="Solenoidal field">Соленоидальное поле</button>
+  <button class="step-btn" data-step="5" data-en="Rust: numerical div">Rust: численная div</button>
+  <button class="step-btn" data-step="6" data-en="Summary &amp; exercises">Итоги и упражнения</button>
 </div>
-</main class="main">
+<main class="main">
 
 <section class="step-section active" data-step="0">
 <div class="card">
-<div class="card-title">Определение</div>
-<p class="info">
-<strong>Дивергенция</strong> векторного поля \( \mathbf{F} = (F_x, F_y, F_z) \) — скалярная величина, равная скалярному произведению \( \nabla \) и \( \mathbf{F} \):
-</p>
+<div class="card-title" data-en="Vector field">Векторное поле</div>
+<p class="info" data-en="A vector field assigns a vector to every point of space, not a number: wind velocity in the atmosphere, the flow of water in a river, the electric field around a charge. Formally:">
+Векторное поле ставит каждой точке пространства в соответствие вектор, а не число: скорость ветра в атмосфере, течение воды в реке, электрическое поле вокруг заряда. Формально:</p>
 <div class="formula-block">
-$$ \operatorname{div} \mathbf{F} = \nabla \cdot \mathbf{F} = \frac{\partial F_x}{\partial x} + \frac{\partial F_y}{\partial y} + \frac{\partial F_z}{\partial z} $$
+$$ \mathbf{F} : \mathbb{R}^{3} \to \mathbb{R}^{3}, \qquad \mathbf{F}(x,y,z) = \bigl( F_x(x,y,z),\; F_y(x,y,z),\; F_z(x,y,z) \bigr) $$
 </div>
-<div class="rule-box">
-Дивергенция измеряет, насколько данная точка является «источником» (div > 0) или «стоком» (div < 0) поля.
-</div>
+<p class="info" data-en="A vector field is visualized as a “hedgehog” of arrows: at each point an arrow whose direction is the direction of the field and whose length is the magnitude. A river is the best mental model: think of the field as the velocity of a fluid flowing through space. We will use this fluid picture throughout the course.">
+Векторное поле изображают «ёжиком» стрелок: в каждой точке стрелка, её направление — направление поля, длина — величина. Лучшая ментальная модель — река: представь поле как скорость жидкости, текущей сквозь пространство. Эта «гидродинамическая» картина будет работать во всём курсе.</p>
+<p class="info" data-en="Two questions one can ask about a flowing fluid at a point:<br>· Is there more flowing out of a small neighborhood than into it? (a source lives here)<br>· Is the fluid locally swirling? (a vortex lives here)
+The first question is answered by divergence, the second by curl — the subjects of this module and the next.">
+О текущей жидкости в точке можно задать два вопроса:<br>· Из малой окрестности точки вытекает больше, чем втекает? (здесь живёт источник)<br>· Жидкость локально вращается? (здесь живёт вихрь)
+Первый вопрос закрывает дивергенция, второй — ротор: темы этого и следующего модуля.</p>
+
+<figure class="fig" data-fig="vfields"><figcaption data-en="&lt;b&gt;Fig. 1.&lt;/b&gt; A gallery of vector fields on the plane. Arrows show the field direction (length and colour grow with magnitude), thin lines are &lt;b&gt;streamlines&lt;/b&gt;: curves tangent to the field at every point, the paths a dust particle would follow in the flow. The corner shows div and rot. Compare “source” (lines spread out, div &amp;gt; 0), “rotation” (closed lines, div = 0, rot ≠ 0) and “shear” (parallel lines, yet there is rotation!)."><b>Рис. 1.</b> Галерея векторных полей на плоскости. Стрелки — направление поля (длина и цвет растут с величиной), тонкие линии — <b>линии тока</b>: кривые, касательные к полю в каждой точке, по ним двигалась бы пылинка в потоке. В углу — значения div и rot. Сравните «источник» (линии расходятся, div &gt; 0), «вращение» (линии замкнуты, div = 0, rot ≠ 0) и «сдвиг» (линии параллельны, но есть вращение!).</figcaption></figure>
+
+<div class="rule-box amber" data-en="Do not confuse “arrow density” with divergence. The shear field (y, 0) has arrows of different lengths, yet div = 0: the length changes &lt;b&gt;across&lt;/b&gt; the flow, not along it. Divergence only feels the change of each component along its own axis.">
+Не путайте «густоту стрелок» с дивергенцией. У поля «сдвиг» \( (y, 0) \) стрелки разной длины, но \( \operatorname{div} = 0 \): длина меняется <span class="hl">поперёк</span> потока, а не вдоль. Дивергенция чувствует только изменение компоненты вдоль её собственной оси.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="1">
 <div class="card">
-<div class="card-title">Источники и стоки</div>
-<p class="info">
-Поток через бесконечно малую замкнутую поверхность вокруг точки пропорционален дивергенции:
-</p>
+<div class="card-title" data-en="Definition">Определение</div>
+<p class="info" data-en="The divergence of a vector field is a scalar equal to the “dot product” of the nabla operator with the field:">
+Дивергенция векторного поля — это скаляр, равный «скалярному произведению» оператора набла с полем:</p>
 <div class="formula-block">
-$$ \operatorname{div} \mathbf{F} = \lim_{V \to 0} \frac{1}{V} \oint_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS $$
+$$ \operatorname{div} \mathbf{F} = \nabla \cdot \mathbf{F} = \frac{\partial F_x}{\partial x} + \frac{\partial F_y}{\partial y} + \frac{\partial F_z}{\partial z} $$
 </div>
-<div class="two-col">
-<div class="rule-box green">
-<strong>div F > 0</strong> — точка источник: из неё вытекает больше, чем втекает.
+<p class="info" data-en="This is a scalar, not a vector: the “coordinates” of ∇ are not numbers but derivative operators, and after applying them to the field components and summing we obtain one number at each point. Note the structure: the first component of F is differentiated with respect to the first coordinate, the second with respect to the second, the third with respect to the third — the field is “stretched” along its own axes.">
+Это скаляр, а не вектор: «координаты» \( \nabla \) — не числа, а операторы дифференцирования, и после их применения к компонентам поля и суммирования получается одно число в каждой точке. Обрати внимание на структуру: первая компонента \( \mathbf{F} \) дифференцируется по первой координате, вторая — по второй, третья — по третьей: поле «растягивается» вдоль собственных осей.</p>
+<div class="rule-box" data-en="Physical meaning: divergence measures the net outflow of the field per unit volume from an infinitesimal neighborhood of the point. Positive — the point “generates” field, negative — the point “absorbs” it, zero — as much flows in as flows out.">
+Физический смысл: дивергенция измеряет чистый «выток» поля на единицу объёма из бесконечно малой окрестности точки. Положительна — точка «генерирует» поле, отрицательна — «поглощает», нулевая — сколько втекает, столько и вытекает.</div>
+
+<p class="info" data-en="Where does exactly the sum ∂Fx/∂x + ∂Fy/∂y + ∂Fz/∂z come from? Take a tiny cube with sides dx, dy, dz and count how much field leaves through its faces. Through the right face (area dy dz) the amount F_x(x+dx) dy dz goes out, through the left face F_x(x) dy dz comes in. The net outflow through this pair of faces is:">
+Откуда берётся именно сумма \( \partial F_x/\partial x + \partial F_y/\partial y + \partial F_z/\partial z \)? Возьмём крошечный кубик со сторонами \( dx, dy, dz \) и посчитаем, сколько поля вытекает через его грани. Через правую грань (площадь \( dy\,dz \)) наружу уходит \( F_x(x+dx)\,dy\,dz \), через левую внутрь входит \( F_x(x)\,dy\,dz \). Чистый выток через эту пару граней:</p>
+
+<div class="formula-block">
+$$ \bigl[F_x(x+dx) - F_x(x)\bigr]\,dy\,dz \;\approx\; \frac{\partial F_x}{\partial x}\,dx\,dy\,dz = \frac{\partial F_x}{\partial x}\,dV $$
 </div>
-<div class="rule-box coral">
-<strong>div F < 0</strong> — точка сток: в неё втекает больше, чем вытекает.
-</div>
-</div>
-<p class="info">
-Если \( \operatorname{div} \mathbf{F} = 0 \) везде, поле называется <strong>соленоидальным</strong> (безисточниковым).
-</p>
+
+<p class="info" data-en="The other two pairs of faces give ∂Fy/∂y dV and ∂Fz/∂z dV. Adding them and dividing by dV gives exactly the definition of divergence. So &lt;b&gt;each term is the difference between outflow and inflow along its own axis&lt;/b&gt;. The figure below lets you “touch” this.">
+Две другие пары граней дают \( \frac{\partial F_y}{\partial y}dV \) и \( \frac{\partial F_z}{\partial z}dV \). Сложив и разделив на \( dV \), получаем ровно определение дивергенции. Поэтому <span class="hl">каждое слагаемое — разница между тем, что вытекло и втекло вдоль своей оси</span>. На рисунке ниже это можно «пощупать».</p>
+
+<figure class="fig" data-fig="div-box"><figcaption data-en="&lt;b&gt;Fig. 2.&lt;/b&gt; A two-dimensional “cube” in a field. The field is shown on every face: green arrows leave, red ones enter. Top right: the net outward flux, flux divided by area, and the divergence at the centre. Shrink the square: the ratio “flux / area” tends to div F. For the “stretch” field (x, 0) more leaves on the right than enters on the left — a source; for “rotation” everything that enters immediately leaves. The square can be dragged."><b>Рис. 2.</b> Двумерный «кубик» в поле. На каждой грани показано поле: зелёные стрелки выходят наружу, красные входят внутрь. Справа вверху — чистый поток наружу, поток, делённый на площадь, и дивергенция в центре. Уменьшайте размер квадрата: отношение «поток / площадь» стремится к div F. Для поля «растяжение» \( (x, 0) \) справа выходит больше, чем слева входит — источник; у «вращения» всё, что входит, тут же выходит. Квадрат можно перетаскивать.</figcaption></figure>
 </div>
 </section>
 
 <section class="step-section" data-step="2">
 <div class="card">
-<div class="card-title">В декартовых координатах</div>
-<p class="info">
-Для поля \( \mathbf{F} = (x^{2}y,\; y\sin z,\; z^{3}) \):
-</p>
+<div class="card-title" data-en="Sources and sinks">Источники и стоки</div>
+<p class="info" data-en="The infinitesimal definition of divergence makes the fluid picture precise: surround the point with a small closed surface and compute the net flux through it, then divide by the enclosed volume and shrink the surface to a point:">
+Инфинитезимальное определение дивергенции делает картину жидкости точной: окружим точку малой замкнутой поверхностью, вычислим чистый поток через неё, разделим на объём и стянем поверхность в точку:</p>
 <div class="formula-block">
-$$ \frac{\partial (x^{2}y)}{\partial x} = 2xy, \quad \frac{\partial (y\sin z)}{\partial y} = \sin z, \quad \frac{\partial (z^{3})}{\partial z} = 3z^{2} $$
+$$ \operatorname{div} \mathbf{F} = \lim_{V \to 0} \frac{1}{|V|} ∯_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS $$
 </div>
+<div class="two-col">
+<div class="rule-box green" data-en="<strong>div F &gt; 0 — source.</strong> Outflow exceeds inflow: the neighborhood “pushes” fluid outward. A positive charge creates exactly such a pattern in the electric field.">
+<strong>div F &gt; 0 — источник.</strong> Вытекает больше, чем втекает: окрестность «выталкивает» жидкость наружу. Положительный заряд создаёт ровно такую картину в электрическом поле.</div>
+<div class="rule-box coral" data-en="<strong>div F &lt; 0 — sink.</strong> Inflow exceeds outflow: the neighborhood “swallows” fluid. A negative charge in electrostatics, a drain in a bathtub.">
+<strong>div F &lt; 0 — сток.</strong> Втекает больше, чем вытекает: окрестность «заглатывает» жидкость. Отрицательный заряд в электростатике, слив в ванне.</div>
+</div>
+
+<figure class="fig" data-fig="particles"><figcaption data-en="&lt;b&gt;Fig. 3.&lt;/b&gt; A fluid made of particles carried by the field. With div &amp;gt; 0 particles are born at the centre and fly apart, the spacing grows — the “fluid” expands. With div &amp;lt; 0 particles crowd towards the sink and vanish in it. For the uniform field and rotation the particle density stays constant: div = 0. The “stretch” field (x, 0) shows that a source need not be a point: here the divergence equals 1 throughout space."><b>Рис. 3.</b> Жидкость из частиц, которую несёт поле. При \( \operatorname{div} &gt; 0 \) частицы рождаются в центре и разлетаются, расстояние между ними растёт — «жидкость» расширяется. При \( \operatorname{div} &lt; 0 \) частицы сгущаются к стоку и исчезают в нём. Для однородного поля и вращения плотность частиц остаётся неизменной: \( \operatorname{div} = 0 \). Поле «растяжение» \( (x, 0) \) показывает, что источник не обязан быть точкой: здесь дивергенция равна 1 во всём пространстве.</figcaption></figure>
+<p class="info" data-en="A point source of strength Q at the origin creates the radial field F = Q·r/|r|³ (this is the Coulomb field of a charge, or Newtonian gravity of a mass). Its divergence is zero everywhere except at the origin itself, where the field is singular:">
+Точечный источник силы \( Q \) в начале координат создаёт радиальное поле \( \mathbf{F} = Q\,\mathbf{r}/|\mathbf{r}|^{3} \) (это кулоновское поле заряда или ньютоновская гравитация массы). Его дивергенция равна нулю везде, кроме самого начала координат, где поле сингулярно:</p>
 <div class="formula-block">
-$$ \operatorname{div} \mathbf{F} = 2xy + \sin z + 3z^{2} $$
+$$ \operatorname{div} \frac{Q\,\mathbf{r}}{r^{3}} = 0 \quad (r \neq 0), \qquad \operatorname{div} \frac{Q\,\mathbf{r}}{r^{3}} = 4\pi Q \, \delta(\mathbf{r}) $$
 </div>
+<p class="info" data-en="The delta function δ(r) is the mathematical way of saying: “all the source is concentrated in one point”. Despite the vanishing divergence everywhere around it, the flux through any surface enclosing the origin equals 4πQ — the source is inside. This observation leads to the Gauss theorem of module 05.">
+Дельта-функция \( \delta(\mathbf{r}) \) — математический способ сказать: «весь источник сосредоточен в одной точке». Несмотря на нулевую дивергенцию вокруг, поток через любую поверхность, охватывающую начало координат, равен \( 4\pi Q \) — источник внутри. Это наблюдение ведёт к теореме Гаусса из модуля 05.</p>
 </div>
 </section>
 
 <section class="step-section" data-step="3">
 <div class="card">
-<div class="card-title">Соленоидальное поле</div>
-<p class="info">
-Если \( \operatorname{div} \mathbf{F} = 0 \), то поле можно представить через векторный потенциал \( \mathbf{A} \):
-</p>
+<div class="card-title" data-en="In coordinates">В декартовых координатах</div>
+<p class="info" data-en="Worked example. Let the field be F = (x²y, y·sin z, z³). Each component depends on “its own” coordinate and others:">
+Разбор на примере. Пусть поле \( \mathbf{F} = (x^{2}y,\; y\sin z,\; z^{3}) \). Каждая компонента зависит от «своей» координаты и от чужих:</p>
 <div class="formula-block">
-$$ \mathbf{F} = \operatorname{rot} \mathbf{A} = \nabla \times \mathbf{A} $$
+$$ \frac{\partial (x^{2}y)}{\partial x} = 2xy, \qquad \frac{\partial (y\sin z)}{\partial y} = \sin z, \qquad \frac{\partial (z^{3})}{\partial z} = 3z^{2} $$
 </div>
-<div class="rule-box">
-Это аналог представления безвихревого поля через скалярный потенциал.
+<div class="formula-block">
+$$ \operatorname{div} \mathbf{F} = 2xy + \sin z + 3z^{2} $$
 </div>
+
+<p class="info" data-en="Divergence is convenient to draw as a “source map”: blue regions are where the field is born, red ones where it is absorbed. Two-dimensional examples below: in the field (sin x, cos y) the divergence cos x − sin y forms a checkerboard of sources and sinks.">
+Дивергенцию удобно рисовать как «карту источников»: синие области — где поле рождается, красные — где поглощается. Двумерные примеры ниже: в поле \( (\sin x, \cos y) \) дивергенция \( \cos x - \sin y \) создаёт шахматный узор источников и стоков.</p>
+
+<figure class="fig" data-fig="div-heat"><figcaption data-en="&lt;b&gt;Fig. 4.&lt;/b&gt; Colour is the value of div F, arrows are the field itself. Hover to read the divergence at a point. Notice how the arrows “run away” from blue spots and “converge” into red ones. In the “source + sink” case almost all the divergence is concentrated at two points, and between them the field flows without sources. The “cells” case is an example of a field with zero divergence everywhere."><b>Рис. 4.</b> Цвет — значение \( \operatorname{div}\mathbf{F} \), стрелки — само поле. Наведите курсор, чтобы прочитать дивергенцию в точке. Обратите внимание: стрелки «разбегаются» из синих пятен и «сбегаются» в красные. В варианте «источник + сток» почти вся дивергенция сосредоточена в двух точках, а между ними поле течёт без источников. Вариант «ячейки» — пример поля с нулевой дивергенцией всюду.</figcaption></figure>
+<p class="info" data-en="The divergence turned out to be a scalar field — at every point of space it takes its own value. This is always so: div maps a vector field to a scalar field, just as the gradient maps a scalar field to a vector field. Together they form the “ladder” of this course:">
+Дивергенция оказалась скалярным полем — в каждой точке пространства она принимает своё значение. Так всегда: div переводит векторное поле в скалярное, как градиент переводит скалярное в векторное. Вместе они образуют «лестницу» курса:</p>
+<div class="formula-block">
+$$ \underbrace{f}_{\text{scalar}} \;\xrightarrow{\;\operatorname{grad}\;}\; \underbrace{\nabla f}_{\text{vector}} \;\xrightarrow{\;\operatorname{div}\;}\; \underbrace{\Delta f}_{\text{scalar}} $$
+</div>
+<div class="rule-box green" data-en="Useful identity: div of a gradient is the Laplace operator — one of the most important operators in physics (heat equation, wave equation, electrostatics):
+div grad f = ∂²f/∂x² + ∂²f/∂y² + ∂²f/∂z² ≡ Δf.">
+Полезное тождество: дивергенция градиента — оператор Лапласа, один из важнейших в физике (уравнение теплопроводности, волновое уравнение, электростатика):
+\( \operatorname{div}\operatorname{grad} f = \Delta f \).</div>
 </div>
 </section>
 
 <section class="step-section" data-step="4">
 <div class="card">
-<div class="card-title">Rust: численная дивергенция</div>
+<div class="card-title" data-en="Solenoidal field">Соленоидальное поле</div>
+<p class="info" data-en="A field with identically zero divergence is called solenoidal. The fluid picture: an incompressible fluid — whatever flows in must flow out, there are no sources or sinks. The magnetic field is always solenoidal: there are no magnetic charges (monopoles) in nature, magnetic field lines are always closed.">
+Поле с тождественно нулевой дивергенцией называется <strong>соленоидальным</strong>. Картина жидкости: несжимаемая жидкость — что втекло, то и вытекло, источников и стоков нет. Магнитное поле всегда соленоидально: магнитных зарядов (монополей) в природе нет, силовые линии магнитного поля всегда замкнуты.</p>
+
+<div class="formula-block">
+$$ \operatorname{div} \mathbf{B} = 0 $$
+</div>
+
+<p class="info" data-en="This is one of the four Maxwell equations. Its meaning: as many magnetic field lines enter any closed surface as leave it.">
+Это одно из четырёх уравнений Максвелла. Его смысл: сколько линий магнитного поля входит в любую замкнутую поверхность, столько же и выходит.</p>
+
+<figure class="fig" data-fig="solenoidal"><figcaption data-en="&lt;b&gt;Fig. 5.&lt;/b&gt; An incompressible flow. In the “cells” field (sin x cos y, −cos x sin y) particles circulate in vortex cells but never pile up or thin out: the density stays uniform because div = 0. Switch to “source” to see the contrast: there particles fly away from the centre."><b>Рис. 5.</b> Несжимаемое течение. В поле «ячейки» \( (\sin x\cos y,\; -\cos x\sin y) \) частицы кружат в вихревых ячейках, но нигде не скапливаются и не разрежаются: плотность остаётся равномерной, потому что \( \operatorname{div} = 0 \). Переключитесь на «источник», чтобы увидеть контраст: там частицы разлетаются из центра.</figcaption></figure>
+<p class="info" data-en="A deep fact: a solenoidal field can always be represented as the curl of some auxiliary field A — the vector potential:">
+Глубокий факт: соленоидальное поле всегда можно представить как ротор вспомогательного поля \( \mathbf{A} \) — векторного потенциала:</p>
+<div class="formula-block">
+$$ \operatorname{div} \mathbf{F} = 0 \;\;\Rightarrow\;\; \exists \mathbf{A} : \; \mathbf{F} = \operatorname{rot} \mathbf{A} = \nabla \times \mathbf{A} $$
+</div>
+<div class="rule-box" data-en="Compare with the gradient: a curl-free field is generated by a scalar potential φ (F = ∇φ), a divergence-free field is generated by a vector potential A (F = rot A). Potentials are “economical”: instead of three components of F one stores one function φ or three components of A with freedom in their choice.">
+Сравни с градиентом: безвихревое поле порождается скалярным потенциалом \( \varphi \) (\( \mathbf{F} = \nabla\varphi \)), безисточниковое — векторным потенциалом \( \mathbf{A} \) (\( \mathbf{F} = \operatorname{rot}\mathbf{A} \)). Потенциалы «экономны»: вместо трёх компонент \( \mathbf{F} \) хранишь одну функцию \( \varphi \) или три компоненты \( \mathbf{A} \) со свободой выбора.</div>
+</div>
+</section>
+
+<section class="step-section" data-step="5">
+<div class="card">
+<div class="card-title" data-en="Rust: numerical divergence">Rust: численная дивергенция</div>
+<p class="info" data-en="The code computes the divergence of F = (x²y, y·sin z, z³) at the point (2, 3, 1) by central finite differences and compares with the analytical answer 2xy + sin z + 3z².">
+Код вычисляет дивергенцию поля \( \mathbf{F} = (x^{2}y,\; y\sin z,\; z^{3}) \) в точке \( (2, 3, 1) \) центральными конечными разностями и сверяет с аналитическим ответом \( 2xy + \sin z + 3z^{2} \).</p>
 <div class="editor-wrap">
   <div class="editor-header">
     <span class="editor-lang">Rust</span>
@@ -102,35 +166,55 @@ $$ \mathbf{F} = \operatorname{rot} \mathbf{A} = \nabla \times \mathbf{A} $$
     let h = 1e-6;
     let (x, y, z) = (2.0, 3.0, 1.0);
 
+    // Векторное поле F = (x²y, y·sin z, z³)
     let fx = |x: f64, _y: f64, _z: f64| x*x*_y;
     let fy = |_x: f64, y: f64, z: f64| y*z.sin();
     let fz = |_x: f64, _y: f64, z: f64| z*z*z;
 
-    let dfxdx = (fx(x+h,y,z) - fx(x,y,z)) / h;
-    let dfydy = (fy(x,y+h,z) - fy(x,y,z)) / h;
-    let dfzdz = (fz(x,y,z+h) - fz(x,y,z)) / h;
+    // Каждая компонента дифференцируется по своей координате
+    let dfxdx = (fx(x+h, y, z) - fx(x-h, y, z)) / (2.0*h);
+    let dfydy = (fy(x, y+h, z) - fy(x, y-h, z)) / (2.0*h);
+    let dfzdz = (fz(x, y, z+h) - fz(x, y, z-h)) / (2.0*h);
 
     let div = dfxdx + dfydy + dfzdz;
-    println!("F = (x²y, y·sin z, z³)");
-    println!("В точке ({}, {}, {}):", x, y, z);
-    println!("  div F = {:.6}", div);
-    println!("  Аналитически: 2xy + sin z + 3z² = {:.6}", 2.0*x*y + z.sin() + 3.0*z*z);
-}
-  </textarea>
-  <div class="output-box">Нажмите ▶ Run для запуска</div>
+    let exact = 2.0*x*y + z.sin() + 3.0*z*z;
+
+    println!("Поле: F = (x²y, y·sin z, z³)");
+    println!("Точка: ({}, {}, {})", x, y, z);
+    println!("Численная div F = {:.6}", div);
+    println!("Аналитическая    = {:.6}", exact);
+    println!("div F > 0 → точка является источником поля");
+}</textarea>
+  <div class="output-box" data-en="Press ▶ Run to execute">Нажмите ▶ Run для запуска</div>
 </div>
+<p class="info" data-en="Here div F ≈ 15.84 > 0, hence the point (2,3,1) is a source: the field flows out of the neighborhood of this point. Try changing the point to (1, −2, 0): there 2xy = −4, while sin z and 3z² vanish — the divergence is −4, and the point turns into a sink. (The tempting point (0, 0, −1) does not work: sin(−1) ≈ −0.84, but 3z² = 3 outweighs it, div ≈ 2.16 &gt; 0.)">
+Здесь \( \operatorname{div} \mathbf{F} \approx 15.84 > 0 \), значит точка \( (2,3,1) \) — источник: поле вытекает из её окрестности. Попробуй сменить точку на \( (1, -2, 0) \): там \( 2xy = -4 \), а \( \sin z \) и \( 3z^2 \) обнуляются — дивергенция равна \( -4 \), и точка превращается в сток. (Соблазнительная точка \( (0, 0, -1) \) не подходит: \( \sin(-1) \approx -0.84 \), но \( 3z^2 = 3 \) перевешивает, \( \operatorname{div} \approx 2.16 &gt; 0 \).)</p>
+</div>
+</section>
+
+<section class="step-section" data-step="6">
+<div class="card">
+<div class="card-title" data-en="Summary &amp; exercises">Итоги и упражнения</div>
+<ul class="info" data-en="&lt;li&gt;A vector field assigns a vector to every point; picture it as the velocity of a fluid.&lt;/li&gt;&lt;li&gt;div F = ∂Fx/∂x + ∂Fy/∂y + ∂Fz/∂z — a scalar field.&lt;/li&gt;&lt;li&gt;div F = net outflow per unit volume: &amp;gt; 0 source, &amp;lt; 0 sink, = 0 balance.&lt;/li&gt;&lt;li&gt;Each term = outflow minus inflow through a pair of opposite faces of a tiny cube.&lt;/li&gt;&lt;li&gt;div F ≡ 0 — solenoidal (incompressible) field; then F = rot A.&lt;/li&gt;&lt;li&gt;div grad f = Δf — the Laplacian.&lt;/li&gt;"><li>Векторное поле ставит вектор каждой точке; представляйте его как скорость жидкости.</li><li>\( \operatorname{div}\mathbf F = \partial_x F_x + \partial_y F_y + \partial_z F_z \) — скалярное поле.</li><li>div F — чистый выток на единицу объёма: &gt; 0 источник, &lt; 0 сток, = 0 баланс.</li><li>Каждое слагаемое = «вытекло минус втекло» через пару противоположных граней кубика.</li><li>\( \operatorname{div}\mathbf F \equiv 0 \) — соленоидальное (несжимаемое) поле; тогда \( \mathbf F = \operatorname{rot}\mathbf A \).</li><li>\( \operatorname{div}\operatorname{grad} f = \Delta f \) — лапласиан.</li></ul>
+<p class="info" data-en="&lt;b&gt;Exercises&lt;/b&gt;">
+<b>Упражнения</b></p>
+
+<details class="qa"><summary data-en="1. Find div F for F = (x², y², z²) at (1, 2, 3).">1. Найдите \( \operatorname{div}\mathbf F \) для \( \mathbf F = (x^2, y^2, z^2) \) в точке \( (1, 2, 3) \).</summary><div class="ans" data-en="2x + 2y + 2z = 12. The point is a source.">\( 2x + 2y + 2z = 12 \). Точка — источник.</div></details>
+
+<details class="qa"><summary data-en="2. Is F = (y, z, x) solenoidal?">2. Соленоидально ли поле \( \mathbf F = (y,\; z,\; x) \)?</summary><div class="ans" data-en="Yes: ∂y/∂x + ∂z/∂y + ∂x/∂z = 0. No component depends on “its own” coordinate.">Да: \( \partial_x y + \partial_y z + \partial_z x = 0 \). Каждая компонента не зависит от «своей» координаты.</div></details>
+
+<details class="qa"><summary data-en="3. The field (x, 0, 0) has parallel streamlines. Why is div = 1 then?">3. Поле \( (x, 0, 0) \) имеет параллельные линии тока. Почему же \( \operatorname{div} = 1 \)?</summary><div class="ans" data-en="The speed grows along the flow: more leaves through the right face of a cube than enters through the left. The fluid is “stretched” along x — so something inside adds fluid. The shape of the lines is irrelevant.">Скорость растёт вдоль потока: через правую грань кубика уходит больше, чем входит через левую. Жидкость «растягивается» вдоль \( x \) — значит, внутри что-то её добавляет. Направление линий тут ни при чём.</div></details>
+
+<details class="qa"><summary data-en="4. Compute div r and div(r/r³) for r ≠ 0.">4. Вычислите \( \operatorname{div}\mathbf r \) и \( \operatorname{div}(\mathbf r/r^3) \) при \( r \ne 0 \).</summary><div class="ans" data-en="div r = 3. For r/r³: ∂x(x r⁻³) = r⁻³ − 3x² r⁻⁵; summing over three axes gives 3r⁻³ − 3r² r⁻⁵ = 0. The Coulomb field has no sources outside the charge.">\( \operatorname{div}\mathbf r = 3 \). Для \( \mathbf r/r^3 \): \( \partial_x(x r^{-3}) = r^{-3} - 3x^2 r^{-5} \); сумма по трём осям \( 3r^{-3} - 3r^2 r^{-5} = 0 \). Кулоновское поле не имеет источников вне заряда.</div></details>
+
+<details class="qa"><summary data-en="5. Find Δf = div grad f for f = x² + y² + z².">5. Найдите \( \Delta f = \operatorname{div}\operatorname{grad} f \) для \( f = x^2 + y^2 + z^2 \).</summary><div class="ans" data-en="∇f = 2r, div(2r) = 6.">\( \nabla f = 2\mathbf r \), \( \operatorname{div}(2\mathbf r) = 6 \).</div></details>
+
 </div>
 </section>
 
 </main>
 <script src="playground.js"></script>
-<script>
-  document.querySelectorAll('.step-btn').forEach(b=>b.addEventListener('click',()=>{
-    document.querySelectorAll('.step-btn').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.step-section').forEach(s=>s.classList.remove('active'));
-    b.classList.add('active');
-    document.querySelector('.step-section[data-step="'+b.dataset.step+'"]').classList.add('active');
-  }));
-</script>
+<script src="course.js"></script>
+<script src="viz.js"></script>
 </body>
 </html>

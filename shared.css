@@ -42,6 +42,11 @@ html[lang="en"] .nav-home::after{content:"← Modules"}
 .output-box.ok{color:var(--green)}
 .output-box.err{color:var(--coral)}
 .output-box.loading{color:var(--muted)}
+/* full-bleed: editor spans entire viewport width (после базовых правил, чтобы отступы не перебивались) */
+.editor-wrap{width:100vw;max-width:100vw;position:relative;left:50%;transform:translateX(-50%);border-radius:0;border-left:none;border-right:none;margin-top:28px;margin-bottom:28px}
+.editor-header{padding:10px 28px}
+.code-area{padding:16px 28px}
+.output-box{padding:14px 28px}
 
 /* ── output image ── */
 .output-wrap{margin-bottom:20px}
@@ -139,3 +144,31 @@ h1.big .line2{display:block;background:linear-gradient(95deg,var(--math2),var(--
 .bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .bg-glow::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(62,142,247,.12) 0%,transparent 65%);top:-200px;left:50%;transform:translateX(-50%)}
 .bg-glow::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(139,124,248,.07) 0%,transparent 65%);bottom:-100px;right:10%}
+
+/* ── interactive figures (viz.js) ── */
+.fig{margin:22px 0;background:var(--surface2);border:1px solid var(--border2);border-radius:12px;overflow:hidden}
+.fig-canvas{display:block;width:100%;background:#0e111a}
+.fig-ctrl{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;padding:10px 16px;border-top:1px solid var(--border);background:#11141d}
+.fig-ctl{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.fig-ctl input[type=range]{width:150px;accent-color:var(--math)}
+.fig-ctl b{font-family:var(--mono);color:var(--text);font-weight:600;min-width:44px}
+.fig-ctl select,.fig-btn{background:var(--surface3);color:var(--text);border:1px solid var(--border2);border-radius:6px;padding:4px 8px;font-size:12px;cursor:pointer}
+.fig-btn:hover,.fig-ctl select:hover{border-color:var(--math)}
+.fig figcaption{padding:10px 16px 14px;font-size:13px;line-height:1.6;color:var(--muted);border-top:1px solid var(--border)}
+.fig figcaption b{color:var(--text)}
+
+/* ── step navigation footer ── */
+.step-pager{display:flex;justify-content:space-between;gap:12px;margin-top:8px}
+.step-pager button{background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer}
+.step-pager button:hover{border-color:var(--math)}
+.step-pager button:disabled{opacity:.3;cursor:default}
+
+/* ── self-check / exercises ── */
+.qa{background:var(--surface2);border:1px solid var(--border2);border-radius:10px;margin:10px 0;padding:0}
+.qa summary{cursor:pointer;padding:12px 16px;font-size:14px;line-height:1.6;list-style:none}
+.qa summary::before{content:"▸ ";color:var(--math)}
+.qa[open] summary::before{content:"▾ "}
+.qa .ans{padding:0 16px 14px 32px;font-size:14px;line-height:1.7;color:var(--muted)}
+.info .hl,.rule-box .hl{color:var(--text);font-weight:600}
+ul.info{padding-left:20px}
+ul.info li{margin-bottom:6px}

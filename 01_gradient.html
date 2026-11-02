@@ -5,101 +5,160 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Модуль 01 — Градиент</title>
 <link rel="stylesheet" href="shared.css">
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="mathjax-config.js"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="lang.js"></script>
 </head>
 <body>
 <nav class="top-nav">
   <a class="nav-home" href="index.html">∇</a>
-  <div class="nav-title">Модуль 01 — Градиент скалярного поля</div>
-</div>
+  <div class="nav-title" data-en="Module 01 — Gradient of a scalar field">Модуль 01 — Градиент скалярного поля</div>
+</nav>
 <div id="stepNav">
-  <button class="step-btn active" data-step="0">Определение</button>
-  <button class="step-btn" data-step="1">Частные производные</button>
-  <button class="step-btn" data-step="2">Направление роста</button>
-  <button class="step-btn" data-step="3">Производная по направлению</button>
-  <button class="step-btn" data-step="4">Rust: численный градиент</button>
+  <button class="step-btn active" data-step="0" data-en="Scalar field">Скалярное поле</button>
+  <button class="step-btn" data-step="1" data-en="Definition">Определение</button>
+  <button class="step-btn" data-step="2" data-en="Partial derivatives">Частные производные</button>
+  <button class="step-btn" data-step="3" data-en="Direction of steepest growth">Направление роста</button>
+  <button class="step-btn" data-step="4" data-en="Directional derivative">Производная по направлению</button>
+  <button class="step-btn" data-step="5" data-en="Rust: numerical gradient">Rust: численный градиент</button>
+  <button class="step-btn" data-step="6" data-en="Summary &amp; exercises">Итоги и упражнения</button>
 </div>
-</main class="main">
+<main class="main">
 
 <section class="step-section active" data-step="0">
 <div class="card">
-<div class="card-title">Определение</div>
-<p class="info">
-<strong>Градиент</strong> скалярного поля \( f(x,y,z) \) — это вектор, составленный из частных производных:
-</p>
+<div class="card-title" data-en="Scalar field">Скалярное поле</div>
+<p class="info" data-en="Before talking about the gradient we need the object it acts on — a scalar field. A scalar field is a function that assigns a number to every point of space. Temperature in a room, air pressure on a weather map, altitude on a mountain — all are scalar fields.">
+Прежде чем говорить о градиенте, нужен объект, на котором он определён — скалярное поле. <strong>Скалярное поле</strong> — это функция, которая каждой точке пространства ставит в соответствие число. Температура в комнате, давление воздуха на карте погоды, высота над уровнем моря — всё это скалярные поля.</p>
 <div class="formula-block">
-$$ \nabla f = \left( \frac{\partial f}{\partial x},\; \frac{\partial f}{\partial y},\; \frac{\partial f}{\partial z} \right) $$
+$$ f : \mathbb{R}^{3} \to \mathbb{R} $$
 </div>
-<p class="info">
-Оператор \( \nabla \) («набла») — формальный вектор дифференцирования:
-</p>
+<p class="info" data-en="Graphically a scalar field is drawn with level surfaces — the sets of points where f takes a constant value. On a weather map these are isobars, on a hiking map — contour lines of elevation. Walking along a level line means the field does not change; walking across level lines means it does, and the denser the lines the steeper the change.">
+Графически скалярное поле изображают поверхностями уровня — множествами точек, где \( f \) принимает постоянное значение. На карте погоды это изобары, на туристической карте — горизонтали высоты. Идёшь вдоль линии уровня — поле не меняется; пересекаешь линии уровня — поле меняется, и чем гуще линии, тем резче изменение.</p>
 <div class="formula-block">
-$$ \nabla = \left( \frac{\partial}{\partial x},\; \frac{\partial}{\partial y},\; \frac{\partial}{\partial z} \right) $$
+$$ f(x, y, z) = C \quad \text{— поверхность уровня} $$
 </div>
-<div class="rule-box">
-Градиент указывает направление наискорейшего роста функции, а его модуль равен скорости роста в этом направлении.
-</div>
+
+<figure class="fig" data-fig="scalar-map"><figcaption data-en="&lt;b&gt;Fig. 1.&lt;/b&gt; A scalar field f(x,y) on the plane: a “terrain” with two hills and a hollow. Colour is the value of f, thin white lines are level lines f = const (like contour lines on a hiking map), the yellow one is the level f = 1.5. Where the lines crowd together the field changes faster. Hover to read the value at a point."><b>Рис. 1.</b> Скалярное поле \( f(x,y) \) на плоскости: «рельеф» из двух холмов и впадины. Цвет — значение \( f \), тонкие белые линии — линии уровня \( f = \text{const} \) (как горизонтали на туристической карте), жёлтая — уровень \( f = 1.5 \). Где линии сгущаются, поле меняется быстрее. Наведите курсор, чтобы прочитать значение в точке.</figcaption></figure>
+
+<p class="info" data-en="Almost all figures in the course are two-dimensional: a field f(x,y) is easy to show on the plane with colour. Every idea carries over to 3D unchanged: level lines become level surfaces (nested “onion” shells), and formulas simply gain a third term in z.">
+Почти все рисунки курса — двумерные: поле \( f(x,y) \) удобно показать на плоскости цветом. Все идеи без изменений переносятся в 3D: линии уровня становятся поверхностями уровня (вложенные «луковичные» оболочки), а формулы просто получают третье слагаемое по \( z \).</p>
+<div class="rule-box" data-en="A scalar field answers the question: “what value does the quantity take at this point?”. It carries no direction — only a magnitude. The gradient is precisely the object that recovers direction information from a scalar field.">
+Скалярное поле отвечает на вопрос «каково значение величины в этой точке?». Направления в нём нет — только величина. Градиент — это как раз тот объект, который извлекает из скалярного поля направление.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="1">
 <div class="card">
-<div class="card-title">Частные производные</div>
-<p class="info">
-Частная производная по \( x \) вычисляется при фиксированных \( y,z \):
-</p>
+<div class="card-title" data-en="Definition">Определение</div>
+<p class="info" data-en="If at every point of a domain the scalar field f has partial derivatives, one can build a vector field from them — the gradient. The gradient of f is the vector whose components are the partial derivatives of f with respect to x, y and z:">
+Если в каждой точке области скалярное поле \( f \) имеет частные производные, из них можно собрать векторное поле — <strong>градиент</strong>. Градиент \( f \) — это вектор, компоненты которого равны частным производным \( f \) по \( x, y, z \):</p>
 <div class="formula-block">
-$$ \frac{\partial f}{\partial x} = \lim_{h \to 0} \frac{f(x+h,y,z)-f(x,y,z)}{h} $$
+$$ \operatorname{grad} f = \nabla f = \left( \frac{\partial f}{\partial x},\; \frac{\partial f}{\partial y},\; \frac{\partial f}{\partial z} \right) $$
 </div>
-<p class="info">
-<strong>Пример:</strong> \( f(x,y) = x^{2}y \)
-</p>
+<p class="info" data-en="The symbol ∇ is called nabla (or del). It is convenient to think of it as a formal “vector of differentiation”: it is not a real vector, but if you formally multiply it by a scalar field you get the gradient, if you take a dot product with a vector field you get the divergence, and a cross product gives the curl. All three operations of this course are therefore three “products” of one operator:">
+Символ \( \nabla \) называется «набла». Его удобно воспринимать как формальный «вектор дифференцирования»: это не настоящий вектор, но если формально умножить его на скалярное поле — получится градиент, скалярно умножить на векторное поле — дивергенция, векторно — ротор. Все три операции курса — это три «произведения» одного оператора:</p>
 <div class="formula-block">
-$$ \frac{\partial f}{\partial x} = 2xy, \qquad \frac{\partial f}{\partial y} = x^{2} $$
+$$ \nabla = \left( \frac{\partial}{\partial x},\; \frac{\partial}{\partial y},\; \frac{\partial}{\partial z} \right) $$
 </div>
-<div class="rule-box green">
-Частные производные измеряют чувствительность функции к изменению одной переменной при неподвижных остальных.
+<p class="info" data-en="Example. For f(x,y,z) = x² + y² + z² (a paraboloid centered at the origin):">
+Пример. Для \( f(x,y,z) = x^{2}+y^{2}+z^{2} \):</p>
+<div class="formula-block">
+$$ \nabla f = (2x,\; 2y,\; 2z) = 2\mathbf{r} $$
 </div>
+<p class="info" data-en="The gradient points away from the origin and grows with distance — the paraboloid rises steeper the further you are from the center.">
+Градиент направлен от начала координат и растёт с расстоянием — чем дальше от центра, тем круче поднимается параболоид.</p>
+
+<figure class="fig" data-fig="grad-field"><figcaption data-en="&lt;b&gt;Fig. 2.&lt;/b&gt; The gradient as a vector field. Green arrows are ∇f at grid nodes, white lines are levels of f, colour shows the sign and size of f. Switch the function: for the bowl the arrows spread out from the minimum, for the saddle they grow along x and converge along y, for the tilted plane the gradient is the same everywhere. In every case the arrows cross the level lines at right angles."><b>Рис. 2.</b> Градиент как векторное поле. Зелёные стрелки — \( \nabla f \) в узлах сетки, белые линии — уровни \( f \), цвет — знак и величина \( f \). Переключайте функцию: у чаши стрелки расходятся от минимума, у седла — растут вдоль \( x \) и сходятся вдоль \( y \), у наклонной плоскости градиент один и тот же в каждой точке. Во всех случаях стрелки пересекают линии уровня под прямым углом.</figcaption></figure>
+
+<div class="rule-box" data-en="The gradient is a &lt;b&gt;field&lt;/b&gt;: every point has its own vector. To get a specific vector, substitute the coordinates after differentiating. For f = x²+y²+z² at M₀ = (1, 2, 0): ∇f(M₀) = (2, 4, 0), and its length |∇f| = √20 ≈ 4.47 is the steepness of the ascent at that point.">
+Градиент — это <span class="hl">поле</span>: в каждой точке свой вектор. Чтобы получить конкретный вектор, координаты подставляют после дифференцирования. Для \( f = x^2+y^2+z^2 \) в точке \( M_0 = (1, 2, 0) \): \( \nabla f(M_0) = (2,\,4,\,0) \), а его длина \( |\nabla f| = \sqrt{20} \approx 4.47 \) — крутизна подъёма в этой точке.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="2">
 <div class="card">
-<div class="card-title">Направление наискорейшего роста</div>
-<p class="info">
-Пусть \( \mathbf{e} \) — единичный вектор направления. Производная по направлению:
-</p>
+<div class="card-title" data-en="Partial derivatives">Частные производные</div>
+<p class="info" data-en="A partial derivative is the rate of change of the field when only one coordinate varies and the others are frozen. Formally, for the x-derivative:">
+Частная производная — это скорость изменения поля, когда меняется только одна координата, а остальные заморожены. Формально для производной по \( x \):</p>
 <div class="formula-block">
-$$ \frac{\partial f}{\partial \mathbf{e}} = \nabla f \cdot \mathbf{e} = |\nabla f| \cos\theta $$
+$$ \frac{\partial f}{\partial x} = \lim_{h \to 0} \frac{f(x+h, y, z) - f(x, y, z)}{h} $$
 </div>
-<p class="info">
-Максимум достигается при \( \theta = 0 \), то есть когда \( \mathbf{e} \parallel \nabla f \).
-</p>
-<div class="rule-box amber">
-Максимальная скорость роста равна \( |\nabla f| \). Минимальная (наибыстрейшее убывание) равна \( -|\nabla f| \).
+<p class="info" data-en="The word “partial” means exactly this: we take the derivative only along one direction of the coordinate grid, ignoring the others. Example for f(x,y) = x²y: differentiating with respect to x (y is a constant), the power rule gives 2xy; differentiating with respect to y (x is a constant), x² is simply a coefficient:">
+Слово «частная» и означает: производная берётся только вдоль одного направления координатной сетки, остальные игнорируются. Пример для \( f(x,y) = x^{2}y \): дифференцируя по \( x \) (при этом \( y \) — константа), получаем \( 2xy \); дифференцируя по \( y \) (при этом \( x^{2} \) — просто коэффициент), получаем \( x^{2} \):</p>
+<div class="formula-block">
+$$ f(x, y) = x^{2}y \;\;\Rightarrow\;\; \frac{\partial f}{\partial x} = 2xy, \qquad \frac{\partial f}{\partial y} = x^{2} $$
 </div>
+
+<figure class="fig" data-fig="partial-slice"><figcaption data-en="&lt;b&gt;Fig. 3.&lt;/b&gt; A partial derivative is the slope of a “slice” of the surface. Left: the map of f = x²y with point P. Yellow dashes — the slice y = y₀ (only x varies), pink — the slice x = x₀ (only y varies). Right: graphs of these slices; the slope of the tangent (white dashes) is exactly ∂f/∂x and ∂f/∂y. Drag P: on the axis x = 0 both derivatives vanish — the surface has a fold there."><b>Рис. 3.</b> Частная производная — наклон «среза» поверхности. Слева карта \( f = x^2 y \) с точкой \( P \). Жёлтый пунктир — срез \( y = y_0 \) (меняем только \( x \)), розовый — срез \( x = x_0 \) (меняем только \( y \)). Справа графики этих срезов; наклон касательной (белый пунктир) и есть \( \partial f/\partial x \) и \( \partial f/\partial y \). Перетащите \( P \): на оси \( x = 0 \) обе производные обнуляются — там у поверхности «седловая» складка.</figcaption></figure>
+
+<p class="info" data-en="Why gather the partial derivatives into one vector? Because together they describe the &lt;b&gt;total&lt;/b&gt; change of the function under a small displacement dr = (dx, dy, dz) in any direction. Each term is the contribution of the displacement along its own axis, and their sum is a dot product:">
+Зачем собирать частные производные в один вектор? Потому что они вместе описывают <span class="hl">полное</span> изменение функции при малом смещении \( d\mathbf{r} = (dx, dy, dz) \) в любую сторону. Каждое слагаемое — вклад смещения вдоль своей оси, а их сумма — скалярное произведение:</p>
+
+<div class="formula-block">
+$$ df = \frac{\partial f}{\partial x}dx + \frac{\partial f}{\partial y}dy + \frac{\partial f}{\partial z}dz = \nabla f \cdot d\mathbf{r} $$
+</div>
+
+<p class="info" data-en="This is the &lt;b&gt;total differential&lt;/b&gt; formula, and everything else in the module follows from it: the gradient being perpendicular to level lines, the direction of steepest ascent, the directional derivative. Geometrically it says that near a point the surface z = f(x,y) is indistinguishable from the tangent plane with slopes f_x and f_y.">
+Это формула <span class="hl">полного дифференциала</span>, и из неё следует всё остальное в модуле: перпендикулярность градиента линиям уровня, направление наискорейшего роста, производная по направлению. Геометрически она означает, что вблизи точки поверхность \( z = f(x,y) \) неотличима от касательной плоскости с наклонами \( f_x \) и \( f_y \).</p>
+<div class="rule-box green" data-en="An important sanity check: for a function of one variable the gradient degenerates into the ordinary derivative. The gradient is the natural generalization of f′(x) to functions of several variables.">
+Полезная проверка: для функции одной переменной градиент вырождается в обычную производную. Градиент — естественное обобщение \( f'(x) \) на функции многих переменных.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="3">
 <div class="card">
-<div class="card-title">Производная по направлению</div>
-<p class="info">
-Если \( \mathbf{e} = (\cos\alpha, \cos\beta, \cos\gamma) \) — направляющие косинусы, то:
-</p>
-<div class="formula-block">
-$$ \frac{\partial f}{\partial \mathbf{e}} = \frac{\partial f}{\partial x}\cos\alpha + \frac{\partial f}{\partial y}\cos\beta + \frac{\partial f}{\partial z}\cos\gamma $$
-</div>
-<div class="rule-box">
-Производная по направлению — проекция градиента на данное направление.
-</div>
+<div class="card-title" data-en="Direction of steepest growth">Направление наискорейшего роста</div>
+<p class="info" data-en="The key geometric property of the gradient: among all directions emanating from a point, the gradient points along the steepest ascent of the field, and its magnitude equals the rate of that ascent. Conversely, the opposite vector −∇f points along the steepest descent. Directions perpendicular to ∇f are level directions — moving along them the field does not change to first order.">
+Ключевое геометрическое свойство градиента: среди всех направлений, выходящих из точки, градиент указывает направление наискорейшего подъёма поля, а его модуль равен скорости этого подъёма. Наоборот, вектор \( -\nabla f \) указывает направление наискорейшего спуска. Направления, перпендикулярные \( \nabla f \) — направления вдоль уровня: двигаясь по ним, поле в первом порядке не меняется.</p>
+<div class="rule-box amber" data-en="The gradient is always perpendicular to the level surface passing through the same point. This is why: moving along the level surface f = C the value does not change, hence the directional derivative is zero, hence the direction is orthogonal to ∇f.">
+Градиент всегда перпендикулярен поверхности уровня, проходящей через ту же точку. Почему: вдоль поверхности уровня \( f = C \) значение не меняется, значит производная по направлению равна нулю, значит направление ортогонально \( \nabla f \).</div>
+<p class="info" data-en="A mountaineering analogy: the altitude field f(x,y) describes the terrain. ∇f points straight up the steepest slope, |∇f| is the slope steepness, and level lines are the contour lines of the map. Water flows along −∇f — that is why streams run perpendicular to contour lines.">
+Аналогия с горами: поле высот \( f(x,y) \) описывает рельеф. \( \nabla f \) показывает прямо вверх по самому крутому склону, \( |\nabla f| \) — крутизну склона, линии уровня — горизонтали на карте. Вода течёт вдоль \( -\nabla f \) — поэтому ручьи пересекают горизонтали перпендикулярно.</p>
+
+<figure class="fig" data-fig="steepest"><figcaption data-en="&lt;b&gt;Fig. 4.&lt;/b&gt; Click or drag the point over the map. The green arrow is ∇f (up the slope), the red one is −∇f (down), the yellow segment is the tangent to the level line through the point: it is always perpendicular to the gradient. The dotted curves are paths that always follow ∇f (green, to the summit) and −∇f (red, to the bottom): this is how water flows and how gradient descent works. Notice that both paths cross every level line at a right angle."><b>Рис. 4.</b> Кликните или тащите точку по карте. Зелёная стрелка — \( \nabla f \) (вверх по склону), красная — \( -\nabla f \) (вниз), жёлтый отрезок — касательная к линии уровня через точку: он всегда перпендикулярен градиенту. Пунктиры — траектории, которые идут всё время вдоль \( \nabla f \) (зелёная, к вершине) и вдоль \( -\nabla f \) (красная, ко дну): так течёт вода и так работает градиентный спуск. Обратите внимание: обе траектории пересекают все линии уровня под прямым углом.</figcaption></figure>
+
+<p class="info" data-en="A one-line proof from the total differential. Move by a small vector dr of length ds at angle θ to the gradient: df = ∇f·dr = |∇f| ds cos θ. For a fixed step length ds the increment is largest when cos θ = 1, smallest when cos θ = −1, and zero when θ = 90°, i.e. along the level line.">
+Доказательство в одну строку, из формулы полного дифференциала. Сдвинемся на малый вектор \( d\mathbf{r} \) длины \( ds \) под углом \( \theta \) к градиенту: \( df = \nabla f\cdot d\mathbf{r} = |\nabla f|\,ds\,\cos\theta \). При фиксированной длине шага \( ds \) приращение максимально при \( \cos\theta = 1 \), минимально при \( \cos\theta = -1 \) и равно нулю при \( \theta = 90^\circ \), то есть вдоль линии уровня.</p>
+
+<div class="rule-box coral" data-en="A common mistake is to think the gradient “points to the summit”. No — it points along the steepest ascent &lt;b&gt;right here&lt;/b&gt;. Fig. 4 shows that the green path reaches the summit along a curve, not a straight line: the gradient direction is different at every point.">
+Частая ошибка: считать, что градиент «показывает на вершину». Нет — он показывает направление самого крутого подъёма <span class="hl">здесь</span>. На рис. 4 видно, что зелёная траектория идёт к вершине по кривой, а не по прямой: в каждой точке направление градиента своё.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="4">
 <div class="card">
-<div class="card-title">Rust: численный расчёт градиента</div>
+<div class="card-title" data-en="Directional derivative">Производная по направлению</div>
+<p class="info" data-en="The gradient lets us answer a practical question: how fast does the field change if we move from a point in an arbitrary direction e (a unit vector)? The answer is the directional derivative — the projection of the gradient onto that direction:">
+Градиент позволяет ответить на практический вопрос: с какой скоростью меняется поле, если двигаться из точки в произвольном направлении \( \mathbf{e} \) (единичном)? Ответ — <strong>производная по направлению</strong> — проекция градиента на это направление:</p>
+<div class="formula-block">
+$$ \frac{\partial f}{\partial \mathbf{e}} = \nabla f \cdot \mathbf{e} = |\nabla f| \cos\theta $$
+</div>
+
+<figure class="fig" data-fig="directional"><figcaption data-en="&lt;b&gt;Fig. 5.&lt;/b&gt; Left: the green vector is ∇f, the yellow one is the unit direction e (drag with the mouse or use the slider). The blue segment along e is the projection of the gradient, i.e. ∂f/∂e (red when negative). Its end always lies on the purple circle whose diameter is ∇f — an inscribed right angle. Right: the same quantity as a function of the angle — a cosine wave from +|∇f| to −|∇f|."><b>Рис. 5.</b> Слева: зелёный вектор — \( \nabla f \), жёлтый — единичное направление \( \mathbf{e} \) (тащите мышью или двигайте ползунок). Синий отрезок вдоль \( \mathbf{e} \) — проекция градиента, то есть \( \partial f/\partial\mathbf{e} \) (красный — если она отрицательна). Его конец всегда лежит на фиолетовой окружности с диаметром \( \nabla f \) — это вписанный прямой угол. Справа та же величина как функция угла: косинусоида от \( +|\nabla f| \) до \( -|\nabla f| \).</figcaption></figure>
+<p class="info" data-en="where θ is the angle between ∇f and e. Through direction cosines e = (cos α, cos β, cos γ) the same thing reads:">
+где \( \theta \) — угол между \( \nabla f \) и \( \mathbf{e} \). Через направляющие косинусы \( \mathbf{e} = (\cos\alpha, \cos\beta, \cos\gamma) \) то же самое: </p>
+<div class="formula-block">
+$$ \frac{\partial f}{\partial \mathbf{e}} = \frac{\partial f}{\partial x}\cos\alpha + \frac{\partial f}{\partial y}\cos\beta + \frac{\partial f}{\partial z}\cos\gamma $$
+</div>
+<div class="rule-box" data-en="Three key cases from the formula ∇f·e = |∇f| cos θ:<br>· θ = 0 — moving along the gradient: maximum growth rate |∇f|;<br>· θ = π — moving against the gradient: maximum descent −|∇f|;<br>· θ = π/2 — moving along the level surface: rate of change is zero.">
+Три ключевых случая из формулы \( \nabla f \cdot \mathbf{e} = |\nabla f|\cos\theta \):<br>· \( \theta = 0 \) — движение вдоль градиента: максимальная скорость роста \( |\nabla f| \);<br>· \( \theta = \pi \) — против градиента: максимальная скорость убывания \( -|\nabla f| \);<br>· \( \theta = \pi/2 \) — вдоль поверхности уровня: скорость изменения нулевая.</div>
+
+<p class="info" data-en="A numerical example. f = x² + y², point (1, 2), direction e = (3/5, 4/5). The gradient is ∇f = (2, 4), so ∂f/∂e = 2·3/5 + 4·4/5 = 4.4. This is slightly less than the maximum possible |∇f| = √20 ≈ 4.47: the direction e almost coincides with the gradient (the angle is about 10°).">
+Числовой пример. \( f = x^2 + y^2 \), точка \( (1, 2) \), направление \( \mathbf{e} = (3/5,\; 4/5) \). Градиент \( \nabla f = (2, 4) \), значит \( \partial f/\partial\mathbf{e} = 2\cdot\tfrac35 + 4\cdot\tfrac45 = 4.4 \). Это чуть меньше максимально возможного \( |\nabla f| = \sqrt{20} \approx 4.47 \): направление \( \mathbf{e} \) почти совпадает с градиентом (угол около 10°).</p>
+
+<div class="rule-box amber" data-en="Do not forget to normalize the direction! With a non-unit vector a, ∇f·a comes out |a| times larger than the actual rate of change. The correct way: e = a/|a|.">
+Не забудьте нормировать направление! Если взять неединичный вектор \( \mathbf{a} \), то \( \nabla f\cdot\mathbf{a} \) окажется в \( |\mathbf{a}| \) раз больше настоящей скорости изменения. Правильно: \( \mathbf{e} = \mathbf{a}/|\mathbf{a}| \).</div>
+<p class="info" data-en="This is the basis of gradient descent — the optimization algorithm: to minimize f(x,y,z) one iteratively takes steps against the gradient, because that is the direction in which f decreases fastest. This is how neural networks are trained.">
+На этом основан градиентный спуск — алгоритм оптимизации: чтобы минимизировать \( f \), итеративно шагают против градиента, потому что там функция убывает быстрее всего. Так обучают нейросети.</p>
+</div>
+</section>
+
+<section class="step-section" data-step="5">
+<div class="card">
+<div class="card-title" data-en="Rust: numerical gradient">Rust: численный градиент</div>
+<p class="info" data-en="The code below computes the gradient numerically, without symbolic differentiation: each partial derivative is replaced by the finite difference (f(x+h) − f(x))/h with a small step h. The field f = x²y + z³ is differentiated for comparison with the analytical answer (2xy, x², 3z²).">
+Код ниже вычисляет градиент численно, без символьного дифференцирования: каждая частная производная заменяется конечной разностью \( \frac{f(x+h)-f(x)}{h} \) с малым шагом \( h \). Поле \( f = x^{2}y + z^{3} \) дифференцируется в точке и сверяется с аналитическим ответом \( (2xy,\; x^{2},\; 3z^{2}) \).</p>
 <div class="editor-wrap">
   <div class="editor-header">
     <span class="editor-lang">Rust</span>
@@ -109,31 +168,56 @@ $$ \frac{\partial f}{\partial \mathbf{e}} = \frac{\partial f}{\partial x}\cos\al
     let h = 1e-6;
     let (x, y, z) = (2.0, 3.0, 1.0);
 
+    // Скалярное поле f(x,y,z) = x²y + z³
     let f = |x: f64, y: f64, z: f64| x*x*y + z*z*z;
 
-    let dfdx = (f(x+h,y,z) - f(x,y,z)) / h;
-    let dfdy = (f(x,y+h,z) - f(x,y,z)) / h;
-    let dfdz = (f(x,y,z+h) - f(x,y,z)) / h;
+    // Численные частные производные (central difference)
+    let dfdx = (f(x+h, y, z) - f(x-h, y, z)) / (2.0*h);
+    let dfdy = (f(x, y+h, z) - f(x, y-h, z)) / (2.0*h);
+    let dfdz = (f(x, y, z+h) - f(x, y, z-h)) / (2.0*h);
 
-    println!("f({}, {}, {}) = {}", x, y, z, f(x,y,z));
-    println!("∇f = ({:.6}, {:.6}, {:.6})", dfdx, dfdy, dfdz);
-    println!("Аналитически: ∇f = (2xy, x², 3z²) = ({:.6}, {:.6}, {:.6})", 2.0*x*y, x*x, 3.0*z*z);
-}
-  </textarea>
-  <div class="output-box">Нажмите ▶ Run для запуска</div>
+    println!("Поле: f(x,y,z) = x²y + z³");
+    println!("Точка: ({}, {}, {})", x, y, z);
+    println!("f = {}", f(x, y, z));
+    println!("Численный  ∇f = ({:.6}, {:.6}, {:.6})", dfdx, dfdy, dfdz);
+    println!("Аналитический = ({:.6}, {:.6}, {:.6})", 2.0*x*y, x*x, 3.0*z*z);
+
+    // Производная по направлению e = (1,1,1)/√3
+    let norm = (3.0_f64).sqrt();
+    let ex = 1.0/norm; let ey = 1.0/norm; let ez = 1.0/norm;
+    let dir = dfdx*ex + dfdy*ey + dfdz*ez;
+    println!("∂f/∂e, где e=(1,1,1)/√3: {:.6}", dir);
+}</textarea>
+  <div class="output-box" data-en="Press ▶ Run to execute">Нажмите ▶ Run для запуска</div>
 </div>
+<p class="info" data-en="The central difference (f(x+h) − f(x−h))/2h has error O(h²) — an order better than the forward difference (f(x+h) − f(x))/h. Notice also: the directional derivative along e=(1,1,1)/√3 is simply the sum of the components of ∇f divided by √3 — exactly what the formula ∇f·e predicts.">
+Центральная разность \( \frac{f(x+h)-f(x-h)}{2h} \) даёт погрешность \( O(h^{2}) \) — на порядок лучше прямой разности. Заметь: производная по направлению \( (1,1,1)/\sqrt{3} \) — это просто сумма компонент \( \nabla f \), делённая на \( \sqrt{3} \), ровно как предсказывает формула \( \nabla f \cdot \mathbf{e} \).</p>
+</div>
+</section>
+
+<section class="step-section" data-step="6">
+<div class="card">
+<div class="card-title" data-en="Summary &amp; exercises">Итоги и упражнения</div>
+<ul class="info" data-en="&lt;li&gt;A scalar field assigns a number to every point; it is drawn with level lines/surfaces f = C.&lt;/li&gt;&lt;li&gt;∇f = (∂f/∂x, ∂f/∂y, ∂f/∂z) — a vector field built from the partial derivatives.&lt;/li&gt;&lt;li&gt;df = ∇f·dr — the total differential; everything else follows from it.&lt;/li&gt;&lt;li&gt;∇f points along the steepest ascent, |∇f| is its rate, ∇f ⟂ level surfaces.&lt;/li&gt;&lt;li&gt;∂f/∂e = ∇f·e = |∇f| cos θ, with e a &lt;b&gt;unit&lt;/b&gt; vector.&lt;/li&gt;"><li>Скалярное поле ставит число каждой точке; изображается линиями/поверхностями уровня \( f = C \).</li><li>\( \nabla f = (\partial_x f,\, \partial_y f,\, \partial_z f) \) — векторное поле из частных производных.</li><li>\( df = \nabla f\cdot d\mathbf{r} \) — полный дифференциал; из него следует всё остальное.</li><li>\( \nabla f \) указывает направление наискорейшего роста, \( |\nabla f| \) — его скорость, \( \nabla f \perp \) поверхностям уровня.</li><li>\( \partial f/\partial\mathbf{e} = \nabla f\cdot\mathbf{e} = |\nabla f|\cos\theta \), где \( \mathbf{e} \) — <b>единичный</b> вектор.</li></ul>
+<p class="info" data-en="&lt;b&gt;Exercises&lt;/b&gt; — solve them yourself first, then reveal the answer.">
+<b>Упражнения</b> — сначала решите сами, потом раскройте ответ.</p>
+
+<details class="qa"><summary data-en="1. Find ∇f for f = xy + yz + zx at the point (1, 1, 1).">1. Найдите \( \nabla f \) для \( f = xy + yz + zx \) в точке \( (1, 1, 1) \).</summary><div class="ans" data-en="∇f = (y+z, x+z, x+y); at (1,1,1): (2, 2, 2), |∇f| = 2√3.">\( \nabla f = (y+z,\; x+z,\; x+y) \), в точке \( (1,1,1) \): \( (2, 2, 2) \), \( |\nabla f| = 2\sqrt3 \).</div></details>
+
+<details class="qa"><summary data-en="2. In which direction from (1, 2) does f = x² + y² grow fastest, and at what rate?">2. В каком направлении из точки \( (1, 2) \) быстрее всего растёт \( f = x^2 + y^2 \), и с какой скоростью?</summary><div class="ans" data-en="Along ∇f = (2, 4), i.e. e = (1, 2)/√5 — straight away from the origin. The rate is |∇f| = 2√5 ≈ 4.47.">Вдоль \( \nabla f = (2, 4) \), т.е. \( \mathbf{e} = (1, 2)/\sqrt5 \) — прямо от начала координат. Скорость \( |\nabla f| = 2\sqrt5 \approx 4.47 \).</div></details>
+
+<details class="qa"><summary data-en="3. Find the derivative of f = x²y at (1, 3) in the direction of a = (1, 1).">3. Найдите производную \( f = x^2 y \) в точке \( (1, 3) \) по направлению вектора \( \mathbf{a} = (1, 1) \).</summary><div class="ans" data-en="∇f = (2xy, x²) = (6, 1). Normalize: e = (1,1)/√2. Answer: 7/√2 ≈ 4.95. Without normalization one would get the wrong value 7.">\( \nabla f = (2xy,\; x^2) = (6, 1) \). Нормируем: \( \mathbf{e} = (1,1)/\sqrt2 \). Ответ: \( 7/\sqrt2 \approx 4.95 \). Без нормировки получилось бы неверное 7.</div></details>
+
+<details class="qa"><summary data-en="4. Why is the gradient perpendicular to a level line? Explain with one formula.">4. Почему градиент перпендикулярен линии уровня? Объясните одной формулой.</summary><div class="ans" data-en="Along a level line f does not change: df = ∇f·dr = 0 for every tangent dr. A zero dot product means perpendicularity.">Вдоль линии уровня \( f \) не меняется: \( df = \nabla f\cdot d\mathbf{r} = 0 \) для любого касательного \( d\mathbf{r} \). Нулевое скалярное произведение означает перпендикулярность.</div></details>
+
+<details class="qa"><summary data-en="5. For f = √(x²+y²+z²) = r find ∇f. What is its magnitude?">5. Для \( f = \sqrt{x^2+y^2+z^2} = r \) найдите \( \nabla f \). Какой у него модуль?</summary><div class="ans" data-en="∇r = r/r — the unit radial vector, |∇r| = 1 everywhere except the origin (r is not differentiable there). Distance grows at unit rate if you walk straight away from the centre.">\( \nabla r = \mathbf{r}/r \) — единичный радиальный вектор, \( |\nabla r| = 1 \) всюду, кроме начала координат (там \( r \) не дифференцируема). Расстояние растёт с единичной скоростью, если идти прямо от центра.</div></details>
+
 </div>
 </section>
 
 </main>
 <script src="playground.js"></script>
-<script>
-  document.querySelectorAll('.step-btn').forEach(b => b.addEventListener('click', () => {
-    document.querySelectorAll('.step-btn').forEach(x => x.classList.remove('active'));
-    document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
-    b.classList.add('active');
-    document.querySelector('.step-section[data-step="'+b.dataset.step+'"]').classList.add('active');
-  }));
-</script>
+<script src="course.js"></script>
+<script src="viz.js"></script>
 </body>
 </html>

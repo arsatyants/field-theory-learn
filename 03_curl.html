@@ -5,117 +5,174 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Модуль 03 — Ротор</title>
 <link rel="stylesheet" href="shared.css">
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="mathjax-config.js"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="lang.js"></script>
 </head>
 <body>
 <nav class="top-nav">
   <a class="nav-home" href="index.html">∇×</a>
-  <div class="nav-title">Модуль 03 — Ротор (ротация) векторного поля</div>
-</div>
+  <div class="nav-title" data-en="Module 03 — Curl of a vector field">Модуль 03 — Ротор векторного поля</div>
+</nav>
 <div id="stepNav">
-  <button class="step-btn active" data-step="0">Определение</button>
-  <button class="step-btn" data-step="1">Циркуляция</button>
-  <button class="step-btn" data-step="2">Безвихревое поле</button>
-  <button class="step-btn" data-step="3">В координатах</button>
-  <button class="step-btn" data-step="4">Rust: численный rot</button>
+  <button class="step-btn active" data-step="0" data-en="Intuition">Интуиция</button>
+  <button class="step-btn" data-step="1" data-en="Definition">Определение</button>
+  <button class="step-btn" data-step="2" data-en="Circulation">Циркуляция</button>
+  <button class="step-btn" data-step="3" data-en="Irrotational field">Безвихревое поле</button>
+  <button class="step-btn" data-step="4" data-en="Worked example">Разбор примера</button>
+  <button class="step-btn" data-step="5" data-en="Rust: numerical curl">Rust: численный rot</button>
+  <button class="step-btn" data-step="6" data-en="Summary &amp; exercises">Итоги и упражнения</button>
 </div>
-</main class="main">
+<main class="main">
 
 <section class="step-section active" data-step="0">
 <div class="card">
-<div class="card-title">Определение</div>
-<p class="info">
-<strong>Ротор</strong> (ротация) векторного поля \( \mathbf{F} \) — это векторное произведение \( \nabla \times \mathbf{F} \):
-</p>
-<div class="formula-block">
-$$ \operatorname{rot} \mathbf{F} = \nabla \times \mathbf{F} = \begin{vmatrix}
-\mathbf{i} & \mathbf{j} & \mathbf{k} \\
-\frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\
-F_x & F_y & F_z
-\end{vmatrix} $$
-</div>
-<p class="info">
-В развёрнутом виде:
-</p>
-<div class="formula-block">
-$$ \operatorname{rot} \mathbf{F} = \left( \frac{\partial F_z}{\partial y} - \frac{\partial F_y}{\partial z},\;
-\frac{\partial F_x}{\partial z} - \frac{\partial F_z}{\partial x},\;
-\frac{\partial F_y}{\partial x} - \frac{\partial F_x}{\partial y} \right) $$
-</div>
-<div class="rule-box">
-Ротор измеряет «вихревость» поля в данной точке: чем больше ротор, тем сильнее локальное вращение.
-</div>
+<div class="card-title" data-en="Intuition: a paddle wheel">Интуиция: вертушка</div>
+<p class="info" data-en="Imagine placing a tiny paddle wheel into the fluid flow described by the field F. If the wheel starts spinning, the field has curl at that point. The curl vector points along the wheel’s rotation axis (by the right-hand rule), and its magnitude is twice the angular velocity the wheel acquires.">
+Представь, что в поток жидкости, описываемый полем \( \mathbf{F} \), опускаешь крошечную вертушку с лопастями. Если вертушка начинает вращаться — в этой точке у поля есть ротор. Вектор ротора направлен вдоль оси вращения вертушки (по правилу правого винта), а его величина равна удвоенной угловой скорости, которую вертушка приобретает.</p>
+<p class="info" data-en="A river illustrates all cases at once: in the middle of a straight channel the flow is fast but uniform — the wheel drifts without spinning (curl = 0). Near the bank the water is slow: one side of the wheel is in fast water, the other in slow — the wheel spins (curl ≠ 0). A whirlpool is pure curl — the flow moves in circles.">
+Река иллюстрирует все случаи сразу: в середине прямого канала течение быстрое, но однородное — вертушку несёт по течению, но не вращает (ротор = 0). У берега вода медленная: одна сторона вертушки в быстрой воде, другая в медленной — вертушка вращается (ротор ≠ 0). Водоворот — чистый ротор: жидкость ходит кругами.</p>
+
+<figure class="fig" data-fig="paddle"><figcaption data-en="&lt;b&gt;Fig. 1.&lt;/b&gt; A paddle wheel in the flow (drag it with the mouse). Green arrows are the fluid velocity at the blade tips, yellow dots are fluid particles, the pink blade helps you follow the rotation. Try every field: &lt;b&gt;rotation&lt;/b&gt; spins the wheel equally everywhere; &lt;b&gt;shear&lt;/b&gt; (y, 0) has straight streamlines, yet the wheel spins because the upper blade is pushed faster than the lower one; &lt;b&gt;point vortex&lt;/b&gt; — the fluid moves in circles, but away from the centre the wheel is only carried around without spinning about its own axis (rot = 0!); &lt;b&gt;source&lt;/b&gt; and &lt;b&gt;saddle&lt;/b&gt; do not spin it at all."><b>Рис. 1.</b> Вертушка в потоке (тащите её мышью). Зелёные стрелки — скорость жидкости на концах лопастей, жёлтые точки — частицы жидкости, розовая лопасть помогает следить за вращением. Попробуйте все поля: <b>вращение</b> крутит вертушку везде одинаково; <b>сдвиг</b> \( (y, 0) \) — линии тока прямые, но вертушка вращается, потому что верхнюю лопасть несёт быстрее нижней; <b>точечный вихрь</b> — жидкость ходит кругами, но вне центра вертушка лишь переносится по кругу, не вращаясь вокруг своей оси (rot = 0!); <b>источник</b> и <b>седло</b> не вращают вовсе.</figcaption></figure>
+
+<div class="rule-box amber" data-en="The main lesson of the figure: curl does &lt;b&gt;not&lt;/b&gt; mean “the streamlines are curved”. Curl is the &lt;b&gt;difference of velocities&lt;/b&gt; on opposite sides of a small neighbourhood. A straight shear flow has curl, while the circular flow of a point vortex has none away from its centre.">
+Главный урок рисунка: ротор — это <span class="hl">не</span> «линии тока закручены». Ротор — это <span class="hl">разница скоростей</span> на противоположных сторонах маленькой окрестности. Прямолинейный сдвиг имеет ротор, а круговое течение точечного вихря вне центра — нет.</div>
+<div class="rule-box" data-en="Divergence answers “does the point generate field?”, curl answers “does the point rotate field?”. Together they give the full local portrait of a vector field: sources and vortices.">
+Дивергенция отвечает «генерирует ли точка поле?», ротор — «вращает ли точка поле?». Вместе они дают полный локальный портрет векторного поля: источники и вихри.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="1">
 <div class="card">
-<div class="card-title">Циркуляция и ротор</div>
-<p class="info">
-Циркуляция поля по замкнутому контуру \( L \):
-</p>
+<div class="card-title" data-en="Definition">Определение</div>
+<p class="info" data-en="The curl (rotation) of a vector field is the cross product of nabla with the field. It is best remembered through the formal determinant, expanded along the first row:">
+Ротор (ротация, вихрь) векторного поля — векторное произведение наблы с полем. Удобнее всего запоминать через формальный определитель, раскрытый по первой строке:</p>
 <div class="formula-block">
-$$ \Gamma = \oint_{L} \mathbf{F} \cdot d\mathbf{r} $$
+$$ \operatorname{rot} \mathbf{F} = \nabla \times \mathbf{F} = \begin{vmatrix}
+\mathbf{i} & \mathbf{j} & \mathbf{k} \\
+\dfrac{\partial}{\partial x} & \dfrac{\partial}{\partial y} & \dfrac{\partial}{\partial z} \\
+F_x & F_y & F_z
+\end{vmatrix} $$
 </div>
-<p class="info">
-По теореме Стокса циркуляция связана с потоком ротора через ограничиваемую контур поверхность:
-</p>
+<p class="info" data-en="Expanding the determinant gives the componentwise formula:">
+Раскрытие определителя даёт покомпонентную формулу:</p>
 <div class="formula-block">
-$$ \oint_{L} \mathbf{F} \cdot d\mathbf{r} = \iint_{S} (\nabla \times \mathbf{F}) \cdot \mathbf{n} \, dS $$
+$$ \operatorname{rot} \mathbf{F} = \left(
+\frac{\partial F_z}{\partial y} - \frac{\partial F_y}{\partial z}, \;\;
+\frac{\partial F_x}{\partial z} - \frac{\partial F_z}{\partial x}, \;\;
+\frac{\partial F_y}{\partial x} - \frac{\partial F_x}{\partial y}
+\right) $$
 </div>
-<div class="rule-box amber">
-Если ротор нулевой везде, поле <strong>безвихревое</strong> (потенциальное), и циркуляция по любому контуру равна нулю.
+<p class="info" data-en="Note the structure of each component: the difference of two “mixed” derivatives. The first component involves how Fz changes along y and how Fy changes along z — exactly the shear that spins the paddle wheel around the x axis.">
+Обрати внимание на структуру каждой компоненты: разность двух «перекрёстных» производных. Первая компонента — как \( F_z \) меняется вдоль \( y \) и как \( F_y \) вдоль \( z \): ровно тот сдвиг, который раскручивает вертушку вокруг оси \( x \).</p>
+
+<p class="info" data-en="For a planar field F = (F_x(x,y), F_y(x,y), 0) only the z-component survives, and its meaning is seen directly on the paddle wheel:">
+Для плоского поля \( \mathbf F = (F_x(x,y),\, F_y(x,y),\, 0) \) остаётся только \( z \)-компонента, и её смысл виден на вертушке напрямую:</p>
+
+<div class="formula-block">
+$$ (\operatorname{rot}\mathbf F)_z = \frac{\partial F_y}{\partial x} - \frac{\partial F_x}{\partial y} $$
 </div>
+
+<p class="info" data-en="If F_y grows along x, the right blade is pushed up harder than the left one — the wheel turns counter-clockwise (positive). If F_x grows along y, the upper blade is pushed right harder than the lower one — a clockwise turn (hence the minus sign). The direction of the curl vector is given by the right-hand rule:">
+Если \( F_y \) растёт вдоль \( x \), правую лопасть толкает вверх сильнее, чем левую, — вертушка поворачивается против часовой стрелки (положительно). Если \( F_x \) растёт вдоль \( y \), верхнюю лопасть сносит вправо сильнее нижней — поворот по часовой (отсюда минус). Направление вектора ротора определяется правилом правой руки:</p>
+
+<figure class="fig" data-fig="righthand"><figcaption data-en="&lt;b&gt;Fig. 2.&lt;/b&gt; The right-hand rule. If the four curled fingers of the right hand follow the rotation of the fluid in the xy plane, the extended thumb points along rot F. Counter-clockwise rotation (seen from above) gives curl along +z, clockwise gives −z."><b>Рис. 2.</b> Правило правой руки. Если согнутые четыре пальца правой руки идут по направлению вращения жидкости в плоскости \( xy \), то отогнутый большой палец указывает направление \( \operatorname{rot}\mathbf F \). Вращение против часовой стрелки (если смотреть сверху) даёт ротор вдоль \( +z \), по часовой — вдоль \( -z \).</figcaption></figure>
+<p class="info" data-en="Unlike the gradient (scalar → vector) and divergence (vector → scalar), curl maps a vector field to another vector field: 3 numbers in, 3 numbers out.">
+В отличие от градиента (скаляр → вектор) и дивергенции (вектор → скаляр), ротор переводит векторное поле в векторное: 3 числа на входе, 3 на выходе.</p>
 </div>
 </section>
 
 <section class="step-section" data-step="2">
 <div class="card">
-<div class="card-title">Безвихревое поле</div>
-<p class="info">
-Если \( \operatorname{rot} \mathbf{F} = \mathbf{0} \), поле называется <strong>безвихревым</strong> (потенциальным).
-</p>
+<div class="card-title" data-en="Circulation">Циркуляция</div>
+<p class="info" data-en="The integral “ancestor” of the curl is circulation — the work of the field along a closed path. One takes a curve L, walks along it, and accumulates how much of the field points along the motion:">
+Интегральный «предок» ротора — <strong>циркуляция</strong>: работа поля вдоль замкнутого пути. Берём кривую \( L \), идём вдоль неё и накапливаем, сколько поля смотрит по ходу движения:</p>
 <div class="formula-block">
-$$ \mathbf{F} = \nabla \varphi $$
+$$ \Gamma = ∮_{L} \mathbf{F} \cdot d\mathbf{r} = ∮_{L} F_x\,dx + F_y\,dy + F_z\,dz $$
 </div>
-<p class="info">
-Скалярная функция \( \varphi \) называется <strong>скалярным потенциалом</strong> поля \( \mathbf{F} \).
-</p>
-<div class="two-col">
-<div class="rule-box green">
-<strong>rot(∇φ) ≡ 0</strong> — градиент любого скалярного поля безвихрев.
+<p class="info" data-en="The physical meaning is work: if F is a force, the circulation is the work done by the force on a particle that makes one full loop. For a potential (conservative) force the answer must be zero — you cannot extract free energy by returning to the starting point.">
+Физический смысл — работа: если \( \mathbf{F} \) — сила, то циркуляция равна работе силы над частицей, прошедшей круг. Для потенциальной (консервативной) силы работа по замкнутому пути обязана быть нулём — нельзя вернуть бесплатную энергию, вернувшись в исходную точку.</p>
+
+<figure class="fig" data-fig="circulation"><figcaption data-en="&lt;b&gt;Fig. 3.&lt;/b&gt; Circulation around a circle (drag the centre, change the radius). Arrows on the contour show the tangential component F_τ = F·τ: green means the field helps the counter-clockwise traversal, red means it hinders. The circulation Γ is the sum of these contributions along the contour. Compare Γ/area with the curl at the centre: as the radius shrinks they coincide. For the “point vortex” the circulation is 2π if the contour encloses the centre and zero otherwise."><b>Рис. 3.</b> Циркуляция по окружности (тащите центр, меняйте радиус). Стрелки на контуре — касательная составляющая поля \( F_\tau = \mathbf F\cdot\boldsymbol\tau \): зелёные — поле помогает обходу против часовой стрелки, красные — мешает. Циркуляция \( \Gamma \) — сумма этих вкладов вдоль контура. Сравните \( \Gamma/\text{площадь} \) с ротором в центре: при уменьшении радиуса они совпадают. У «точечного вихря» циркуляция равна \( 2\pi \), если контур охватывает центр, и нулю, если нет.</figcaption></figure>
+<p class="info" data-en="The connection between circulation and curl is the Stokes theorem (module 06): the circulation along the boundary equals the flux of the curl through the surface. Its infinitesimal version — the curl is the circulation per unit area of a shrinking contour:">
+Связь циркуляции и ротора — теорема Стокса (модуль 06): циркуляция по границе равна потоку ротора через поверхность. Её инфинитезимальная версия — ротор есть циркуляция на единицу площади сжимающегося контура:</p>
+<div class="formula-block">
+$$ (\operatorname{rot} \mathbf{F}) \cdot \mathbf{n} = \lim_{S \to 0} \frac{1}{|S|} ∮_{\partial S} \mathbf{F} \cdot d\mathbf{r} $$
 </div>
-<div class="rule-box">
-<strong>div(rot F) ≡ 0</strong> — дивергенция ротора тождественно нуль.
-</div>
-</div>
+<div class="rule-box amber" data-en="This is the curl-analogue of the divergence definition: div = flux per unit volume, rot = circulation per unit area. Both are “density” versions of integral theorems.">
+Это ротор-аналог определения дивергенции: div = поток на единицу объёма, rot = циркуляция на единицу площади. Обе — «плотностные» версии интегральных теорем.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="3">
 <div class="card">
-<div class="card-title">В декартовых координатах</div>
-<p class="info">
-Для поля \( \mathbf{F} = (yz,\; xz,\; xy) \):
-</p>
+<div class="card-title" data-en="Irrotational field">Безвихревое поле</div>
+<p class="info" data-en="A field with identically zero curl is called irrotational. The fluid picture: the paddle wheel never spins anywhere. The key property: such a field (in a simply connected domain) is necessarily a gradient of some scalar potential:">
+Поле с тождественно нулевым ротором называется <strong>безвихревым</strong>. Картина жидкости: вертушка нигде не вращается. Ключевое свойство: такое поле (в односвязной области) обязательно является градиентом некоторого скалярного потенциала:</p>
 <div class="formula-block">
-$$ \frac{\partial (xy)}{\partial y} - \frac{\partial (xz)}{\partial z} = x - x = 0 $$
-$$ \frac{\partial (yz)}{\partial z} - \frac{\partial (xy)}{\partial x} = y - y = 0 $$
-$$ \frac{\partial (xz)}{\partial x} - \frac{\partial (yz)}{\partial y} = z - z = 0 $$
+$$ \operatorname{rot} \mathbf{F} = \mathbf{0} \;\;\Longleftrightarrow\;\; \exists \, \varphi : \; \mathbf{F} = \operatorname{grad} \varphi = \nabla \varphi $$
 </div>
+
+<p class="info" data-en="Why this matters in practice: for a gradient field the work depends only on the start and end of the path, not on its shape. This is a generalisation of the Newton–Leibniz formula:">
+Почему это так важно на практике: для градиентного поля работа зависит только от начала и конца пути, но не от его формы. Это обобщение формулы Ньютона–Лейбница:</p>
+
 <div class="formula-block">
-$$ \operatorname{rot} \mathbf{F} = (0,\; 0,\; 0) $$
+$$ \int_{A}^{B} \nabla\varphi \cdot d\mathbf r = \varphi(B) - \varphi(A) $$
 </div>
-<div class="rule-box green">
-Это поле безвихревое. Действительно, \( \mathbf{F} = \nabla(xyz) \).
+
+<figure class="fig" data-fig="irrot"><figcaption data-en="&lt;b&gt;Fig. 4.&lt;/b&gt; The field F = (y, x) = ∇(xy): arrows are the field, colour and level lines are the potential φ = xy. The work along three different paths from A to B (straight, polyline, arc) is the same and equals φ(B) − φ(A). Drag B. It also follows that the work around any closed path is zero: going from A to B one way and coming back another gives Δφ − Δφ = 0."><b>Рис. 4.</b> Поле \( \mathbf F = (y, x) = \nabla(xy) \): стрелки — поле, цвет и линии уровня — потенциал \( \varphi = xy \). Работа по трём разным путям из \( A \) в \( B \) (прямая, ломаная, дуга) одинакова и равна \( \varphi(B)-\varphi(A) \). Перетащите \( B \). Отсюда же следует, что по любому замкнутому пути работа равна нулю: пройти от \( A \) до \( B \) по одному пути и вернуться по другому — это \( \Delta\varphi - \Delta\varphi = 0 \).</figcaption></figure>
+
+<div class="rule-box coral" data-en="An important caveat about &lt;b&gt;simple connectivity&lt;/b&gt;. The point vortex (−y, x)/r² has rot = 0 everywhere except the origin, where the field is undefined. Yet the circulation around a circle about the origin is 2π ≠ 0 (check it in Fig. 3). There is no global potential: a region with a “hole” is not simply connected, and the potential theorem fails there. A potential exists only in a region that does not encircle the origin — it is the angle φ = arctan(y/x).">
+Важная оговорка про <span class="hl">односвязность</span>. Точечный вихрь \( (-y, x)/r^2 \) имеет \( \operatorname{rot} = 0 \) всюду, кроме начала координат, где поле не определено. Но циркуляция по окружности вокруг начала равна \( 2\pi \ne 0 \) (проверьте на рис. 3). Глобального потенциала нет: область с «дыркой» не односвязна, и теорема о потенциале в ней не работает. Потенциал есть только в области, которая не охватывает начало, — это угол \( \varphi = \arctan(y/x) \).</div>
+<p class="info" data-en="Why gradients are curl-free is seen directly from the component formula — mixed derivatives commute (Clairaut/Schwarz theorem), so each pair cancels:">
+Почему у градиента нет ротора — видно прямо из покомпонентной формулы: смешанные производные коммутируют (теорема Шварца), и каждая пара сокращается:</p>
+<div class="formula-block">
+$$ \operatorname{rot} \operatorname{grad} \varphi = \mathbf{0} $$
 </div>
+<p class="info" data-en="The dual identity holds for divergence and curl: the divergence of any curl is identically zero:">
+Двойственное тождество выполняется для дивергенции и ротора: дивергенция любого ротора тождественно равна нулю:</p>
+<div class="formula-block">
+$$ \operatorname{div} \operatorname{rot} \mathbf{A} \equiv 0 $$
+</div>
+<div class="two-col">
+<div class="rule-box green" data-en="<strong>rot grad ≡ 0</strong> — a gradient field never rotates the wheel. Electrostatics: E = −grad φ.">
+<strong>rot grad ≡ 0</strong> — градиентное поле никогда не вращает вертушку. Электростатика: \( \mathbf{E} = -\operatorname{grad}\varphi \).</div>
+<div class="rule-box" data-en="<strong>div rot ≡ 0</strong> — a vortex field has no sources. Magnetism: div B = 0.">
+<strong>div rot ≡ 0</strong> — вихревое поле не имеет источников. Магнетизм: \( \operatorname{div}\mathbf{B} = 0 \).</div>
+</div>
+<p class="info" data-en="These two identities are the reason the “potential representations” of module 02 exist: a curl-free field is F = grad φ, a divergence-free field is F = rot A. The identities guarantee the consistency of these representations.">
+Эти два тождества — причина существования «потенциальных представлений» из модуля 02: безвихревое поле есть \( \mathbf{F} = \operatorname{grad}\varphi \), безисточниковое — \( \mathbf{F} = \operatorname{rot}\mathbf{A} \). Тождества гарантируют согласованность таких представлений.</p>
 </div>
 </section>
 
 <section class="step-section" data-step="4">
 <div class="card">
-<div class="card-title">Rust: численный ротор</div>
+<div class="card-title" data-en="Worked example">Разбор примера</div>
+<p class="info" data-en="Take the field F = (yz, xz, xy). Compute the first component: it is ∂Fz/∂y − ∂Fy/∂z = ∂(xy)/∂y − ∂(xz)/∂z = x − x = 0. Similarly the others vanish. The field is curl-free — and indeed it is the gradient of the potential φ = xyz:">
+Возьмём поле \( \mathbf{F} = (yz,\; xz,\; xy) \). Первая компонента: \( \partial F_z/\partial y - \partial F_y/\partial z = x - x = 0 \). Остальные исчезают аналогично. Поле безвихревое — и действительно, это градиент потенциала \( \varphi = xyz \):</p>
+<div class="formula-block">
+$$ \operatorname{grad}(xyz) = (yz, \; xz, \; xy) = \mathbf{F} $$
+</div>
+
+<p class="info" data-en="Let us compute the curl of two planar fields with (rot F)_z = ∂F_y/∂x − ∂F_x/∂y:">
+Вычислим ротор двух плоских полей по формуле \( (\operatorname{rot}\mathbf F)_z = \partial_x F_y - \partial_y F_x \):</p>
+
+<div class="formula-block">
+$$ \mathbf F = (-y,\; x,\; 0):\quad \partial_x(x) - \partial_y(-y) = 1 + 1 = 2; \qquad \mathbf F = (y,\; 0,\; 0):\quad 0 - \partial_y(y) = -1 $$
+</div>
+
+<p class="info" data-en="Rotation gives +2 (counter-clockwise), shear gives −1 (clockwise: the top moves faster than the bottom). Both results can be checked with the paddle wheel in Fig. 1.">
+Вращение даёт \( +2 \) (против часовой), сдвиг \( -1 \) (по часовой: верх движется быстрее низа). Оба результата можно проверить вертушкой на рис. 1.</p>
+<p class="info" data-en="The opposite example is the “pure vortex” F = (−y, x, 0) — the rigid rotation of a fluid with unit angular velocity around the z axis. Its curl is constant: (0, 0, 2) — twice the angular velocity, as the paddle-wheel picture promised. This exact field will be the hero of the Stokes theorem module.">
+Противоположный пример — «чистый вихрь» \( \mathbf{F} = (-y,\; x,\; 0) \): вращение жидкости как твёрдого тела с единичной угловой скоростью вокруг оси \( z \). Его ротор постоянен: \( (0,\; 0,\; 2) \) — удвоенная угловая скорость, ровно как обещала картинка с вертушкой. Именно это поле станет героем модуля теоремы Стокса.</p>
+</div>
+</section>
+
+<section class="step-section" data-step="5">
+<div class="card">
+<div class="card-title" data-en="Rust: numerical curl">Rust: численный ротор</div>
+<p class="info" data-en="The code computes all three components of rot F for F = (yz, xz, xy) at the point (1.5, 2, 0.5) via central differences. The expected answer is the zero vector — the field is a gradient, hence curl-free.">
+Код вычисляет все три компоненты \( \operatorname{rot}\mathbf{F} \) для поля \( \mathbf{F} = (yz, xz, xy) \) в точке \( (1.5, 2, 0.5) \) центральными разностями. Ожидаемый ответ — нулевой вектор: поле градиентное, значит безвихревое.</p>
 <div class="editor-wrap">
   <div class="editor-header">
     <span class="editor-lang">Rust</span>
@@ -125,37 +182,65 @@ $$ \operatorname{rot} \mathbf{F} = (0,\; 0,\; 0) $$
     let h = 1e-6;
     let (x, y, z) = (1.5, 2.0, 0.5);
 
+    // Векторное поле F = (yz, xz, xy)
     let fx = |_x: f64, y: f64, z: f64| y*z;
     let fy = |x: f64, _y: f64, z: f64| x*z;
     let fz = |x: f64, y: f64, _z: f64| x*y;
 
-    // rot_x = dFz/dy - dFy/dz
-    let rot_x = ((fz(x,y+h,z) - fz(x,y,z))/h) - ((fy(x,y,z+h) - fy(x,y,z))/h);
-    // rot_y = dFx/dz - dFz/dx
-    let rot_y = ((fx(x,y,z+h) - fx(x,y,z))/h) - ((fz(x+h,y,z) - fz(x,y,z))/h);
-    // rot_z = dFy/dx - dFx/dy
-    let rot_z = ((fy(x+h,y,z) - fy(x,y,z))/h) - ((fx(x,y+h,z) - fx(x,y,z))/h);
+    // rot_x = ∂Fz/∂y − ∂Fy/∂z
+    let rot_x = (fz(x, y+h, z) - fz(x, y-h, z))/(2.0*h)
+              - (fy(x, y, z+h) - fy(x, y, z-h))/(2.0*h);
+    // rot_y = ∂Fx/∂z − ∂Fz/∂x
+    let rot_y = (fx(x, y, z+h) - fx(x, y, z-h))/(2.0*h)
+              - (fz(x+h, y, z) - fz(x-h, y, z))/(2.0*h);
+    // rot_z = ∂Fy/∂x − ∂Fx/∂y
+    let rot_z = (fy(x+h, y, z) - fy(x-h, y, z))/(2.0*h)
+              - (fx(x, y+h, z) - fx(x, y-h, z))/(2.0*h);
 
-    println!("F = (yz, xz, xy)");
-    println!("В точке ({}, {}, {}):", x, y, z);
-    println!("  rot F = ({:.6e}, {:.6e}, {:.6e})", rot_x, rot_y, rot_z);
-    println!("  Ожидается: (0, 0, 0) — безвихревое поле");
-}
-  </textarea>
-  <div class="output-box">Нажмите ▶ Run для запуска</div>
+    println!("Поле: F = (yz, xz, xy)");
+    println!("Точка: ({}, {}, {})", x, y, z);
+    println!("Численный  rot F = ({:.2e}, {:.2e}, {:.2e})", rot_x, rot_y, rot_z);
+    println!("Аналитический     = (0, 0, 0)  — поле безвихревое");
+    println!("Проверка: F = grad(xyz), а rot·grad ≡ 0");
+
+    // Контраст: чистый вихрь F = (−y, x, 0) имеет rot = (0, 0, 2)
+    let wx = |_x: f64, y: f64, _z: f64| -y;
+    let wy = |_x: f64, _y: f64, _z: f64| 0.0;
+    let wz = |_x: f64, _y: f64, _z: f64| 0.0;
+    let wr_z = (wy(x+h, y, z) - wy(x-h, y, z))/(2.0*h)
+             - (wx(x, y+h, z) - wx(x, y-h, z))/(2.0*h);
+    println!("\nВихрь W = (−y, 0, 0): rot_z = {:.2} (теория: 2.0)", wr_z);
+}</textarea>
+  <div class="output-box" data-en="Press ▶ Run to execute">Нажмите ▶ Run для запуска</div>
 </div>
+<p class="info" data-en="The residual ~1e−10 is just floating-point noise of finite differences — effectively zero. The second part of the code computes the z-component of the curl of the “rigid rotation” field (−y, 0, 0) and confirms the value 2: twice the angular velocity.">
+Остаток порядка \( 10^{-10} \) — это лишь шум конечных разностей, фактически ноль. Вторая часть кода считает \( z \)-компоненту ротора поля «твёрдого вращения» \( (-y, 0, 0) \) и подтверждает значение 2 — удвоенную угловую скорость.</p>
+</div>
+</section>
+
+<section class="step-section" data-step="6">
+<div class="card">
+<div class="card-title" data-en="Summary &amp; exercises">Итоги и упражнения</div>
+<ul class="info" data-en="&lt;li&gt;rot F = ∇ × F — a vector field; its direction is the rotation axis (right-hand rule), its magnitude is twice the local angular velocity.&lt;/li&gt;&lt;li&gt;Planar case: (rot F)_z = ∂F_y/∂x − ∂F_x/∂y.&lt;/li&gt;&lt;li&gt;Circulation Γ = ∮F·dr; rot F·n = circulation per unit area.&lt;/li&gt;&lt;li&gt;Curl ≠ curved streamlines: shear has curl, a point vortex (away from the centre) does not.&lt;/li&gt;&lt;li&gt;rot grad ≡ 0, div rot ≡ 0.&lt;/li&gt;&lt;li&gt;rot F = 0 in a simply connected region ⇔ F = ∇φ ⇔ work is path-independent.&lt;/li&gt;"><li>\( \operatorname{rot}\mathbf F = \nabla\times\mathbf F \) — векторное поле; направление — ось вращения (правило правой руки), модуль — удвоенная локальная угловая скорость.</li><li>Плоский случай: \( (\operatorname{rot}\mathbf F)_z = \partial_x F_y - \partial_y F_x \).</li><li>Циркуляция \( \Gamma = ∮ \mathbf F\cdot d\mathbf r \); \( \operatorname{rot}\mathbf F\cdot\mathbf n \) — циркуляция на единицу площади.</li><li>Ротор ≠ изогнутые линии тока: у сдвига ротор есть, у точечного вихря (вне центра) — нет.</li><li>\( \operatorname{rot}\operatorname{grad} \equiv 0 \), \( \operatorname{div}\operatorname{rot} \equiv 0 \).</li><li>\( \operatorname{rot}\mathbf F = 0 \) в односвязной области ⇔ \( \mathbf F = \nabla\varphi \) ⇔ работа не зависит от пути.</li></ul>
+<p class="info" data-en="&lt;b&gt;Exercises&lt;/b&gt;">
+<b>Упражнения</b></p>
+
+<details class="qa"><summary data-en="1. Find rot F for F = (xy, yz, zx).">1. Найдите \( \operatorname{rot}\mathbf F \) для \( \mathbf F = (xy,\; yz,\; zx) \).</summary><div class="ans" data-en="(∂(zx)/∂y − ∂(yz)/∂z, ∂(xy)/∂z − ∂(zx)/∂x, ∂(yz)/∂x − ∂(xy)/∂y) = (−y, −z, −x).">\( (\partial_y(zx) - \partial_z(yz),\; \partial_z(xy) - \partial_x(zx),\; \partial_x(yz) - \partial_y(xy)) = (-y,\; -z,\; -x) \).</div></details>
+
+<details class="qa"><summary data-en="2. A river flows with velocity v = (1 − y², 0) in the channel −1 ≤ y ≤ 1. Where does a paddle wheel spin fastest, and which way?">2. Река течёт со скоростью \( \mathbf v = (1 - y^2,\; 0) \) в канале \( -1 \le y \le 1 \). Где вертушка крутится сильнее всего и в какую сторону?</summary><div class="ans" data-en="(rot v)_z = −∂(1−y²)/∂y = 2y. In the middle (y = 0) it does not spin; it spins fastest at the banks: counter-clockwise at the upper bank (y = 1), clockwise at the lower one.">\( (\operatorname{rot}\mathbf v)_z = -\partial_y(1-y^2) = 2y \). На середине (\( y=0 \)) не крутится, сильнее всего у берегов: у верхнего (\( y=1 \)) против часовой, у нижнего — по часовой.</div></details>
+
+<details class="qa"><summary data-en="3. Is F = (2xy, x² + z, y) potential? If so, find the potential.">3. Потенциально ли поле \( \mathbf F = (2xy,\; x^2 + z,\; y) \)? Если да — найдите потенциал.</summary><div class="ans" data-en="rot F = (1 − 1, 0 − 0, 2x − 2x) = 0 — yes. φ = x²y + yz (+ const): ∇φ = (2xy, x² + z, y).">rot F = \( (1 - 1,\; 0 - 0,\; 2x - 2x) = 0 \) — да. \( \varphi = x^2 y + yz \) (+ константа): \( \nabla\varphi = (2xy,\; x^2 + z,\; y) \).</div></details>
+
+<details class="qa"><summary data-en="4. What is the circulation of F = (−y, x) around a circle of radius 2?">4. Чему равна циркуляция \( \mathbf F = (-y, x) \) по окружности радиуса 2?</summary><div class="ans" data-en="rot = 2 is constant, the area is 4π: Γ = 2·4π = 8π. Directly: on the circle |F| = 2 and the field is tangent, Γ = 2·2π·2 = 8π.">rot = 2 постоянен, площадь \( 4\pi \): \( \Gamma = 2\cdot 4\pi = 8\pi \). Напрямую: на окружности \( |\mathbf F| = 2 \) и поле касательно, \( \Gamma = 2\cdot 2\pi\cdot 2 = 8\pi \).</div></details>
+
+<details class="qa"><summary data-en="5. Prove div rot A = 0.">5. Докажите \( \operatorname{div}\operatorname{rot}\mathbf A = 0 \).</summary><div class="ans" data-en="Expand: ∂x(∂yAz − ∂zAy) + ∂y(∂zAx − ∂xAz) + ∂z(∂xAy − ∂yAx). The six mixed derivatives cancel in pairs by Schwarz’s theorem.">Распишите: \( \partial_x(\partial_y A_z - \partial_z A_y) + \partial_y(\partial_z A_x - \partial_x A_z) + \partial_z(\partial_x A_y - \partial_y A_x) \). Шесть смешанных производных попарно сокращаются по теореме Шварца.</div></details>
+
 </div>
 </section>
 
 </main>
 <script src="playground.js"></script>
-<script>
-  document.querySelectorAll('.step-btn').forEach(b=>b.addEventListener('click',()=>{
-    document.querySelectorAll('.step-btn').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.step-section').forEach(s=>s.classList.remove('active'));
-    b.classList.add('active');
-    document.querySelector('.step-section[data-step="'+b.dataset.step+'"]').classList.add('active');
-  }));
-</script>
+<script src="course.js"></script>
+<script src="viz.js"></script>
 </body>
 </html>

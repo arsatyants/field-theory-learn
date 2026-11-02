@@ -5,112 +5,135 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Модуль 05 — Теорема Остроградского-Гаусса</title>
 <link rel="stylesheet" href="shared.css">
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="mathjax-config.js"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="lang.js"></script>
 </head>
 <body>
 <nav class="top-nav">
   <a class="nav-home" href="index.html">∭→∯</a>
-  <div class="nav-title">Модуль 05 — Теорема Остроградского-Гаусса</div>
-</div>
+  <div class="nav-title" data-en="Module 05 — Divergence (Gauss–Ostrogradsky) theorem">Модуль 05 — Теорема Остроградского-Гаусса</div>
+</nav>
 <div id="stepNav">
-  <button class="step-btn active" data-step="0">Формулировка</button>
-  <button class="step-btn" data-step="1">Доказательство</button>
-  <button class="step-btn" data-step="2">Пример: сфера</button>
-  <button class="step-btn" data-step="3">Физический смысл</button>
-  <button class="step-btn" data-step="4">Rust: проверка Гаусса</button>
+  <button class="step-btn active" data-step="0" data-en="Statement">Формулировка</button>
+  <button class="step-btn" data-step="1" data-en="Idea of the proof">Идея доказательства</button>
+  <button class="step-btn" data-step="2" data-en="Worked example: sphere">Пример: сфера</button>
+  <button class="step-btn" data-step="3" data-en="Physics: Gauss law">Физика: закон Гаусса</button>
+  <button class="step-btn" data-step="4" data-en="Rust: verifying Gauss">Rust: проверка теоремы</button>
+  <button class="step-btn" data-step="5" data-en="Summary &amp; exercises">Итоги и упражнения</button>
 </div>
-</main class="main">
+<main class="main">
 
 <section class="step-section active" data-step="0">
 <div class="card">
-<div class="card-title">Формулировка</div>
-<p class="info">
-Пусть \( V \) — замкнутая ограниченная область пространства, ограниченная гладкой (или кусочно-гладкой) поверхностью \( S = \partial V \), и пусть векторное поле \( \mathbf{F} \) непрерывно дифференцируемо в \( V \cup S \).
-</p>
+<div class="card-title" data-en="Statement">Формулировка</div>
+<p class="info" data-en="Let V be a bounded solid region whose boundary ∂V is a piecewise-smooth closed surface, and let F be a vector field continuously differentiable in a neighborhood of V. Orient ∂V with the outward normal. Then:">
+Пусть \( V \) — ограниченное тело, граница которого \( \partial V \) — кусочно-гладкая замкнутая поверхность, и пусть векторное поле \( \mathbf{F} \) непрерывно дифференцируемо в окрестности \( V \). Ориентируем \( \partial V \) внешней нормалью. Тогда:</p>
 <div class="formula-block">
-$$ \oiint_{S} \mathbf{F} \cdot \mathbf{n} \, dS = \iiint_{V} \operatorname{div} \mathbf{F} \, dV $$
+$$ ∯_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS \;=\; \iiint_{V} \operatorname{div} \mathbf{F} \, dV $$
 </div>
-<div class="rule-box">
-Поток векторного поля через замкнутую поверхность равен объёмному интегралу дивергенции по ограниченной области.
+<p class="info" data-en="In words: the flux of the field through the boundary equals the volume integral of the divergence over the interior. What escapes through the walls is exactly what the sources inside produce. The theorem converts a two-dimensional surface integral into a three-dimensional volume integral — and back.">
+Словами: поток поля через границу равен объёмному интегралу дивергенции по внутренности. Что убежало сквозь стены — ровно то, что произвели источники внутри. Теорема превращает двумерный поверхностный интеграл в трёхмерный объёмный — и обратно.</p>
+
+<p class="info" data-en="It helps to recognise an “old friend” in the theorem. The Newton–Leibniz formula ∫ₐᵇ f′(x) dx = f(b) − f(a) says the same thing in a one-dimensional world: the integral of a derivative over a segment equals the values of the function on its &lt;b&gt;boundary&lt;/b&gt; — two points, the right one with a “+” sign (its outward normal points right) and the left one with “−”. The Gauss theorem is Newton–Leibniz for volumes: derivative (div) inside ↔ values (flux) on the boundary.">
+Полезно увидеть в теореме «старого знакомого». Формула Ньютона–Лейбница \( \int_a^b f'(x)\,dx = f(b) - f(a) \) говорит то же самое в одномерном мире: интеграл производной по отрезку равен значениям функции на его <span class="hl">границе</span> — двух точках, причём правая берётся со знаком «+» (внешняя нормаль смотрит вправо), а левая — со знаком «−». Теорема Гаусса — это Ньютон–Лейбниц для объёма: производная (div) внутри ↔ значения (поток) на границе.</p>
+
+<div class="formula-block">
+$$ \underbrace{\int_a^b f'\,dx = f(b) - f(a)}_{\text{1D}} \qquad\longleftrightarrow\qquad \underbrace{\iiint_V \operatorname{div}\mathbf F\,dV = ∯_{\partial V}\mathbf F\cdot\mathbf n\,dS}_{\text{3D}} $$
 </div>
+
+<figure class="fig" data-fig="closed-flux" data-field="stretch" data-shape="blob"><figcaption data-en="&lt;b&gt;Fig. 1.&lt;/b&gt; The planar version of the theorem: the flux through a closed contour (first line) equals the integral of the divergence over the region inside (second line; here div is constant, so the integral is div × area). Change the field, the shape and the position of the contour — the equality always holds."><b>Рис. 1.</b> Плоская версия теоремы: поток через замкнутый контур (первая строка) равен интегралу дивергенции по области внутри (вторая строка; здесь div постоянна, поэтому интеграл — это div × площадь). Меняйте поле, форму и положение контура — равенство сохраняется всегда.</figcaption></figure>
+<div class="rule-box" data-en="Why the outward normal? The flux counts outflow minus inflow. Divergence measures local net production. The theorem states: total production = net outflow. Consistent orientation is the whole content of the sign convention.">
+Почему внешняя нормаль? Поток считает «вытекло минус втекло». Дивергенция измеряет локальный чистый «выпуск». Теорема утверждает: суммарный выпуск = чистый выток. Согласованная ориентация — всё содержание знакового соглашения.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="1">
 <div class="card">
-<div class="card-title">Суть доказательства</div>
-<p class="info">
-Разобьём объём \( V \) на малые элементы \( \Delta V_i \) с границами \( \Delta S_i \).
-</p>
-<p class="info">
-Внутренние границы соседних элементов входят с противоположными нормалями и дают взаимные компенсации. Остаются только внешние границы — общая поверхность \( S \).
-</p>
+<div class="card-title" data-en="Idea of the proof">Идея доказательства</div>
+<p class="info" data-en="The proof is a bookkeeping argument on a fine partition. Cut V into small boxes. For each box, the flux through its six faces is approximately div F at the box center times the box volume:">
+Доказательство — бухгалтерский аргумент на мелком разбиении. Разрежем \( V \) на малые ячейки-параллелепипеды. Для каждой ячейки поток через её шесть граней приближённо равен \( \operatorname{div}\mathbf{F} \) в центре ячейки, умноженной на её объём:</p>
 <div class="formula-block">
-$$ \sum_{i} \oint_{\Delta S_i} \mathbf{F} \cdot \mathbf{n} \, dS = \sum_{i} \int_{\Delta V_i} \operatorname{div} \mathbf{F} \, dV $$
+$$ ∯_{\partial(\text{box}_i)} \mathbf{F} \cdot \mathbf{n} \, dS \;\approx\; (\operatorname{div} \mathbf{F})(\mathbf{x}_i) \cdot \Delta V_i $$
 </div>
+<p class="info" data-en="Now sum over all boxes. The key observation: every internal face is shared by two neighboring boxes, and their outward normals point in opposite directions — so the shared-face fluxes cancel pairwise. What survives is only the flux through the faces lying on the outer boundary ∂V:">
+Теперь суммируем по всем ячейкам. Ключевое наблюдение: каждая внутренняя грань принадлежит двум соседним ячейкам, и их внешние нормали направлены противоположно — потоки через общую грань попарно сокращаются. Выживает только поток через грани, лежащие на внешней границе \( \partial V \):</p>
 <div class="formula-block">
-$$ \oint_{S} \mathbf{F} \cdot \mathbf{n} \, dS = \int_{V} \operatorname{div} \mathbf{F} \, dV $$
+$$ \sum_i ∯_{\partial(\text{box}_i)} \!\!\mathbf{F}\cdot\mathbf{n}\,dS \;=\; ∯_{\partial V} \mathbf{F}\cdot\mathbf{n}\,dS, \qquad
+\sum_i (\operatorname{div}\mathbf{F})(\mathbf{x}_i)\,\Delta V_i \;\to\; \iiint_V \operatorname{div}\mathbf{F}\,dV $$
 </div>
-<div class="rule-box green">
-При переходе к пределу \( \Delta V_i \to 0 \) сумма интегралов по элементам переходит в тройной интеграл по области.
-</div>
+
+<figure class="fig" data-fig="gauss-cells"><figcaption data-en="&lt;b&gt;Fig. 2.&lt;/b&gt; The bookkeeping of the proof. The square is cut into N×N cells, and the outward flux is drawn on every face of every cell (green — leaving, red — entering). On interior faces the arrows of neighbouring cells always point the same way: for one cell it is “leaving”, for its neighbour “entering”, and the contributions cancel. The bright arrows on the outer boundary are all that remains. Right: the sum of the fluxes of all cells is &lt;b&gt;exactly&lt;/b&gt; equal to the flux through the outer boundary for any N, while the sum div F·ΔV approaches them as N grows. Switch to “outer only” to see what survives the cancellation."><b>Рис. 2.</b> Бухгалтерия доказательства. Квадрат разрезан на \( N\times N \) ячеек, на каждой грани каждой ячейки нарисован поток наружу (зелёный — вытекает, красный — втекает). На внутренних гранях стрелки соседних ячеек всегда смотрят в одну сторону: для одной ячейки это «вытекает», для соседней — «втекает», и вклады взаимно уничтожаются. Яркие стрелки на внешней границе — это всё, что остаётся. Справа: сумма потоков всех ячеек <b>точно</b> равна потоку через внешнюю границу при любом \( N \), а сумма \( \operatorname{div}\mathbf F\cdot\Delta V \) приближается к ним с ростом \( N \). Переключите «только внешние», чтобы увидеть, что останется после сокращения.</figcaption></figure>
+<div class="rule-box green" data-en="The cancellation of internal faces is the heart of the proof. It is also why the theorem is “obvious” for a fluid: whatever flows from one cell immediately flows into the neighboring one — internal exchange does not change the total.">
+Сокращение внутренних граней — сердце доказательства. Именно поэтому теорема «очевидна» для жидкости: что вытекло из одной ячейки, тут же втекло в соседнюю — внутренний обмен не меняет суммарного баланса.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="2">
 <div class="card">
-<div class="card-title">Пример: сфера + радиальное поле</div>
-<p class="info">
-Пусть \( \mathbf{F} = \mathbf{r} = (x,\; y,\; z) \). Тогда \( \operatorname{div} \mathbf{F} = 3 \).
-</p>
+<div class="card-title" data-en="Worked example: sphere">Пример: сфера</div>
+<p class="info" data-en="The canonical verification: the radial field F = (x, y, z), the ball of radius R. Right side (volume) — divergence is 3, and the volume of the ball is 4πR³/3:">
+Классическая проверка: радиальное поле \( \mathbf{F} = (x, y, z) \), шар радиуса \( R \). Правая (объёмная) часть — дивергенция равна 3, объём шара \( \frac{4}{3}\pi R^{3} \):</p>
 <div class="formula-block">
-$$ \iiint_{V} \operatorname{div} \mathbf{F} \, dV = 3 \cdot \frac{4}{3} \pi R^{3} = 4 \pi R^{3} $$
+$$ \iiint_{V} \operatorname{div} \mathbf{F} \, dV = 3 \cdot \frac{4}{3}\pi R^{3} = 4\pi R^{3} $$
 </div>
-<p class="info">
-Поверхностный интеграл: на сфере \( \mathbf{n} = \mathbf{r}/R \), \( \mathbf{F} \cdot \mathbf{n} = R \):
-</p>
+<p class="info" data-en="Left side (surface) — on the sphere the normal is n = r/R, hence F·n = r²/R = R, and the integral of a constant over the sphere is the constant times the area:">
+Левая (поверхностная) часть — на сфере нормаль \( \mathbf{n} = \mathbf{r}/R \), значит \( \mathbf{F}\cdot\mathbf{n} = R \), а интеграл константы по сфере — константа на площадь:</p>
 <div class="formula-block">
-$$ \oiint_{S} R \, dS = R \cdot 4 \pi R^{2} = 4 \pi R^{3} $$
+$$ ∯_{S} \mathbf{F}\cdot\mathbf{n}\,dS = R \cdot 4\pi R^{2} = 4\pi R^{3} $$
 </div>
-<div class="rule-box">
-Обе части равны \( 4\pi R^{3} \) — теорема верифицирована.
-</div>
+
+<figure class="fig" data-fig="gauss-sphere"><figcaption data-en="&lt;b&gt;Fig. 3.&lt;/b&gt; The field F = r on a sphere of radius R: the arrows point along the normal everywhere and have length R. Right: both sides of the theorem as bars; move the R slider: they grow as R³ and are always equal."><b>Рис. 3.</b> Поле \( \mathbf F = \mathbf r \) на сфере радиуса \( R \): стрелки везде направлены по нормали и имеют длину \( R \). Справа — обе части теоремы как полосы; двигайте ползунок \( R \): они растут как \( R^3 \) и всегда равны.</figcaption></figure>
+<p class="info" data-en="Both sides equal 4πR³. Note how much easier the volume side was: one multiplication instead of a surface integral. This is the practical power of the theorem — choose the easier side of the equality.">
+Обе части равны \( 4\pi R^{3} \). Заметь, насколько проще объёмная часть: одно умножение вместо поверхностного интеграла. В этом практическая сила теоремы — выбирай ту часть равенства, которая проще.</p>
 </div>
 </section>
 
 <section class="step-section" data-step="3">
 <div class="card">
-<div class="card-title">Физический смысл</div>
-<div class="two-col">
-<div class="rule-box green">
-<strong>Электростатика:</strong> поток \( \mathbf{E} \) через замкнутую поверхность пропорционален заряду внутри (закон Гаусса).
-</div>
-<div class="rule-box">
-<strong>Гидродинамика:</strong> поток скорости жидкости через поверхность равен сумме источников внутри объёма.
-</div>
-</div>
+<div class="card-title" data-en="Physics: Gauss law">Физика: закон Гаусса</div>
+<p class="info" data-en="In electrostatics the divergence of the field E is proportional to the charge density: div E = ρ/ε₀. Integrating over any volume and applying the theorem:">
+В электростатике дивергенция поля \( \mathbf{E} \) пропорциональна плотности заряда: \( \operatorname{div}\mathbf{E} = \rho/\varepsilon_0 \). Интегрируя по любому объёму и применяя теорему:</p>
 <div class="formula-block">
-$$ \oiint_{S} \mathbf{E} \cdot \mathbf{n} \, dS = \frac{Q_{\text{внутри}}}{\varepsilon_{0}} $$
+$$ ∯_{\partial V} \mathbf{E} \cdot \mathbf{n} \, dS = \iiint_{V} \frac{\rho}{\varepsilon_0} \, dV = \frac{Q_{\text{enclosed}}}{\varepsilon_0} $$
 </div>
+<p class="info" data-en="This is Gauss law — one of Maxwell’s equations. The flux of the electric field through any closed surface equals the enclosed charge divided by ε₀. The surface can be a sphere, a cube, a potato — the answer depends only on the charge inside, not on the shape of the surface.">
+Это закон Гаусса — одно из уравнений Максвелла. Поток электрического поля через любую замкнутую поверхность равен заряду внутри, делённому на \( \varepsilon_0 \). Поверхность может быть сферой, кубом, картофелиной — ответ зависит только от заряда внутри, но не от формы поверхности.</p>
+
+<figure class="fig" data-fig="gauss-drag"><figcaption data-en="&lt;b&gt;Fig. 4.&lt;/b&gt; Gauss law on the plane. Three charges: +1, −1 and +2; the thin lines are field lines. Drag the yellow contour, change its size and shape. The flux (in 2D it equals 2π × charge) changes in a &lt;b&gt;jump&lt;/b&gt; only when a charge crosses the contour boundary; as long as no charge crosses it, the flux stays constant under any deformation. Charges outside contribute nothing: as many of their field lines enter the contour as leave it."><b>Рис. 4.</b> Закон Гаусса на плоскости. Три заряда: \( +1 \), \( -1 \) и \( +2 \); тонкие линии — силовые линии поля. Перетаскивайте жёлтый контур, меняйте его размер и форму. Поток (в 2D он равен \( 2\pi \times \) заряд) меняется <b>скачком</b> только тогда, когда заряд пересекает границу контура; пока заряды не пересекают границу, поток остаётся постоянным при любых деформациях. Заряды снаружи вносят нулевой вклад: сколько их силовых линий входит в контур, столько и выходит.</figcaption></figure>
+<div class="rule-box" data-en="Engineering consequence: to find E of a symmetric charge distribution, pick a surface on which E·n is constant (a sphere around a point charge, a cylinder around a wire, a plane slab) — the surface integral degenerates into a multiplication. This is how every textbook field is derived in one line.">
+Инженерное следствие: чтобы найти \( \mathbf{E} \) симметричного распределения зарядов, выбирают поверхность, на которой \( \mathbf{E}\cdot\mathbf{n} \) постоянен (сфера вокруг точечного заряда, цилиндр вокруг провода) — поверхностный интеграл вырождается в умножение. Так выводятся все «табличные» поля в одну строчку.</div>
+
+<p class="info" data-en="A one-line example — the field of a point charge q. Take a sphere of radius r around the charge. By symmetry E is radial and has the same magnitude everywhere on the sphere, so E·n = E(r):">
+Пример в одну строку — поле точечного заряда \( q \). Возьмём сферу радиуса \( r \) вокруг заряда. По симметрии \( \mathbf E \) радиально и одинаково по модулю на сфере, поэтому \( \mathbf E\cdot\mathbf n = E(r) \):</p>
+
+<div class="formula-block">
+$$ E(r)\cdot 4\pi r^2 = \frac{q}{\varepsilon_0} \quad\Longrightarrow\quad E(r) = \frac{q}{4\pi\varepsilon_0 r^2} $$
+</div>
+
+<p class="info" data-en="Coulomb’s law came out without a single integral: all the work went into choosing a convenient surface.">
+Закон Кулона получился без единого интеграла: вся работа ушла на выбор удобной поверхности.</p>
 </div>
 </section>
 
 <section class="step-section" data-step="4">
 <div class="card">
-<div class="card-title">Rust: численная проверка теоремы Гаусса</div>
+<div class="card-title" data-en="Rust: verifying the theorem">Rust: проверка теоремы</div>
+<p class="info" data-en="The field F = (x², y², z²) in the unit cube [0,1]³. The code computes the volume integral of div F = 2x + 2y + 2z by the midpoint rule, and the surface flux through the six faces exactly (only the three faces at x, y, z = 1 contribute: on them the field component equals 1). Both must equal 3.">
+Поле \( \mathbf{F} = (x^{2}, y^{2}, z^{2}) \) в единичном кубе \( [0,1]^{3} \). Код считает объёмный интеграл \( \operatorname{div}\mathbf{F} = 2x+2y+2z \) методом средних точек, а поверхностный поток через шесть граней — точно (вклад дают только три грани при \( x,y,z=1 \), где компонента поля равна 1). Оба должны дать 3.</p>
 <div class="editor-wrap">
   <div class="editor-header">
     <span class="editor-lang">Rust</span>
     <button class="run-btn">▶ Run</button>
   </div>
   <textarea class="code-area">fn main() {
-    // Теорема Гаусса для F = (x², y², z²) в кубе [0,1]³
+    // Теорема Гаусса: F = (x², y², z²) в кубе [0,1]³
     // div F = 2x + 2y + 2z
-    // Объёмный интеграл: ∫∫∫ (2x+2y+2z) dV = 3 * ∫₀¹∫₀¹∫₀¹ 2x dxdydz = 3 * 2*(1/2) = 3
-    let n = 40usize;
+    let n = 40;
+    let dx = 1.0 / n as f64;
+
+    // Левая часть: объёмный интеграл (midpoint rule)
     let mut vol_int = 0.0_f64;
-    let dx = 1.0 / (n as f64);
     for i in 0..n {
         let x = (i as f64 + 0.5) * dx;
         for j in 0..n {
@@ -122,55 +145,49 @@ $$ \oiint_{S} \mathbf{E} \cdot \mathbf{n} \, dS = \frac{Q_{\text{внутри}}}
         }
     }
 
-    // Поверхностный интеграл через 6 граней куба
-    let mut surf_int = 0.0_f64;
-    // грани x=0 и x=1: F·n = ±Fx = ±x²
-    for j in 0..n {
-        let y = (j as f64 + 0.5) * dx;
-        for k in 0..n {
-            let z = (k as f64 + 0.5) * dx;
-            // x=1: n=(1,0,0), F·n = 1.0
-            surf_int += 1.0 * dx * dx;
-            // x=0: n=(-1,0,0), F·n = 0
-        }
-    }
-    // грани y=0 и y=1
-    for i in 0..n {
-        let x = (i as f64 + 0.5) * dx;
-        for k in 0..n {
-            let z = (k as f64 + 0.5) * dx;
-            surf_int += 1.0 * dx * dx; // y=1
-        }
-    }
-    // грани z=0 и z=1
-    for i in 0..n {
-        let x = (i as f64 + 0.5) * dx;
-        for j in 0..n {
-            let y = (j as f64 + 0.5) * dx;
-            surf_int += 1.0 * dx * dx; // z=1
-        }
-    }
+    // Правая часть: поток через 6 граней
+    // Грань x=1: F·n = x² = 1, площадь 1 → вклад 1
+    // Грань x=0: F·n = −x² = 0 → вклад 0
+    // Аналогично для y и z
+    let surf_int = 1.0 + 1.0 + 1.0; // x=1, y=1, z=1
 
-    println!("F = (x², y², z²) в кубе [0,1]³");
-    println!("Объёмный интеграл div F: {:.6}", vol_int);
-    println!("Поверхностный интеграл:   {:.6}", surf_int);
-    println!("Аналитически:             3.0");
-}
-  </textarea>
-  <div class="output-box">Нажмите ▶ Run для запуска</div>
+    println!("Поле F = (x², y², z²), куб [0,1]³");
+    println!("Объёмный интеграл div F (числ.): {:.6}", vol_int);
+    println!("Поверхностный поток      (точно): {:.6}", surf_int);
+    println!("Аналитически: ∫2x dV + ∫2y dV + ∫2z dV = 3 × 1 = 3.0");
+
+    // Сравнение: относительная ошибка
+    let err = ((vol_int - surf_int) / surf_int).abs();
+    println!("Относительная ошибка: {:.2e}  → теорема подтверждена", err);
+}</textarea>
+  <div class="output-box" data-en="Press ▶ Run to execute">Нажмите ▶ Run для запуска</div>
 </div>
+<p class="info" data-en="The volume integral converged to 3.0 within the resolution of the 40³ grid, matching the exact surface flux. The theorem holds numerically. Note the pattern: the flux only depends on what happens at the boundary values x=1, y=1, z=1 — everything inside is bookkeeping.">
+Объёмный интеграл сошёлся к 3.0 в пределах разрешения сетки 40³, точно совпав с поверхностным потоком. Теорема выполняется численно. Заметь закономерность: поток зависит только от значений поля на границе \( x=1, y=1, z=1 \) — всё внутри — бухгалтерия.</p>
+</div>
+</section>
+
+<section class="step-section" data-step="5">
+<div class="card">
+<div class="card-title" data-en="Summary &amp; exercises">Итоги и упражнения</div>
+<ul class="info" data-en="&lt;li&gt;∯_{∂V} F·n dS = ∭_V div F dV, with the outward normal.&lt;/li&gt;&lt;li&gt;Meaning: net outflow through the walls = total production of sources inside.&lt;/li&gt;&lt;li&gt;Proof: split into cells — interior faces cancel, only the outer boundary remains.&lt;/li&gt;&lt;li&gt;It is Newton–Leibniz in 3D: derivative inside ↔ values on the boundary.&lt;/li&gt;&lt;li&gt;Use the easier side; with symmetry the surface integral becomes a multiplication.&lt;/li&gt;&lt;li&gt;Physics: Gauss law ∯E·n dS = Q/ε₀.&lt;/li&gt;"><li>\( ∯_{\partial V}\mathbf F\cdot\mathbf n\,dS = \iiint_V \operatorname{div}\mathbf F\,dV \), нормаль внешняя.</li><li>Смысл: чистый выток через стенки = суммарная мощность источников внутри.</li><li>Доказательство: разбиение на ячейки — внутренние грани сокращаются, остаётся только внешняя граница.</li><li>Это Ньютон–Лейбниц в 3D: производная внутри ↔ значения на границе.</li><li>Считайте ту часть, что проще; при симметрии поверхностный интеграл становится умножением.</li><li>Физика: закон Гаусса \( ∯ \mathbf E\cdot\mathbf n\,dS = Q/\varepsilon_0 \).</li></ul>
+<p class="info" data-en="&lt;b&gt;Exercises&lt;/b&gt;">
+<b>Упражнения</b></p>
+
+<details class="qa"><summary data-en="1. Find the flux of F = (x³, y³, z³) through a sphere of radius R.">1. Найдите поток \( \mathbf F = (x^3, y^3, z^3) \) через сферу радиуса \( R \).</summary><div class="ans" data-en="div F = 3r². ∭3r² dV = ∫₀ᴿ 3r²·4πr² dr = (12/5)πR⁵.">\( \operatorname{div}\mathbf F = 3r^2 \). \( \iiint 3r^2\,dV = \int_0^R 3r^2\cdot 4\pi r^2\,dr = \tfrac{12}{5}\pi R^5 \).</div></details>
+
+<details class="qa"><summary data-en="2. Find the flux of F = (x, y, z) through the surface of the cube [0,1]³.">2. Найдите поток \( \mathbf F = (x, y, z) \) через поверхность куба \( [0,1]^3 \).</summary><div class="ans" data-en="div = 3, volume 1 — flux 3. Check: the faces x=1, y=1, z=1 contribute 1 each; on x=0, y=0, z=0 the field is tangent — zero.">div = 3, объём 1 — поток 3. Проверка: на гранях \( x=1, y=1, z=1 \) вклад по 1, на гранях \( x=0, y=0, z=0 \) поле касательно — ноль.</div></details>
+
+<details class="qa"><summary data-en="3. The flux of r/r³ through any sphere about the origin is 4π, although div = 0 away from the origin. Is this a contradiction?">3. Поток \( \mathbf r/r^3 \) через любую сферу вокруг начала равен \( 4\pi \), хотя div = 0 вне начала. Нет ли противоречия с теоремой?</summary><div class="ans" data-en="No: the field is not differentiable at the origin, and the theorem requires smoothness throughout V. The whole “source” sits at a point: div = 4πδ(r). For a surface that does not enclose the origin the flux is indeed zero.">Нет: поле не дифференцируемо в начале координат, а теорема требует гладкости во всём \( V \). Весь «источник» сидит в точке: \( \operatorname{div} = 4\pi\delta(\mathbf r) \). Для поверхности, не охватывающей начало, поток действительно равен нулю.</div></details>
+
+<details class="qa"><summary data-en="4. Find the field of an infinite wire with linear charge density λ.">4. Найдите поле бесконечной нити с линейной плотностью заряда \( \lambda \).</summary><div class="ans" data-en="A cylinder of radius r and length L: zero flux through the ends, E·2πrL through the side = λL/ε₀, hence E = λ/(2πε₀r).">Цилиндр радиуса \( r \), длины \( L \): поток через торцы ноль, через боковую поверхность \( E\cdot 2\pi r L = \lambda L/\varepsilon_0 \), откуда \( E = \lambda/(2\pi\varepsilon_0 r) \).</div></details>
+
 </div>
 </section>
 
 </main>
 <script src="playground.js"></script>
-<script>
-  document.querySelectorAll('.step-btn').forEach(b=>b.addEventListener('click',()=>{
-    document.querySelectorAll('.step-btn').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.step-section').forEach(s=>s.classList.remove('active'));
-    b.classList.add('active');
-    document.querySelector('.step-section[data-step="'+b.dataset.step+'"]').classList.add('active');
-  }));
-</script>
+<script src="course.js"></script>
+<script src="viz.js"></script>
 </body>
 </html>

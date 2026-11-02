@@ -5,152 +5,198 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Модуль 04 — Поток поля</title>
 <link rel="stylesheet" href="shared.css">
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="mathjax-config.js"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="lang.js"></script>
 </head>
 <body>
 <nav class="top-nav">
   <a class="nav-home" href="index.html">∯</a>
-  <div class="nav-title">Модуль 04 — Поток векторного поля через поверхность</div>
-</div>
+  <div class="nav-title" data-en="Module 04 — Flux of scalar and vector fields">Модуль 04 — Поток скалярного и векторного поля</div>
+</nav>
 <div id="stepNav">
-  <button class="step-btn active" data-step="0">Определение</button>
-  <button class="step-btn" data-step="1">Поток через грань</button>
-  <button class="step-btn" data-step="2">Связь с дивергенцией</button>
-  <button class="step-btn" data-step="3">Геометрический смысл</button>
-  <button class="step-btn" data-step="4">Rust: численный поток</button>
+  <button class="step-btn active" data-step="0" data-en="Flux of a scalar field">Поток скалярного поля</button>
+  <button class="step-btn" data-step="1" data-en="Flux of a vector field">Поток векторного поля</button>
+  <button class="step-btn" data-step="2" data-en="Oriented surface">Ориентированная поверхность</button>
+  <button class="step-btn" data-step="3" data-en="Closed surface & flux examples">Замкнутая поверхность и примеры</button>
+  <button class="step-btn" data-step="4" data-en="Rust: numerical flux">Rust: численный поток</button>
+  <button class="step-btn" data-step="5" data-en="Summary &amp; exercises">Итоги и упражнения</button>
 </div>
-</main class="main">
+<main class="main">
 
 <section class="step-section active" data-step="0">
 <div class="card">
-<div class="card-title">Определение</div>
-<p class="info">
-<strong>Поток</strong> векторного поля \( \mathbf{F} \) через ориентированную поверхность \( S \):
-</p>
+<div class="card-title" data-en="Flux of a scalar field">Поток скалярного поля</div>
+<p class="info" data-en="The story of flux begins not with a vector field but with a scalar one. Let the temperature T(x,y,z) be given in space, and let an oriented surface S be placed in this field. The flux of the scalar field T through S is the surface integral of the values of T:">
+История потока начинается не с векторного, а со скалярного поля. Пусть в пространстве задана температура \( T(x,y,z) \), и в этом поле размещена ориентированная поверхность \( S \). <strong>Поток скалярного поля \( T \) через \( S \)</strong> — поверхностный интеграл значений \( T \):</p>
 <div class="formula-block">
-$$ \Phi = \iint_{S} \mathbf{F} \cdot \mathbf{n} \, dS = \iint_{S} F_n \, dS $$
+$$ \Phi_{T} = \iint_{S} T(x, y, z) \, dS $$
 </div>
-<p class="info">
-где \( \mathbf{n} \) — единичный вектор нормали к поверхности, \( F_n \) — проекция поля на нормаль.
-</p>
-<div class="rule-box">
-Если поле можно представить как скорость жидкости, поток — это объём жидкости, протекающий через поверхность в единицу времени.
+<p class="info" data-en="The physical picture: if the surface is a thin membrane and T is the concentration of a substance, the flux of T is how much of the substance “settles” on the surface per unit time. The integral simply sums the field values over all surface elements, weighted by their areas dS. No direction of the field is involved yet — the surface orientation does not matter here.">
+Физическая картинка: если поверхность — тонкая мембрана, а \( T \) — концентрация вещества, то поток \( T \) — сколько вещества «оседает» на поверхности в единицу времени. Интеграл просто суммирует значения поля по всем элементам поверхности с весом их площадей \( dS \). Направление поля пока не участвует — ориентация поверхности здесь не важна.</p>
+<p class="info" data-en="If T ≡ 1, the flux equals the area of the surface. If T is the charge density spread on a surface, the flux is the total charge. The scalar flux is the “mass” of the field collected by the surface.">
+Если \( T \equiv 1 \), поток равен площади поверхности. Если \( T \) — плотность заряда, размазанного по поверхности, поток — полный заряд. Скалярный поток — «масса» поля, собранная поверхностью.</p>
+
+<p class="info" data-en="How such an integral is computed by definition: the surface is cut into small pieces ΔS_i, a point M_i is taken in each, the field value is multiplied by the piece area, and everything is summed. As the partition is refined the sum tends to the integral:">
+Как такой интеграл вычисляют по определению: поверхность режут на маленькие кусочки \( \Delta S_i \), в каждом берут точку \( M_i \), умножают значение поля на площадь кусочка и складывают. При измельчении разбиения сумма стремится к интегралу:</p>
+
+<div class="formula-block">
+$$ \iint_S T\,dS = \lim_{\max \Delta S_i \to 0}\; \sum_i T(M_i)\,\Delta S_i $$
 </div>
+
+<figure class="fig" data-fig="scalar-flux"><figcaption data-en="&lt;b&gt;Fig. 1.&lt;/b&gt; A curved surface is cut into N×N cells; the cell colour is the value of T at its centre. Top right: the Riemann sum Σ T(M_i) ΔS_i. Increase N: the sum quickly settles — that is the value of the surface integral. Drag to rotate the surface. Each cell area accounts for the slope: ΔS = √(1 + z_x² + z_y²) Δx Δy — steep parts “weigh” more than their shadow on the plane."><b>Рис. 1.</b> Изогнутая поверхность разбита на \( N\times N \) ячеек, цвет ячейки — значение \( T \) в её центре. Справа вверху — интегральная сумма \( \sum T(M_i)\,\Delta S_i \). Увеличивайте \( N \): сумма быстро стабилизируется — это и есть значение поверхностного интеграла. Тащите мышью, чтобы повернуть поверхность. Площадь каждой ячейки учитывает наклон: \( \Delta S = \sqrt{1 + z_x^2 + z_y^2}\,\Delta x\,\Delta y \) — крутые участки «весят» больше своей тени на плоскости.</figcaption></figure>
+<div class="rule-box" data-en="The scalar flux is the foundation: it is a weighted sum of a scalar field over a surface. The vector flux (next step) is built from it by replacing the scalar with the normal component of a vector field.">
+Скалярный поток — фундамент: взвешенная сумма скалярного поля по поверхности. Векторный поток (следующий шаг) строится из него заменой скаляра на нормальную компоненту векторного поля.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="1">
 <div class="card">
-<div class="card-title">Поток через грань куба</div>
-<p class="info">
-Рассмотрим постоянное поле \( \mathbf{F} = (a,\; b,\; c) \) и грань куба \( x = \text{const} \), нормаль \( \mathbf{n} = (1,\; 0,\; 0) \):
-</p>
+<div class="card-title" data-en="Flux of a vector field">Поток векторного поля</div>
+<p class="info" data-en="Now let a fluid flow with velocity field F. How much liquid crosses the surface S per unit time? Only the component of F perpendicular to the surface transports liquid through it — the tangential component slides along. For a surface element dS with unit normal n the answer is:">
+Пусть теперь течёт жидкость со скоростью \( \mathbf{F} \). Сколько жидкости пересекает поверхность \( S \) в единицу времени? Через поверхность переносит жидкость только перпендикулярная к ней компонента \( \mathbf{F} \) — касательная скользит вдоль. Для элемента поверхности \( dS \) с единичной нормалью \( \mathbf{n} \) ответ:</p>
 <div class="formula-block">
-$$ \Phi = \iint_{S} a \, dS = a \cdot S $$
+$$ d\Phi = \mathbf{F} \cdot \mathbf{n} \, dS = |\mathbf{F}| \cos\theta \, dS $$
 </div>
-<p class="info">
-Через все шесть граней куба с ребром \( L \):
-</p>
+<p class="info" data-en="This is the volume of an oblique cylinder with base dS and “height” F·n — the geometric meaning of the flux element. Summing over the whole surface gives the flux of the vector field:">
+Это объём наклонного цилиндра с основанием \( dS \) и «высотой» \( \mathbf{F}\cdot\mathbf{n} \) — геометрический смысл элемента потока. Суммируя по всей поверхности, получаем поток векторного поля:</p>
 <div class="formula-block">
-$$ \Phi_{\text{total}} = aL^{2} - aL^{2} + bL^{2} - bL^{2} + cL^{2} - cL^{2} = 0 $$
+$$ \Phi = \iint_{S} \mathbf{F} \cdot \mathbf{n} \, dS = \iint_{S} F_n \, dS $$
 </div>
-<div class="rule-box green">
-Для однородного поля полный поток через замкнутую поверхность равен нулю — нет источников и стоков.
-</div>
+
+<figure class="fig" data-fig="flux-angle"><figcaption data-en="&lt;b&gt;Fig. 2.&lt;/b&gt; Why there is a cos θ in the flux. A patch dS (white segment, side view) with normal n sits in a uniform flow F. The streamlines that cross it are highlighted in blue — as many of them, as much fluid passes through the patch. Their number is proportional not to the area itself but to its &lt;b&gt;projection&lt;/b&gt; onto the plane perpendicular to the flow (yellow bar on the left): dS |cos θ|. At θ = 90° the patch is edge-on to the flow and nothing passes through; at θ &amp;gt; 90° the fluid flows against the normal — the flux is negative."><b>Рис. 2.</b> Почему в потоке стоит \( \cos\theta \). Площадка \( dS \) (белый отрезок, вид сбоку) с нормалью \( \mathbf n \) стоит в однородном потоке \( \mathbf F \). Синим выделены линии тока, которые её пересекают, — сколько их, столько жидкости проходит сквозь площадку. Их число пропорционально не самой площади, а её <b>проекции</b> на плоскость, перпендикулярную потоку (жёлтая полоса слева): \( dS\,|\cos\theta| \). При \( \theta = 90^\circ \) площадка «ребром» к потоку, и сквозь неё не проходит ничего; при \( \theta &gt; 90^\circ \) жидкость течёт против нормали — поток отрицателен.</figcaption></figure>
+<div class="rule-box green" data-en="The flux of a vector field is the scalar flux of the normal component F·n. This is exactly how the two concepts are related: the vector flux reduces to the scalar flux of one carefully chosen scalar — the projection of the field onto the normal.">
+Поток векторного поля — это скалярный поток нормальной компоненты \( F_n = \mathbf{F}\cdot\mathbf{n} \). Так связаны оба понятия: векторный поток сводится к скалярному потоку одного тщательно выбранного скаляра — проекции поля на нормаль.</div>
+<p class="info" data-en="Units make the picture concrete: if F is measured in m/s and dS in m², the flux is in m³/s — cubic meters of liquid per second. The flux is literally “how much flows through”.">
+Единицы измерения делают картину конкретной: если \( \mathbf{F} \) в м/с, а \( dS \) в м², то поток — в м³/с: кубометры жидкости в секунду. Поток — это буквально «сколько протекает сквозь».</p>
 </div>
 </section>
 
 <section class="step-section" data-step="2">
 <div class="card">
-<div class="card-title">Связь с дивергенцией</div>
-<p class="info">
-Теорема Остроградского-Гаусса связывает поток через замкнутую поверхность с дивергенцией:
-</p>
-<div class="formula-block">
-$$ \oiint_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS = \iiint_{V} \operatorname{div} \mathbf{F} \, dV $$
+<div class="card-title" data-en="Oriented surface">Ориентированная поверхность</div>
+<p class="info" data-en="For the flux to be signed, the surface must be oriented: a continuous choice of the normal direction must be made. For a closed surface (a sphere, a cube) the convention is outward normal. For an open surface the choice is free but must be consistent — and it is linked to the direction of traversal of its boundary (right-hand rule), which will matter in the Stokes theorem.">
+Чтобы поток был знакопеременным, поверхность должна быть <strong>ориентированной</strong>: нужно непрерывно выбрать направление нормали. Для замкнутой поверхности (сфера, куб) соглашение — внешняя нормаль. Для открытой поверхности выбор свободен, но должен быть согласованным — и он связан с направлением обхода её границы (правило правого винта), что понадобится в теореме Стокса.</p>
+
+<p class="info" data-en="Not every surface can be oriented. The classic counterexample is the &lt;b&gt;Möbius strip&lt;/b&gt;: a strip glued with a half-twist. If you carry the normal continuously along the centre line, after one full loop it comes back to the starting point pointing the opposite way. Such a surface has one side, there is no “in/out”, and flux through it is undefined.">
+Не всякую поверхность можно ориентировать. Классический контрпример — <span class="hl">лист Мёбиуса</span>: полоска, склеенная с перекрутом. Если непрерывно вести нормаль вдоль средней линии, то, обойдя лист один раз, она вернётся в исходную точку смотрящей в противоположную сторону. У такой поверхности одна сторона, понятия «внутрь/наружу» нет, и поток через неё не определён.</p>
+
+<figure class="fig" data-fig="mobius"><figcaption data-en="&lt;b&gt;Fig. 3.&lt;/b&gt; Left: a closed two-sided surface (a section of a sphere): the outward normal can be chosen continuously everywhere. Right: a Möbius strip: the normal arrow is carried along the centre line; after the first loop (yellow dot is the start) it turns red and points the opposite way. Only after the second loop does the normal return to its original position."><b>Рис. 3.</b> Слева — замкнутая двусторонняя поверхность (сечение сферы): внешнюю нормаль можно выбрать непрерывно везде. Справа — лист Мёбиуса: стрелка нормали переносится вдоль средней линии; после первого круга (жёлтая точка — старт) она становится красной и смотрит в противоположную сторону. Только после второго круга нормаль возвращается в исходное положение.</figcaption></figure>
+<p class="info" data-en="Three characteristic flux regimes depending on the angle θ between F and n:">
+Три характерных режима потока в зависимости от угла \( \theta \) между \( \mathbf{F} \) и \( \mathbf{n} \):</p>
+<div class="two-col">
+<div class="rule-box green" data-en="<strong>θ &lt; 90°</strong> — the field crosses the surface “along” the normal: positive contribution to the flux.">
+<strong>θ &lt; 90°</strong> — поле пересекает поверхность «по нормали»: положительный вклад в поток.</div>
+<div class="rule-box coral" data-en="<strong>θ &gt; 90°</strong> — the field crosses “against” the normal: negative contribution.">
+<strong>θ &gt; 90°</strong> — поле пересекает «против нормали»: отрицательный вклад.</div>
 </div>
-<div class="rule-box">
-Это означает: суммарный «выброс» поля через границу тела равен интегралу плотности источников по всему объёму.
-</div>
+<div class="rule-box amber" data-en="<strong>θ = 90°</strong> — the field slides along the surface: zero contribution. Rain falling on a tilted window: the more the window is tilted toward the rain, the less water hits it.">
+<strong>θ = 90°</strong> — поле скользит вдоль поверхности: вклад нулевой. Дождь на наклонном окне: чем сильнее окно отклонено от дождя, тем меньше воды на него попадает.</div>
 </div>
 </section>
 
 <section class="step-section" data-step="3">
 <div class="card">
-<div class="card-title">Геометрический смысл</div>
-<p class="info">
-Поток поля через элементарную площадку \( dS \) равен объёму цилиндра с основанием \( dS \) и высотой, равной проекции вектора поля на нормаль.
-</p>
+<div class="card-title" data-en="Closed surface: examples">Замкнутая поверхность: примеры</div>
+<p class="info" data-en="For a closed surface the flux counts the balance: outflow minus inflow. This makes the closed-surface flux a “source detector”:">
+Для замкнутой поверхности поток считает баланс: вытекло минус втекло. Это делает поток через замкнутую поверхность «детектором источников»:</p>
 <div class="formula-block">
-$$ d\Phi = \mathbf{F} \cdot \mathbf{n} \, dS = |\mathbf{F}| \cos\theta \, dS $$
+$$ \Phi = ∯_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS = \underbrace{\iint_{\text{out}}}_{&gt;\,0} + \underbrace{\iint_{\text{in}}}_{&lt;\,0} $$
 </div>
-<div class="rule-box amber">
-При \( \theta = 90^{\circ} \) (поле параллельно поверхности) поток равен нулю. При \( \theta = 0^{\circ} \) (поле перпендикулярно) — максимален.
+
+<p class="info" data-en="A positive flux means there are sources inside, a negative one — sinks, zero — either none or they balance. On the plane the analogue of a closed surface is a closed curve, and the flux through it is ∮ F·n dl. Experiment:">
+Положительный поток означает, что внутри есть источники, отрицательный — стоки, ноль — либо их нет, либо они уравновешены. На плоскости аналог замкнутой поверхности — замкнутая кривая, а поток через неё \( ∮ \mathbf F\cdot\mathbf n\,dl \). Поэкспериментируйте:</p>
+
+<figure class="fig" data-fig="closed-flux"><figcaption data-en="&lt;b&gt;Fig. 4.&lt;/b&gt; Flux through a closed contour. Arrows on the contour are the normal component of the field: green — fluid leaves, red — it enters. Drag the contour and change its shape. The uniform field and rotation give zero at any position: what flows in flows out. For the “source” the flux is positive and equals 2 × area — it depends on the size of the contour but not on its position or shape for the same area. The second line is div F times area: it always matches the flux — a preview of the Gauss theorem."><b>Рис. 4.</b> Поток через замкнутый контур. Стрелки на контуре — нормальная составляющая поля: зелёные — жидкость вытекает, красные — втекает. Перетаскивайте контур и меняйте его форму. Однородное поле и вращение дают ноль при любом положении: сколько втекло, столько вытекло. У «источника» поток положителен и равен \( 2\times \) площадь — он зависит от размера контура, но не от его положения и формы при той же площади. Вторая строка — произведение div F на площадь: она всегда совпадает с потоком, это предвестник теоремы Гаусса.</figcaption></figure>
+<p class="info" data-en="Example 1 — uniform field F = (a, b, c) and a cube. Each face admits a constant normal component; opposite faces have opposite normals, so the contributions cancel pairwise:">
+Пример 1 — однородное поле \( \mathbf{F} = (a, b, c) \) и куб. На каждой грани нормальная компонента постоянна; противоположные грани дают противоположные вклады и попарно сокращаются:</p>
+<div class="formula-block">
+$$ \Phi_{\text{cube}} = aL^{2} - aL^{2} + bL^{2} - bL^{2} + cL^{2} - cL^{2} = 0 $$
 </div>
+<p class="info" data-en="Zero — there are no sources inside a uniform field. Example 2 — the radial field F = (x, y, z) = r and a sphere of radius R. On the sphere F·n = R is constant, so:">
+Ноль — внутри однородного поля источников нет. Пример 2 — радиальное поле \( \mathbf{F} = (x, y, z) = \mathbf{r} \) и сфера радиуса \( R \). На сфере \( \mathbf{F}\cdot\mathbf{n} = R \) постоянно, поэтому:</p>
+<div class="formula-block">
+$$ \Phi_{\text{sphere}} = ∯_{S} R \, dS = R \cdot 4\pi R^{2} = 4\pi R^{3} $$
+</div>
+<p class="info" data-en="The flux grows as R³ — the volume of the sphere — because the source of the field fills the entire ball: div F = 3 everywhere inside (module 05 makes this connection exact).">
+Поток растёт как \( R^{3} \) — объём сферы, потому что источник поля заполняет весь шар: \( \operatorname{div}\mathbf{F} = 3 \) всюду внутри (модуль 05 делает эту связь точной).</p>
 </div>
 </section>
 
 <section class="step-section" data-step="4">
 <div class="card">
-<div class="card-title">Rust: поток через сферу (численно)</div>
+<div class="card-title" data-en="Rust: flux of scalar and vector fields">Rust: поток скалярного и векторного поля</div>
+<p class="info" data-en="The code computes both kinds of flux through the same sphere of radius R: (1) the scalar flux of the field T = x² + y² + z² = r², equal to R² · (surface area) = 4πR⁴; (2) the vector flux of F = (x, y, z), equal to 4πR³. One surface — two different “weighings”.">
+Код считает оба вида потока через одну и ту же сферу радиуса \( R \): (1) скалярный поток поля \( T = x^{2}+y^{2}+z^{2} = r^{2} \), равный \( R^{2} \cdot 4\pi R^{2} = 4\pi R^{4} \); (2) векторный поток \( \mathbf{F} = (x,y,z) \), равный \( 4\pi R^{3} \). Одна поверхность — два разных «взвешивания».</p>
 <div class="editor-wrap">
   <div class="editor-header">
     <span class="editor-lang">Rust</span>
     <button class="run-btn">▶ Run</button>
   </div>
   <textarea class="code-area">fn main() {
-    // Поток поля F = (x, y, z) = r через сферу радиуса R
-    // Аналитически: div F = 3 => поток = 3 * (4/3 π R³) = 4πR³
     let r = 2.0;
-    let n = 200usize;
-    let mut flux = 0.0_f64;
+    let n = 200;
+    let pi = std::f64::consts::PI;
+
+    let mut scalar_flux = 0.0_f64;  // поток скалярного поля T = r²
+    let mut vector_flux = 0.0_f64; // поток векторного поля F = r
 
     for i in 0..n {
-        let theta = std::f64::consts::PI * (i as f64 + 0.5) / (n as f64);
+        let theta = pi * (i as f64 + 0.5) / n as f64;
         let st = theta.sin();
-        let ct = theta.cos();
         for j in 0..n {
-            let phi = 2.0 * std::f64::consts::PI * (j as f64 + 0.5) / (n as f64);
-            let sp = phi.sin();
-            let cp = phi.cos();
+            let phi = 2.0*pi * (j as f64 + 0.5) / n as f64;
+            let dtheta = pi / n as f64;
+            let dphi = 2.0*pi / n as f64;
+            let ds = r * r * st * dtheta * dphi; // элемент площади сферы
 
-            // точка на сфере
-            let x = r * st * cp;
-            let y = r * st * sp;
-            let z = r * ct;
+            // Точка на сфере
+            let x = r * st * phi.cos();
+            let y = r * st * phi.sin();
+            let z = r * theta.cos();
 
-            // F = (x, y, z)
-            // нормаль n = (x, y, z)/r
-            // F·n = (x²+y²+z²)/r = r²/r = r
-            // dS = r² sinθ dθ dφ
-            let dtheta = std::f64::consts::PI / (n as f64);
-            let dphi = 2.0 * std::f64::consts::PI / (n as f64);
-            let dS = r * r * st * dtheta * dphi;
-            flux += r * dS;
+            // Скалярный поток: T = x² + y² + z² = r² (на сфере = R²)
+            scalar_flux += (x*x + y*y + z*z) * ds;
+
+            // Векторный поток: F·n = r (на сфере)
+            vector_flux += r * ds;
         }
     }
 
-    let expected = 4.0 * std::f64::consts::PI * r * r * r;
-    println!("Численный поток через сферу R={}: {:.6}", r, flux);
-    println!("Аналитически 4πR³ = {:.6}", expected);
-    println!("Относительная ошибка: {:.6}%", ((flux - expected)/expected).abs() * 100.0);
-}
-  </textarea>
-  <div class="output-box">Нажмите ▶ Run для запуска</div>
+    println!("Сфера радиуса R = {}", r);
+    println!("Скалярный поток T = r²:  числ. {:.4}  аналит. 4πR⁴ = {:.4}",
+             scalar_flux, 4.0*pi*r.powi(4));
+    println!("Векторный поток F = r:  числ. {:.4}  аналит. 4πR³ = {:.4}",
+             vector_flux, 4.0*pi*r.powi(3));
+}</textarea>
+  <div class="output-box" data-en="Press ▶ Run to execute">Нажмите ▶ Run для запуска</div>
 </div>
+<p class="info" data-en="Both numbers came out as predicted: 4πR⁴ ≈ 200 for the scalar field and 4πR³ ≈ 100.5 for the vector field. The difference is exactly one factor of R — the scalar field on the sphere equals R², the normal component of the vector field equals R.">
+Оба числа сошлись с предсказанием: \( 4\pi R^{4} \approx 200 \) для скалярного поля и \( 4\pi R^{3} \approx 100.5 \) для векторного. Разница — ровно один множитель \( R \): скалярное поле на сфере равно \( R^{2} \), нормальная компонента векторного — \( R \).</p>
+</div>
+</section>
+
+<section class="step-section" data-step="5">
+<div class="card">
+<div class="card-title" data-en="Summary &amp; exercises">Итоги и упражнения</div>
+<ul class="info" data-en="&lt;li&gt;Scalar flux ∬T dS — a weighted sum of the field over the surface (a Riemann sum in the limit).&lt;/li&gt;&lt;li&gt;Vector flux Φ = ∬F·n dS — the amount of “fluid” crossing the surface per unit time.&lt;/li&gt;&lt;li&gt;dΦ = |F| dS cos θ: only the normal component carries flux.&lt;/li&gt;&lt;li&gt;The surface must be oriented; closed surfaces use the outward normal; a Möbius strip cannot be oriented.&lt;/li&gt;&lt;li&gt;Flux through a closed surface = outflow − inflow = a detector of sources.&lt;/li&gt;"><li>Скалярный поток \( \iint T\,dS \) — взвешенная сумма поля по поверхности (предел интегральных сумм).</li><li>Векторный поток \( \Phi = \iint \mathbf F\cdot\mathbf n\,dS \) — сколько «жидкости» пересекает поверхность за единицу времени.</li><li>\( d\Phi = |\mathbf F|\,dS\cos\theta \): поток переносит только нормальная компонента.</li><li>Поверхность должна быть ориентирована; у замкнутой — внешняя нормаль; лист Мёбиуса ориентировать нельзя.</li><li>Поток через замкнутую поверхность = вытекло − втекло = детектор источников.</li></ul>
+<p class="info" data-en="&lt;b&gt;Exercises&lt;/b&gt;">
+<b>Упражнения</b></p>
+
+<details class="qa"><summary data-en="1. Find the flux of F = (0, 0, 5) through the square [0,2]×[0,2] in the plane z = 0 with normal +z. And through the same square in the plane x = 0?">1. Найдите поток поля \( \mathbf F = (0, 0, 5) \) через квадрат \( [0,2]\times[0,2] \) в плоскости \( z = 0 \) с нормалью \( +z \). А через тот же квадрат в плоскости \( x = 0 \)?</summary><div class="ans" data-en="In the first case F·n = 5, area 4, Φ = 20. In the second n = (1,0,0) ⟂ F, flux 0 — the field slides along the square.">В первом случае \( \mathbf F\cdot\mathbf n = 5 \), площадь 4, \( \Phi = 20 \). Во втором \( \mathbf n = (1,0,0) \perp \mathbf F \), поток 0 — поле скользит вдоль квадрата.</div></details>
+
+<details class="qa"><summary data-en="2. A 2 m² patch is placed at 60° (between n and F) to a water flow of 3 m/s. How much water passes per second?">2. Площадку площадью 2 м² ставят под углом 60° (между \( \mathbf n \) и \( \mathbf F \)) к потоку воды со скоростью 3 м/с. Сколько воды проходит за секунду?</summary><div class="ans" data-en="Φ = 3·2·cos 60° = 3 m³/s.">\( \Phi = 3\cdot 2\cdot\cos 60^\circ = 3 \) м³/с.</div></details>
+
+<details class="qa"><summary data-en="3. Find the flux of F = r/r³ through a sphere of radius R centred at the origin. Does it depend on R?">3. Найдите поток \( \mathbf F = \mathbf r/r^3 \) через сферу радиуса \( R \) с центром в начале координат. Зависит ли он от \( R \)?</summary><div class="ans" data-en="On the sphere F·n = 1/R², area 4πR²: Φ = 4π for any R. The field decays as 1/R² while the area grows as R² — Coulomb’s law in integral form.">На сфере \( \mathbf F\cdot\mathbf n = 1/R^2 \), площадь \( 4\pi R^2 \): \( \Phi = 4\pi \) для любого \( R \). Поле убывает как \( 1/R^2 \), а площадь растёт как \( R^2 \) — это закон Кулона в интегральной форме.</div></details>
+
+<details class="qa"><summary data-en="4. What is the flux of (−y, x, 0) through any closed surface? Why?">4. Чему равен поток поля \( (-y, x, 0) \) через любую замкнутую поверхность? Почему?</summary><div class="ans" data-en="Zero: the field is purely rotational, div = 0, the streamlines are closed — what enters leaves.">Нулю: поле чисто вращательное, \( \operatorname{div} = 0 \), линии тока замкнуты — сколько вошло, столько и вышло.</div></details>
+
 </div>
 </section>
 
 </main>
 <script src="playground.js"></script>
-<script>
-  document.querySelectorAll('.step-btn').forEach(b=>b.addEventListener('click',()=>{
-    document.querySelectorAll('.step-btn').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.step-section').forEach(s=>s.classList.remove('active'));
-    b.classList.add('active');
-    document.querySelector('.step-section[data-step="'+b.dataset.step+'"]').classList.add('active');
-  }));
-</script>
+<script src="course.js"></script>
+<script src="viz.js"></script>
 </body>
 </html>
