@@ -10,7 +10,7 @@
 </head>
 <body>
 <nav class="top-nav">
-  <a class="nav-home" href="index.html">∭→\oiint</a>
+  <a class="nav-home" href="index.html">∭→\mathop{∯}</a>
   <div class="nav-title" data-en="Module 05 — Divergence (Gauss–Ostrogradsky) theorem">Модуль 05 — Теорема Остроградского-Гаусса</div>
 </nav>
 <div id="stepNav">
@@ -29,7 +29,7 @@
 <p class="info" data-en="Let V be a bounded solid region whose boundary ∂V is a piecewise-smooth closed surface, and let F be a vector field continuously differentiable in a neighborhood of V. Orient ∂V with the outward normal. Then:">
 Пусть \( V \) — ограниченное тело, граница которого \( \partial V \) — кусочно-гладкая замкнутая поверхность, и пусть векторное поле \( \mathbf{F} \) непрерывно дифференцируемо в окрестности \( V \). Ориентируем \( \partial V \) внешней нормалью. Тогда:</p>
 <div class="formula-block">
-$$ \oiint_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS \;=\; \iiint_{V} \operatorname{div} \mathbf{F} \, dV $$
+$$ \mathop{∯}_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS \;=\; \iiint_{V} \operatorname{div} \mathbf{F} \, dV $$
 </div>
 <p class="info" data-en="In words: the flux of the field through the boundary equals the volume integral of the divergence over the interior. What escapes through the walls is exactly what the sources inside produce. The theorem converts a two-dimensional surface integral into a three-dimensional volume integral — and back.">
 Словами: поток поля через границу равен объёмному интегралу дивергенции по внутренности. Что убежало сквозь стены — ровно то, что произвели источники внутри. Теорема превращает двумерный поверхностный интеграл в трёхмерный объёмный — и обратно.</p>
@@ -38,7 +38,7 @@ $$ \oiint_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS \;=\; \iiint_{V} \opera
 Полезно увидеть в теореме «старого знакомого». Формула Ньютона–Лейбница \( \int_a^b f'(x)\,dx = f(b) - f(a) \) говорит то же самое в одномерном мире: интеграл производной по отрезку равен значениям функции на его <span class="hl">границе</span> — двух точках, причём правая берётся со знаком «+» (внешняя нормаль смотрит вправо), а левая — со знаком «−». Теорема Гаусса — это Ньютон–Лейбниц для объёма: производная (div) внутри ↔ значения (поток) на границе.</p>
 
 <div class="formula-block">
-$$ \underbrace{\int_a^b f'\,dx = f(b) - f(a)}_{\text{1D}} \qquad\longleftrightarrow\qquad \underbrace{\iiint_V \operatorname{div}\mathbf F\,dV = \oiint_{\partial V}\mathbf F\cdot\mathbf n\,dS}_{\text{3D}} $$
+$$ \underbrace{\int_a^b f'\,dx = f(b) - f(a)}_{\text{1D}} \qquad\longleftrightarrow\qquad \underbrace{\iiint_V \operatorname{div}\mathbf F\,dV = \mathop{∯}_{\partial V}\mathbf F\cdot\mathbf n\,dS}_{\text{3D}} $$
 </div>
 
 <figure class="fig" data-fig="closed-flux" data-field="stretch" data-shape="blob"><figcaption data-en="&lt;b&gt;Fig. 1.&lt;/b&gt; The planar version of the theorem: the flux through a closed contour (first line) equals the integral of the divergence over the region inside (second line; here div is constant, so the integral is div × area). Change the field, the shape and the position of the contour — the equality always holds."><b>Рис. 1.</b> Плоская версия теоремы: поток через замкнутый контур (первая строка) равен интегралу дивергенции по области внутри (вторая строка; здесь div постоянна, поэтому интеграл — это div × площадь). Меняйте поле, форму и положение контура — равенство сохраняется всегда.</figcaption></figure>
@@ -53,12 +53,12 @@ $$ \underbrace{\int_a^b f'\,dx = f(b) - f(a)}_{\text{1D}} \qquad\longleftrightar
 <p class="info" data-en="The proof is a bookkeeping argument on a fine partition. Cut V into small boxes. For each box, the flux through its six faces is approximately div F at the box center times the box volume:">
 Доказательство — бухгалтерский аргумент на мелком разбиении. Разрежем \( V \) на малые ячейки-параллелепипеды. Для каждой ячейки поток через её шесть граней приближённо равен \( \operatorname{div}\mathbf{F} \) в центре ячейки, умноженной на её объём:</p>
 <div class="formula-block">
-$$ \oiint_{\partial(\text{box}_i)} \mathbf{F} \cdot \mathbf{n} \, dS \;\approx\; (\operatorname{div} \mathbf{F})(\mathbf{x}_i) \cdot \Delta V_i $$
+$$ \mathop{∯}_{\partial(\text{box}_i)} \mathbf{F} \cdot \mathbf{n} \, dS \;\approx\; (\operatorname{div} \mathbf{F})(\mathbf{x}_i) \cdot \Delta V_i $$
 </div>
 <p class="info" data-en="Now sum over all boxes. The key observation: every internal face is shared by two neighboring boxes, and their outward normals point in opposite directions — so the shared-face fluxes cancel pairwise. What survives is only the flux through the faces lying on the outer boundary ∂V:">
 Теперь суммируем по всем ячейкам. Ключевое наблюдение: каждая внутренняя грань принадлежит двум соседним ячейкам, и их внешние нормали направлены противоположно — потоки через общую грань попарно сокращаются. Выживает только поток через грани, лежащие на внешней границе \( \partial V \):</p>
 <div class="formula-block">
-$$ \sum_i \oiint_{\partial(\text{box}_i)} \!\!\mathbf{F}\cdot\mathbf{n}\,dS \;=\; \oiint_{\partial V} \mathbf{F}\cdot\mathbf{n}\,dS, \qquad
+$$ \sum_i \mathop{∯}_{\partial(\text{box}_i)} \!\!\mathbf{F}\cdot\mathbf{n}\,dS \;=\; \mathop{∯}_{\partial V} \mathbf{F}\cdot\mathbf{n}\,dS, \qquad
 \sum_i (\operatorname{div}\mathbf{F})(\mathbf{x}_i)\,\Delta V_i \;\to\; \iiint_V \operatorname{div}\mathbf{F}\,dV $$
 </div>
 
@@ -79,7 +79,7 @@ $$ \iiint_{V} \operatorname{div} \mathbf{F} \, dV = 3 \cdot \frac{4}{3}\pi R^{3}
 <p class="info" data-en="Left side (surface) — on the sphere the normal is n = r/R, hence F·n = r²/R = R, and the integral of a constant over the sphere is the constant times the area:">
 Левая (поверхностная) часть — на сфере нормаль \( \mathbf{n} = \mathbf{r}/R \), значит \( \mathbf{F}\cdot\mathbf{n} = R \), а интеграл константы по сфере — константа на площадь:</p>
 <div class="formula-block">
-$$ \oiint_{S} \mathbf{F}\cdot\mathbf{n}\,dS = R \cdot 4\pi R^{2} = 4\pi R^{3} $$
+$$ \mathop{∯}_{S} \mathbf{F}\cdot\mathbf{n}\,dS = R \cdot 4\pi R^{2} = 4\pi R^{3} $$
 </div>
 
 <figure class="fig" data-fig="gauss-sphere"><figcaption data-en="&lt;b&gt;Fig. 3.&lt;/b&gt; The field F = r on a sphere of radius R: the arrows point along the normal everywhere and have length R. Right: both sides of the theorem as bars; move the R slider: they grow as R³ and are always equal."><b>Рис. 3.</b> Поле \( \mathbf F = \mathbf r \) на сфере радиуса \( R \): стрелки везде направлены по нормали и имеют длину \( R \). Справа — обе части теоремы как полосы; двигайте ползунок \( R \): они растут как \( R^3 \) и всегда равны.</figcaption></figure>
@@ -94,7 +94,7 @@ $$ \oiint_{S} \mathbf{F}\cdot\mathbf{n}\,dS = R \cdot 4\pi R^{2} = 4\pi R^{3} $$
 <p class="info" data-en="In electrostatics the divergence of the field E is proportional to the charge density: div E = ρ/ε₀. Integrating over any volume and applying the theorem:">
 В электростатике дивергенция поля \( \mathbf{E} \) пропорциональна плотности заряда: \( \operatorname{div}\mathbf{E} = \rho/\varepsilon_0 \). Интегрируя по любому объёму и применяя теорему:</p>
 <div class="formula-block">
-$$ \oiint_{\partial V} \mathbf{E} \cdot \mathbf{n} \, dS = \iiint_{V} \frac{\rho}{\varepsilon_0} \, dV = \frac{Q_{\text{enclosed}}}{\varepsilon_0} $$
+$$ \mathop{∯}_{\partial V} \mathbf{E} \cdot \mathbf{n} \, dS = \iiint_{V} \frac{\rho}{\varepsilon_0} \, dV = \frac{Q_{\text{enclosed}}}{\varepsilon_0} $$
 </div>
 <p class="info" data-en="This is Gauss law — one of Maxwell’s equations. The flux of the electric field through any closed surface equals the enclosed charge divided by ε₀. The surface can be a sphere, a cube, a potato — the answer depends only on the charge inside, not on the shape of the surface.">
 Это закон Гаусса — одно из уравнений Максвелла. Поток электрического поля через любую замкнутую поверхность равен заряду внутри, делённому на \( \varepsilon_0 \). Поверхность может быть сферой, кубом, картофелиной — ответ зависит только от заряда внутри, но не от формы поверхности.</p>
@@ -169,7 +169,7 @@ $$ E(r)\cdot 4\pi r^2 = \frac{q}{\varepsilon_0} \quad\Longrightarrow\quad E(r) =
 <section class="step-section" data-step="5">
 <div class="card">
 <div class="card-title" data-en="Summary &amp; exercises">Итоги и упражнения</div>
-<ul class="info" data-en="&lt;li&gt;\oiint_{∂V} F·n dS = ∭_V div F dV, with the outward normal.&lt;/li&gt;&lt;li&gt;Meaning: net outflow through the walls = total production of sources inside.&lt;/li&gt;&lt;li&gt;Proof: split into cells — interior faces cancel, only the outer boundary remains.&lt;/li&gt;&lt;li&gt;It is Newton–Leibniz in 3D: derivative inside ↔ values on the boundary.&lt;/li&gt;&lt;li&gt;Use the easier side; with symmetry the surface integral becomes a multiplication.&lt;/li&gt;&lt;li&gt;Physics: Gauss law \oiintE·n dS = Q/ε₀.&lt;/li&gt;"><li>\( \oiint_{\partial V}\mathbf F\cdot\mathbf n\,dS = \iiint_V \operatorname{div}\mathbf F\,dV \), нормаль внешняя.</li><li>Смысл: чистый выток через стенки = суммарная мощность источников внутри.</li><li>Доказательство: разбиение на ячейки — внутренние грани сокращаются, остаётся только внешняя граница.</li><li>Это Ньютон–Лейбниц в 3D: производная внутри ↔ значения на границе.</li><li>Считайте ту часть, что проще; при симметрии поверхностный интеграл становится умножением.</li><li>Физика: закон Гаусса \( \oiint \mathbf E\cdot\mathbf n\,dS = Q/\varepsilon_0 \).</li></ul>
+<ul class="info" data-en="&lt;li&gt;\mathop{∯}_{∂V} F·n dS = ∭_V div F dV, with the outward normal.&lt;/li&gt;&lt;li&gt;Meaning: net outflow through the walls = total production of sources inside.&lt;/li&gt;&lt;li&gt;Proof: split into cells — interior faces cancel, only the outer boundary remains.&lt;/li&gt;&lt;li&gt;It is Newton–Leibniz in 3D: derivative inside ↔ values on the boundary.&lt;/li&gt;&lt;li&gt;Use the easier side; with symmetry the surface integral becomes a multiplication.&lt;/li&gt;&lt;li&gt;Physics: Gauss law \mathop{∯}E·n dS = Q/ε₀.&lt;/li&gt;"><li>\( \mathop{\mathop{∯}}_{\partial V}\mathbf F\cdot\mathbf n\,dS = \iiint_V \operatorname{div}\mathbf F\,dV \), нормаль внешняя.</li><li>Смысл: чистый выток через стенки = суммарная мощность источников внутри.</li><li>Доказательство: разбиение на ячейки — внутренние грани сокращаются, остаётся только внешняя граница.</li><li>Это Ньютон–Лейбниц в 3D: производная внутри ↔ значения на границе.</li><li>Считайте ту часть, что проще; при симметрии поверхностный интеграл становится умножением.</li><li>Физика: закон Гаусса \( \mathop{\mathop{∯}} \mathbf E\cdot\mathbf n\,dS = Q/\varepsilon_0 \).</li></ul>
 <p class="info" data-en="&lt;b&gt;Exercises&lt;/b&gt;">
 <b>Упражнения</b></p>
 

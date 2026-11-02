@@ -11,7 +11,7 @@
 </head>
 <body>
 <nav class="top-nav">
-  <a class="nav-home" href="index.html">\oint→\oiint</a>
+  <a class="nav-home" href="index.html">\mathop{∮}→\mathop{∯}</a>
   <div class="nav-title" data-en="Module 06 — Stokes theorem">Модуль 06 — Теорема Стокса</div>
 </nav>
 <div id="stepNav">
@@ -30,7 +30,7 @@
 <p class="info" data-en="Take an oriented surface S bounded by a closed curve L = ∂S. Let the vector field F be smooth in a neighborhood of S. Choose the orientations consistently: the normal to S and the direction of traversal of L are related by the right-hand rule (fingers along L, thumb along n). Then:">
 Возьмём ориентированную поверхность \( S \), ограниченную замкнутой кривой \( L = \partial S \). Пусть векторное поле \( \mathbf{F} \) гладкое в окрестности \( S \). Ориентации согласованы по правилу правого винта (пальцы вдоль \( L \), большой палец вдоль \( \mathbf{n} \)). Тогда:</p>
 <div class="formula-block">
-$$ \oint_{L} \mathbf{F} \cdot d\mathbf{r} \;=\; \iint_{S} (\nabla \times \mathbf{F}) \cdot \mathbf{n} \, dS $$
+$$ \mathop{∮}_{L} \mathbf{F} \cdot d\mathbf{r} \;=\; \iint_{S} (\nabla \times \mathbf{F}) \cdot \mathbf{n} \, dS $$
 </div>
 <p class="info" data-en="In words: the circulation of F around the boundary equals the flux of curl F through any surface that has this boundary. The theorem converts a one-dimensional contour integral into a two-dimensional surface integral — and back.">
 Словами: циркуляция \( \mathbf{F} \) по границе равна потоку ротора \( \mathbf{F} \) через любую поверхность, имеющую эту границу. Теорема превращает одномерный контурный интеграл в двумерный поверхностный — и обратно.</p>
@@ -45,12 +45,12 @@ $$ \oint_{L} \mathbf{F} \cdot d\mathbf{r} \;=\; \iint_{S} (\nabla \times \mathbf
 <p class="info" data-en="The proof is the same cancellation trick as in the Gauss theorem, but one dimension lower. Partition the surface S into small cells (imagine paving it with tiny loops). For each small cell the circulation around its boundary is approximately the normal component of curl F at the cell center times the cell area:">
 Доказательство — тот же приём сокращения, что и в теореме Гаусса, но на одно измерение ниже. Разобьём поверхность \( S \) на малые ячейки. Для каждой малой ячейки циркуляция по её границе приближённо равна нормальной компоненте ротора в центре ячейки, умноженной на её площадь:</p>
 <div class="formula-block">
-$$ \oint_{\partial(\text{cell}_i)} \mathbf{F} \cdot d\mathbf{r} \;\approx\; \bigl( (\nabla \times \mathbf{F}) \cdot \mathbf{n} \bigr)(\mathbf{x}_i) \cdot \Delta S_i $$
+$$ \mathop{∮}_{\partial(\text{cell}_i)} \mathbf{F} \cdot d\mathbf{r} \;\approx\; \bigl( (\nabla \times \mathbf{F}) \cdot \mathbf{n} \bigr)(\mathbf{x}_i) \cdot \Delta S_i $$
 </div>
 <p class="info" data-en="Sum over all cells. Every internal edge is shared by two neighboring cells, but those cells walk the edge in opposite directions, so the edge circulations cancel. Only the edges lying on the outer boundary L survive. The sum of the cell circulations becomes the circulation around L; the sum of the curl-fluxes becomes the surface integral of curl F over S:">
 Суммируем по ячейкам. Каждое внутреннее ребро принадлежит двум соседним ячейкам, но они обходят его в противоположных направлениях — циркуляции по ребру сокращаются. Выживают только рёбра на внешней границе \( L \). Сумма циркуляций по ячейкам становится циркуляцией вокруг \( L \); сумма потоков роторов — поверхностным интегралом ротора по \( S \):</p>
 <div class="formula-block">
-$$ \sum_i \oint_{\partial(\text{cell}_i)} \mathbf{F}\cdot d\mathbf{r} = \oint_{L} \mathbf{F}\cdot d\mathbf{r}, \qquad
+$$ \sum_i \mathop{∮}_{\partial(\text{cell}_i)} \mathbf{F}\cdot d\mathbf{r} = \mathop{∮}_{L} \mathbf{F}\cdot d\mathbf{r}, \qquad
 \sum_i (\nabla\times\mathbf{F})\cdot\mathbf{n}\,\Delta S_i \to \iint_{S} (\nabla\times\mathbf{F})\cdot\mathbf{n}\,dS $$
 </div>
 <div class="rule-box green" data-en="The Stokes theorem is the two-dimensional analogue of the Newton–Leibniz formula: the integral of a derivative over the interior equals the original function evaluated on the boundary. The Gauss theorem was the 3D version; this is the 2D version.">
@@ -69,7 +69,7 @@ $$ \nabla \times \mathbf{F} = \left( 0,\; 0,\; \frac{\partial x}{\partial x} - \
 <p class="info" data-en="Left side — circulation around a circle of radius R: x = R cos t, y = R sin t, t from 0 to 2π.">
 Левая часть — циркуляция по окружности радиуса \( R \): \( x = R\cos t,\; y = R\sin t,\; 0 \leq t \leq 2\pi \):</p>
 <div class="formula-block">
-$$ \oint_{L} (-y)\,dx + x\,dy = \int_{0}^{2\pi} \bigl[(-R\sin t)(-R\sin t) + (R\cos t)(R\cos t)\bigr] dt $$
+$$ \mathop{∮}_{L} (-y)\,dx + x\,dy = \int_{0}^{2\pi} \bigl[(-R\sin t)(-R\sin t) + (R\cos t)(R\cos t)\bigr] dt $$
 $$ = R^{2} \int_{0}^{2\pi} (\sin^{2}t + \cos^{2}t)\,dt = 2\pi R^{2} $$
 </div>
 <p class="info" data-en="Right side — flux of curl F through the disk. Since rot F = (0,0,2) and the disk normal is n = (0,0,1), the dot product is 2:">
@@ -106,7 +106,7 @@ $$ \iint_{S} 2 \, dS = 2 \cdot \pi R^{2} = 2\pi R^{2} $$
 <p class="info" data-en="The theorem is not an abstract exercise; it appears under different names across physics. In electromagnetism, Faraday’s law of induction says that the electromotive force around a conducting loop equals minus the rate of change of the magnetic flux through the loop:">
 Теорема — не абстрактное упражнение; она встречается в физике под разными именами. В электромагнетизме закон электромагнитной индукции Фарадея говорит, что ЭДС в проводящем контуре равна минус скорости изменения магнитного потока через контур:</p>
 <div class="formula-block">
-$$ \mathcal{E} = \oint_{L} \mathbf{E} \cdot d\mathbf{r} = -\frac{d}{dt} \iint_{S} \mathbf{B} \cdot \mathbf{n} \, dS $$
+$$ \mathcal{E} = \mathop{∮}_{L} \mathbf{E} \cdot d\mathbf{r} = -\frac{d}{dt} \iint_{S} \mathbf{B} \cdot \mathbf{n} \, dS $$
 </div>
 <p class="info" data-en="Using Stokes theorem, the left side can be rewritten as the surface integral of rot E, giving the differential form:">
 Используя теорему Стокса, левую часть можно переписать как поверхностный интеграл \( \operatorname{rot}\mathbf{E} \), получая дифференциальную форму:</p>
@@ -134,7 +134,7 @@ $$ \nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t} $$
     let n = 400;
     let pi = std::f64::consts::PI;
 
-    // Левая часть: циркуляция \oint F·dr = \oint (−y dx + x dy)
+    // Левая часть: циркуляция \mathop{∮} F·dr = \mathop{∮} (−y dx + x dy)
     let mut circ = 0.0_f64;
     let dt = 2.0 * pi / (n as f64);
     for i in 0..n {
@@ -152,7 +152,7 @@ $$ \nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t} $$
 
     println!("Поле F = (−y, x, 0) — вращение как твёрдое тело");
     println!("Контур: окружность R = {}", r);
-    println!("Циркуляция \ointF·dr   (числ.): {:.6}", circ);
+    println!("Циркуляция \mathop{∮}F·dr   (числ.): {:.6}", circ);
     println!("Поток rot F·n dS   (аналит): {:.6}", flux);
     println!("Относительная ошибка: {:.6}%", ((circ - flux)/flux).abs() * 100.0);
     println!("rot F = (0, 0, 2) — удвоенная угловая скорость");
