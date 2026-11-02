@@ -10,7 +10,7 @@
 </head>
 <body>
 <nav class="top-nav">
-  <a class="nav-home" href="index.html">\mathop{∯}</a>
+  <a class="nav-home" href="index.html">∯</a>
   <div class="nav-title" data-en="Module 04 — Flux of scalar and vector fields">Модуль 04 — Поток скалярного и векторного поля</div>
 </nav>
 <div id="stepNav">
@@ -68,6 +68,9 @@ $$ \Phi = \iint_{S} \mathbf{F} \cdot \mathbf{n} \, dS = \iint_{S} F_n \, dS $$
 Поток векторного поля — это скалярный поток нормальной компоненты \( F_n = \mathbf{F}\cdot\mathbf{n} \). Так связаны оба понятия: векторный поток сводится к скалярному потоку одного тщательно выбранного скаляра — проекции поля на нормаль.</div>
 <p class="info" data-en="Units make the picture concrete: if F is measured in m/s and dS in m², the flux is in m³/s — cubic meters of liquid per second. The flux is literally “how much flows through”.">
 Единицы измерения делают картину конкретной: если \( \mathbf{F} \) в м/с, а \( dS \) в м², то поток — в м³/с: кубометры жидкости в секунду. Поток — это буквально «сколько протекает сквозь».</p>
+
+<div class="rule-box green" data-en="A scalar flux sums a scalar field over a surface, like total rainfall collected on a roof. A vector flux sums only the normal component of a vector field, like the volume of wind passing through a window.">
+Скалярный поток суммирует скалярное поле по поверхности — как суммарный дождь на крыше. Векторный поток суммирует только нормальную компоненту векторного поля — как объём ветра, прошедшего через окно.</div>
 </div>
 </section>
 
@@ -91,6 +94,25 @@ $$ \Phi = \iint_{S} \mathbf{F} \cdot \mathbf{n} \, dS = \iint_{S} F_n \, dS $$
 </div>
 <div class="rule-box amber" data-en="<strong>θ = 90°</strong> — the field slides along the surface: zero contribution. Rain falling on a tilted window: the more the window is tilted toward the rain, the less water hits it.">
 <strong>θ = 90°</strong> — поле скользит вдоль поверхности: вклад нулевой. Дождь на наклонном окне: чем сильнее окно отклонено от дождя, тем меньше воды на него попадает.</div>
+<div class="svg-diagram">
+<svg width="360" height="220" viewBox="0 0 360 220">
+  <rect width="360" height="220" fill="#13161f" rx="12"/>
+  <!-- surface plane -->
+  <path d="M60,160 L180,120 L300,160 L180,200 Z" fill="rgba(62,142,247,0.08)" stroke="#3e8ef7" stroke-width="1.5"/>
+  <!-- normal -->
+  <line x1="180" y1="160" x2="180" y2="90" stroke="#eceef5" stroke-width="2" marker-end="url(#a4)"/>
+  <text x="190" y="85" fill="#eceef5" font-size="13" font-family="JetBrains Mono,monospace">n</text>
+  <!-- field vector -->
+  <line x1="180" y1="160" x2="230" y2="120" stroke="#f7c948" stroke-width="2" marker-end="url(#a4)"/>
+  <text x="238" y="118" fill="#f7c948" font-size="13" font-family="JetBrains Mono,monospace">F</text>
+  <!-- angle arc -->
+  <path d="M180,145 A18,18 0 0,1 195,137" fill="none" stroke="#7a7f9a" stroke-width="1"/>
+  <text x="210" y="140" fill="#7a7f9a" font-size="12">θ</text>
+  <text x="180" y="215" fill="#7a7f9a" font-size="12" text-anchor="middle">Поток = F·n dS = |F|cosθ dS</text>
+  <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,5 L7,2.5 z" fill="currentColor"/></marker></defs>
+</svg>
+<div class="svg-label">Рис. Векторное поле F проходит через элемент поверхности dS; в потоке участвует только нормальная компонента.</div>
+</div>
 </div>
 </section>
 
@@ -100,11 +122,11 @@ $$ \Phi = \iint_{S} \mathbf{F} \cdot \mathbf{n} \, dS = \iint_{S} F_n \, dS $$
 <p class="info" data-en="For a closed surface the flux counts the balance: outflow minus inflow. This makes the closed-surface flux a “source detector”:">
 Для замкнутой поверхности поток считает баланс: вытекло минус втекло. Это делает поток через замкнутую поверхность «детектором источников»:</p>
 <div class="formula-block">
-$$ \Phi = \mathop{∯}_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS = \underbrace{\iint_{\text{out}}}_{&gt;\,0} + \underbrace{\iint_{\text{in}}}_{&lt;\,0} $$
+$$ \Phi = ∯_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dS = \underbrace{\iint_{\text{out}}}_{&gt;\,0} + \underbrace{\iint_{\text{in}}}_{&lt;\,0} $$
 </div>
 
-<p class="info" data-en="A positive flux means there are sources inside, a negative one — sinks, zero — either none or they balance. On the plane the analogue of a closed surface is a closed curve, and the flux through it is \mathop{∮} F·n dl. Experiment:">
-Положительный поток означает, что внутри есть источники, отрицательный — стоки, ноль — либо их нет, либо они уравновешены. На плоскости аналог замкнутой поверхности — замкнутая кривая, а поток через неё \( \mathop{\mathop{∮}} \mathbf F\cdot\mathbf n\,dl \). Поэкспериментируйте:</p>
+<p class="info" data-en="A positive flux means there are sources inside, a negative one — sinks, zero — either none or they balance. On the plane the analogue of a closed surface is a closed curve, and the flux through it is ∮ F·n dl. Experiment:">
+Положительный поток означает, что внутри есть источники, отрицательный — стоки, ноль — либо их нет, либо они уравновешены. На плоскости аналог замкнутой поверхности — замкнутая кривая, а поток через неё \( ∮ \mathbf F\cdot\mathbf n\,dl \). Поэкспериментируйте:</p>
 
 <figure class="fig" data-fig="closed-flux"><figcaption data-en="&lt;b&gt;Fig. 4.&lt;/b&gt; Flux through a closed contour. Arrows on the contour are the normal component of the field: green — fluid leaves, red — it enters. Drag the contour and change its shape. The uniform field and rotation give zero at any position: what flows in flows out. For the “source” the flux is positive and equals 2 × area — it depends on the size of the contour but not on its position or shape for the same area. The second line is div F times area: it always matches the flux — a preview of the Gauss theorem."><b>Рис. 4.</b> Поток через замкнутый контур. Стрелки на контуре — нормальная составляющая поля: зелёные — жидкость вытекает, красные — втекает. Перетаскивайте контур и меняйте его форму. Однородное поле и вращение дают ноль при любом положении: сколько втекло, столько вытекло. У «источника» поток положителен и равен \( 2\times \) площадь — он зависит от размера контура, но не от его положения и формы при той же площади. Вторая строка — произведение div F на площадь: она всегда совпадает с потоком, это предвестник теоремы Гаусса.</figcaption></figure>
 <p class="info" data-en="Example 1 — uniform field F = (a, b, c) and a cube. Each face admits a constant normal component; opposite faces have opposite normals, so the contributions cancel pairwise:">
@@ -115,7 +137,7 @@ $$ \Phi_{\text{cube}} = aL^{2} - aL^{2} + bL^{2} - bL^{2} + cL^{2} - cL^{2} = 0 
 <p class="info" data-en="Zero — there are no sources inside a uniform field. Example 2 — the radial field F = (x, y, z) = r and a sphere of radius R. On the sphere F·n = R is constant, so:">
 Ноль — внутри однородного поля источников нет. Пример 2 — радиальное поле \( \mathbf{F} = (x, y, z) = \mathbf{r} \) и сфера радиуса \( R \). На сфере \( \mathbf{F}\cdot\mathbf{n} = R \) постоянно, поэтому:</p>
 <div class="formula-block">
-$$ \Phi_{\text{sphere}} = \mathop{∯}_{S} R \, dS = R \cdot 4\pi R^{2} = 4\pi R^{3} $$
+$$ \Phi_{\text{sphere}} = ∯_{S} R \, dS = R \cdot 4\pi R^{2} = 4\pi R^{3} $$
 </div>
 <p class="info" data-en="The flux grows as R³ — the volume of the sphere — because the source of the field fills the entire ball: div F = 3 everywhere inside (module 05 makes this connection exact).">
 Поток растёт как \( R^{3} \) — объём сферы, потому что источник поля заполняет весь шар: \( \operatorname{div}\mathbf{F} = 3 \) всюду внутри (модуль 05 делает эту связь точной).</p>

@@ -172,3 +172,9 @@ h1.big .line2{display:block;background:linear-gradient(95deg,var(--math2),var(--
 .info .hl,.rule-box .hl{color:var(--text);font-weight:600}
 ul.info{padding-left:20px}
 ul.info li{margin-bottom:6px}
+
+
+/* ── SVG diagrams ── */
+.svg-diagram{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:20px;margin:16px 0;text-align:center}
+.svg-diagram svg{display:block;margin:0 auto;max-width:100%}
+.svg-label{font-size:12px;color:var(--muted);margin-top:12px}

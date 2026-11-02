@@ -102,6 +102,9 @@ $$ df = \frac{\partial f}{\partial x}dx + \frac{\partial f}{\partial y}dy + \fra
 Это формула <span class="hl">полного дифференциала</span>, и из неё следует всё остальное в модуле: перпендикулярность градиента линиям уровня, направление наискорейшего роста, производная по направлению. Геометрически она означает, что вблизи точки поверхность \( z = f(x,y) \) неотличима от касательной плоскости с наклонами \( f_x \) и \( f_y \).</p>
 <div class="rule-box green" data-en="An important sanity check: for a function of one variable the gradient degenerates into the ordinary derivative. The gradient is the natural generalization of f′(x) to functions of several variables.">
 Полезная проверка: для функции одной переменной градиент вырождается в обычную производную. Градиент — естественное обобщение \( f'(x) \) на функции многих переменных.</div>
+
+<div class="rule-box amber" data-en="A useful check: for a single-variable function the gradient collapses to the ordinary derivative. The gradient is the natural generalisation of f′(x) to functions of several variables.">
+Полезная проверка: для функции одной переменной градиент вырождается в обычную производную. Градиент — естественное обобщение \( f'(x) \) на функции многих переменных.</div>
 </div>
 </section>
 
@@ -122,6 +125,20 @@ $$ df = \frac{\partial f}{\partial x}dx + \frac{\partial f}{\partial y}dy + \fra
 
 <div class="rule-box coral" data-en="A common mistake is to think the gradient “points to the summit”. No — it points along the steepest ascent &lt;b&gt;right here&lt;/b&gt;. Fig. 4 shows that the green path reaches the summit along a curve, not a straight line: the gradient direction is different at every point.">
 Частая ошибка: считать, что градиент «показывает на вершину». Нет — он показывает направление самого крутого подъёма <span class="hl">здесь</span>. На рис. 4 видно, что зелёная траектория идёт к вершине по кривой, а не по прямой: в каждой точке направление градиента своё.</div>
+<div class="svg-diagram">
+<svg width="360" height="240" viewBox="0 0 360 240">
+  <rect width="360" height="240" fill="#13161f" rx="12"/>
+  <ellipse cx="180" cy="170" rx="140" ry="36" fill="none" stroke="#2a2e45" stroke-width="1"/>
+  <ellipse cx="180" cy="145" rx="110" ry="28" fill="none" stroke="#2a2e45" stroke-width="1"/>
+  <ellipse cx="180" cy="120" rx="80" ry="20" fill="none" stroke="#2a2e45" stroke-width="1"/>
+  <ellipse cx="180" cy="100" rx="50" ry="13" fill="none" stroke="#2a2e45" stroke-width="1"/>
+  <line x1="180" y1="130" x2="245" y2="70" stroke="#3e8ef7" stroke-width="3" marker-end="url(#a1)"/>
+  <text x="255" y="68" fill="#3e8ef7" font-size="14" font-family="JetBrains Mono,monospace">∇f</text>
+  <text x="180" y="220" fill="#7a7f9a" font-size="12" text-anchor="middle">Уровни f = const; ∇f перпендикулярен им и указывает вверх</text>
+  <defs><marker id="a1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#3e8ef7"/></marker></defs>
+</svg>
+<div class="svg-label">Рис. Градиент перпендикулярен линиям уровня и направлен в сторону наибольшего роста поля.</div>
+</div>
 </div>
 </section>
 
