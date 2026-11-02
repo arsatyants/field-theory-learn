@@ -28,6 +28,7 @@
   };
 
   function inject() {
+    if (document.getElementById('langToggle')) { window.applyLang(); return; }
     var s = document.createElement('style');
     s.textContent =
       '#langToggle{position:fixed;top:14px;right:14px;z-index:9999;' +
