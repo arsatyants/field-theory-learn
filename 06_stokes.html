@@ -6,11 +6,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Модуль 06 — Теорема Стокса</title>
 <link rel="stylesheet" href="shared.css">
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script>
 window.MathJax = {
   tex: {
-    packages: {'[+]': ['ams', 'physics']}
+    packages: {'[+]': ['ams']},
+    macros: {
+      oiint: ['\\mathop{\\unicode{x222F}}\\limits_{#1}', 1],
+      oint: ['\\mathop{\\unicode{x222E}}\\limits_{#1}', 1]
+    }
   }
 };
 </script>

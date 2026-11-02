@@ -5,11 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Модуль 04 — Поток поля</title>
 <link rel="stylesheet" href="shared.css">
-<script src="mathjax-config.js"></script>
 <script>
 window.MathJax = {
   tex: {
-    packages: {'[+]': ['ams', 'physics']}
+    packages: {'[+]': ['ams']},
+    macros: {
+      oiint: ['\\mathop{\\unicode{x222F}}\\limits_{#1}', 1],
+      oint: ['\\mathop{\\unicode{x222E}}\\limits_{#1}', 1]
+    }
   }
 };
 </script>
