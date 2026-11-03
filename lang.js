@@ -5,9 +5,14 @@
   window.T = function (ru, en) { return window.LANG === 'en' ? en : ru; };
 
   window.applyLang = function () {
+    var changed = false;
     document.querySelectorAll('[data-en]').forEach(function (el) {
       if (!el.dataset.ru) el.dataset.ru = el.innerHTML;
+      var shown = el.dataset.shown || 'ru';
+      if (shown === window.LANG) return;          // текст уже на нужном языке — не трогаем DOM
       el.innerHTML = window.LANG === 'en' ? el.dataset.en : el.dataset.ru;
+      el.dataset.shown = window.LANG;
+      changed = true;
     });
     var btn = document.getElementById('langToggle');
     if (btn) {
@@ -17,7 +22,17 @@
     }
     document.documentElement.lang = window.LANG;
     // после подмены текста формулы снова сырые — перенабрать
-    if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise().catch(function () {});
+    if (changed) window.retypeset();
+  };
+
+  // Перенабор формул строго после начального набора MathJax и предыдущих перенаборов:
+  // параллельные typesetPromise оставляют часть формул сырым TeX.
+  window.retypeset = function () {
+    var MJ = window.MathJax;
+    if (!MJ || !MJ.startup || !MJ.startup.promise) return; // MathJax ещё не загрузился — он сам наберёт всё при старте
+    MJ.startup.promise = MJ.startup.promise
+      .then(function () { return MJ.typesetPromise(); })
+      .catch(function (e) { console.error('MathJax', e); });
   };
 
   window.toggleLang = function () {
