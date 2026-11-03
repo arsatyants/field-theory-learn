@@ -42,11 +42,8 @@ html[lang="en"] .nav-home::after{content:"← Modules"}
 .output-box.ok{color:var(--green)}
 .output-box.err{color:var(--coral)}
 .output-box.loading{color:var(--muted)}
-/* full-bleed: editor spans entire viewport width (после базовых правил, чтобы отступы не перебивались) */
-.editor-wrap{width:100vw;max-width:100vw;position:relative;left:50%;transform:translateX(-50%);border-radius:0;border-left:none;border-right:none;margin-top:28px;margin-bottom:28px}
-.editor-header{padding:10px 28px}
-.code-area{padding:16px 28px}
-.output-box{padding:14px 28px}
+/* editor aligned with the card frame (same width as surrounding content) */
+.editor-wrap{width:100%;max-width:100%;margin-top:20px;margin-bottom:20px}
 
 /* ── output image ── */
 .output-wrap{margin-bottom:20px}
