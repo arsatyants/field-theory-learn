@@ -41,7 +41,7 @@ $$ f : \mathbb{R}^{3} \to \mathbb{R} $$
 $$ f(x, y, z) = C \quad \text{— поверхность уровня} $$
 </div>
 
-<figure class="fig" data-fig="scalar-map"><canvas id="fig-scalar-map" width="600" height="340" class="fig-canvas"></canvas>
+<figure class="fig" data-fig="scalar-map">
   <figcaption data-en="&lt;b&gt;Fig. 1.&lt;/b&gt; A scalar field f(x,y) on the plane: a “terrain” with two hills and a hollow. Colour is the value of f, thin white lines are level lines f = const (like contour lines on a hiking map), the yellow one is the level f = 1.5. Where the lines crowd together the field changes faster. Hover to read the value at a point."><b>Рис. 1.</b> Скалярное поле \( f(x,y) \) на плоскости: «рельеф» из двух холмов и впадины. Цвет — значение \( f \), тонкие белые линии — линии уровня \( f = \text{const} \) (как горизонтали на туристической карте), жёлтая — уровень \( f = 1.5 \). Где линии сгущаются, поле меняется быстрее. Наведите курсор, чтобы прочитать значение в точке.</figcaption></figure>
 
 <p class="info" data-en="Almost all figures in the course are two-dimensional: a field f(x,y) is easy to show on the plane with colour. Every idea carries over to 3D unchanged: level lines become level surfaces (nested “onion” shells), and formulas simply gain a third term in z.">
@@ -72,7 +72,7 @@ $$ \nabla f = (2x,\; 2y,\; 2z) = 2\mathbf{r} $$
 <p class="info" data-en="The gradient points away from the origin and grows with distance — the paraboloid rises steeper the further you are from the center.">
 Градиент направлен от начала координат и растёт с расстоянием — чем дальше от центра, тем круче поднимается параболоид.</p>
 
-<figure class="fig" data-fig="grad-field"><canvas id="fig-grad-field" width="600" height="340" class="fig-canvas"></canvas>
+<figure class="fig" data-fig="grad-field">
   <figcaption data-en="&lt;b&gt;Fig. 2.&lt;/b&gt; The gradient as a vector field. Green arrows are ∇f at grid nodes, white lines are levels of f, colour shows the sign and size of f. Switch the function: for the bowl the arrows spread out from the minimum, for the saddle they grow along x and converge along y, for the tilted plane the gradient is the same everywhere. In every case the arrows cross the level lines at right angles."><b>Рис. 2.</b> Градиент как векторное поле. Зелёные стрелки — \( \nabla f \) в узлах сетки, белые линии — уровни \( f \), цвет — знак и величина \( f \). Переключайте функцию: у чаши стрелки расходятся от минимума, у седла — растут вдоль \( x \) и сходятся вдоль \( y \), у наклонной плоскости градиент один и тот же в каждой точке. Во всех случаях стрелки пересекают линии уровня под прямым углом.</figcaption></figure>
 
 <div class="rule-box" data-en="The gradient is a &lt;b&gt;field&lt;/b&gt;: every point has its own vector. To get a specific vector, substitute the coordinates after differentiating. For f = x²+y²+z² at M₀ = (1, 2, 0): ∇f(M₀) = (2, 4, 0), and its length |∇f| = √20 ≈ 4.47 is the steepness of the ascent at that point.">
@@ -94,7 +94,7 @@ $$ \frac{\partial f}{\partial x} = \lim_{h \to 0} \frac{f(x+h, y, z) - f(x, y, z
 $$ f(x, y) = x^{2}y \;\;\Rightarrow\;\; \frac{\partial f}{\partial x} = 2xy, \qquad \frac{\partial f}{\partial y} = x^{2} $$
 </div>
 
-<figure class="fig" data-fig="partial-slice"><canvas id="fig-partial-slice" width="600" height="340" class="fig-canvas"></canvas>
+<figure class="fig" data-fig="partial-slice">
   <figcaption data-en="&lt;b&gt;Fig. 3.&lt;/b&gt; A partial derivative is the slope of a “slice” of the surface. Left: the map of f = x²y with point P. Yellow dashes — the slice y = y₀ (only x varies), pink — the slice x = x₀ (only y varies). Right: graphs of these slices; the slope of the tangent (white dashes) is exactly ∂f/∂x and ∂f/∂y. Drag P: on the axis x = 0 both derivatives vanish — the surface has a fold there."><b>Рис. 3.</b> Частная производная — наклон «среза» поверхности. Слева карта \( f = x^2 y \) с точкой \( P \). Жёлтый пунктир — срез \( y = y_0 \) (меняем только \( x \)), розовый — срез \( x = x_0 \) (меняем только \( y \)). Справа графики этих срезов; наклон касательной (белый пунктир) и есть \( \partial f/\partial x \) и \( \partial f/\partial y \). Перетащите \( P \): на оси \( x = 0 \) обе производные обнуляются — там у поверхности «седловая» складка.</figcaption></figure>
 
 <p class="info" data-en="Why gather the partial derivatives into one vector? Because together they describe the &lt;b&gt;total&lt;/b&gt; change of the function under a small displacement dr = (dx, dy, dz) in any direction. Each term is the contribution of the displacement along its own axis, and their sum is a dot product:">
@@ -124,7 +124,7 @@ $$ df = \frac{\partial f}{\partial x}dx + \frac{\partial f}{\partial y}dy + \fra
 <p class="info" data-en="A mountaineering analogy: the altitude field f(x,y) describes the terrain. ∇f points straight up the steepest slope, |∇f| is the slope steepness, and level lines are the contour lines of the map. Water flows along −∇f — that is why streams run perpendicular to contour lines.">
 Аналогия с горами: поле высот \( f(x,y) \) описывает рельеф. \( \nabla f \) показывает прямо вверх по самому крутому склону, \( |\nabla f| \) — крутизну склона, линии уровня — горизонтали на карте. Вода течёт вдоль \( -\nabla f \) — поэтому ручьи пересекают горизонтали перпендикулярно.</p>
 
-<figure class="fig" data-fig="steepest"><canvas id="fig-steepest" width="600" height="340" class="fig-canvas"></canvas>
+<figure class="fig" data-fig="steepest">
   <figcaption data-en="&lt;b&gt;Fig. 4.&lt;/b&gt; Click or drag the point over the map. The green arrow is ∇f (up the slope), the red one is −∇f (down), the yellow segment is the tangent to the level line through the point: it is always perpendicular to the gradient. The dotted curves are paths that always follow ∇f (green, to the summit) and −∇f (red, to the bottom): this is how water flows and how gradient descent works. Notice that both paths cross every level line at a right angle."><b>Рис. 4.</b> Кликните или тащите точку по карте. Зелёная стрелка — \( \nabla f \) (вверх по склону), красная — \( -\nabla f \) (вниз), жёлтый отрезок — касательная к линии уровня через точку: он всегда перпендикулярен градиенту. Пунктиры — траектории, которые идут всё время вдоль \( \nabla f \) (зелёная, к вершине) и вдоль \( -\nabla f \) (красная, ко дну): так течёт вода и так работает градиентный спуск. Обратите внимание: обе траектории пересекают все линии уровня под прямым углом.</figcaption></figure>
 
 <p class="info" data-en="A one-line proof from the total differential. Move by a small vector dr of length ds at angle θ to the gradient: df = ∇f·dr = |∇f| ds cos θ. For a fixed step length ds the increment is largest when cos θ = 1, smallest when cos θ = −1, and zero when θ = 90°, i.e. along the level line.">
@@ -158,7 +158,7 @@ $$ df = \frac{\partial f}{\partial x}dx + \frac{\partial f}{\partial y}dy + \fra
 $$ \frac{\partial f}{\partial \mathbf{e}} = \nabla f \cdot \mathbf{e} = |\nabla f| \cos\theta $$
 </div>
 
-<figure class="fig" data-fig="directional"><canvas id="fig-directional" width="600" height="340" class="fig-canvas"></canvas>
+<figure class="fig" data-fig="directional">
   <figcaption data-en="&lt;b&gt;Fig. 5.&lt;/b&gt; Left: the green vector is ∇f, the yellow one is the unit direction e (drag with the mouse or use the slider). The blue segment along e is the projection of the gradient, i.e. ∂f/∂e (red when negative). Its end always lies on the purple circle whose diameter is ∇f — an inscribed right angle. Right: the same quantity as a function of the angle — a cosine wave from +|∇f| to −|∇f|."><b>Рис. 5.</b> Слева: зелёный вектор — \( \nabla f \), жёлтый — единичное направление \( \mathbf{e} \) (тащите мышью или двигайте ползунок). Синий отрезок вдоль \( \mathbf{e} \) — проекция градиента, то есть \( \partial f/\partial\mathbf{e} \) (красный — если она отрицательна). Его конец всегда лежит на фиолетовой окружности с диаметром \( \nabla f \) — это вписанный прямой угол. Справа та же величина как функция угла: косинусоида от \( +|\nabla f| \) до \( -|\nabla f| \).</figcaption></figure>
 <p class="info" data-en="where θ is the angle between ∇f and e. Through direction cosines e = (cos α, cos β, cos γ) the same thing reads:">
 где \( \theta \) — угол между \( \nabla f \) и \( \mathbf{e} \). Через направляющие косинусы \( \mathbf{e} = (\cos\alpha, \cos\beta, \cos\gamma) \) то же самое: </p>
